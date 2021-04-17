@@ -1,0 +1,1 @@
+resources/views/pages\tests\modal.blade.php

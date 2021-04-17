@@ -1,0 +1,58 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "dashboard",
+      "icon": "desktop",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    },
+    {
+      "url": "/teachers",
+      "name": "teachers",
+      "icon": "users",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    },
+    {
+      "url": "/students",
+      "name": "students",
+      "icon": "users",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    },
+    {
+      "url": "/classes",
+      "name": "classes",
+      "icon": "grid",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    },
+    {
+      "url": "/classes-free",
+      "name": "classes_free",
+      "icon": "list",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    },
+    {
+      "url": "/tests",
+      "name": "tests",
+      "icon": "notebook",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    },
+    {
+      "url": "/payment",
+      "name": "payment",
+      "icon": "coins",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    },
+    {
+      "url": "/transfers",
+      "name": "transfers",
+      "icon": "credit-card-out",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    },
+    {
+      "url": "/users",
+      "name": "users",
+      "icon": "user",
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+    }
+  ]
+}

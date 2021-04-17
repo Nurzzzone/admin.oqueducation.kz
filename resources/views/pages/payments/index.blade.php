@@ -1,0 +1,1 @@
+resources/views/pages\payments\index.blade.php
