@@ -11,10 +11,10 @@ return [
         'navbarType' => 'fixed', // options:fixed,static,hidden (note: Horizontahl-menu template only support fixed and static)
         'isMenuCollapsed' => false, // options:true or false(default)  Warning:this option is not applicable for horizontal-menu template
         'footerType' => 'static', //options:fixed,static,hidden
-        'templateTitle' => 'Avex', //template Title can be changed, default(Frest)
+        'templateTitle' => 'Oqu', //template Title can be changed, default(Frest)
         'isCardShadow' => true, // Option: true(default) and false ( remove card shadow)
         'isScrollTop' => true, // Option: true and false (Hide Scroll To Top)
-        'defaultLanguage'=>'en', //set your default language Options: en(default),pt,fr,de
+        'defaultLanguage'=>'ru', //set your default language Options: en(default),pt,fr,de
         'direction' => env('MIX_CONTENT_DIRECTION', 'ltr'), // Page direction
     ],
 ];

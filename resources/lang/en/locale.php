@@ -9,7 +9,8 @@ return [
     "tests"         => "Tests",
     "payment"       => "Payment",
     "transfers"     => "Transfers",
-    "users"         => "Users"
+    "users"         => "Users",
+    "login"         => "Authorization"
   ],
   "form_fields" => [
     "user" => [
@@ -22,7 +23,8 @@ return [
       "home_address"  => "Home Address",
       "job_title"     => "Position",
       "email"         => "Email",
-      "email_adders"  => "Email Address",
+      "email_address" => "Email Address",
+      "password"      => "Password" 
     ],
     "post" => [
       "author"      => "Author",

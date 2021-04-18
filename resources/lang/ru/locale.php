@@ -9,7 +9,8 @@ return [
     "tests"         => "Проверка знаний",
     "payment"       => "Оплата",
     "transfers"     => "Переводы",
-    "users"         => "Пользователи"
+    "users"         => "Пользователи",
+    "login"         => "Авторизация"
   ],
   "form_fields" => [
     "user" => [
@@ -22,7 +23,8 @@ return [
       "home_address"  => "Дамашний адрес",
       "job_title"     => "Должность",
       "email"         => "Почта",
-      "email_adders"  => "Электронная почта",
+      "email_address" => "Электронная почта",
+      "password"      => "Пароль" 
     ],
     "post" => [
       "author"      => "Автор",

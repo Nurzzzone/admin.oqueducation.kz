@@ -22,7 +22,7 @@ class Helper
           'isCustomizer' => true,
           'isCardShadow' => true,
           'isScrollTop' => true,
-          'defaultLanguage' => 'en',
+          'defaultLanguage' => 'ru',
           'direction' => env('MIX_CONTENT_DIRECTION', 'ltr'),
         ];
         
