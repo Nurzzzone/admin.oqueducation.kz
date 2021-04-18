@@ -13,17 +13,21 @@ class DashboardController extends Controller
      */
     public function index ()
     {
-      $pageConfigs = ['pageHeader' => true];
+      return view('pages.dashboard.index', $this->getPageBreadcrumbs('dashboard'));
+    }
 
-      $breadcrumbs = [
-        ["link" => "/", "name" => "Home"],
-      ];
+    /**
+     * Get page breadcrumbs
+     * @return array
+     */
+    private function getPageBreadcrumbs(string $name)
+    {
+        $pageConfigs = ['pageHeader' => true];
 
-      $params = [
-          "pageConfigs" => $pageConfigs,
-          "breadcrumbs" => $breadcrumbs,
-      ];
-
-      return view('pages.dashboard.index', $params);
+        $breadcrumbs = [
+          ["link" => "/", "name" => "Home"],
+          ["name" => __('locale.pages.' . $name)]
+        ];
+        return ["pageConfigs" => $pageConfigs, "breadcrumbs" => $breadcrumbs];
     }
 }

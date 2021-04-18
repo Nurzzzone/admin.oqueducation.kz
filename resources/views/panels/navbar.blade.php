@@ -7,15 +7,6 @@ data-bgcolor="@if(isset($configData['navbarBgColor'])){{$configData['navbarBgCol
     <div class="navbar-container content">
       <div class="navbar-collapse" id="navbar-mobile">
         <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
-          @if (request()->is('sk-layout-1-column'))
-          <ul class="nav navbar-nav nav-back">
-            <li class="nav-item mobile-menu d-xl-none mr-auto">
-              <a class="nav-link nav-menu-main hidden-xs font-small-3 d-flex align-items-center" href="{{asset('sk-layout-2-columns')}}">
-                <i class="bx bx-left-arrow-alt"></i>Back
-              </a>
-            </li>
-          </ul>
-          @else
           <ul class="nav navbar-nav">
             <li class="nav-item mobile-menu d-xl-none mr-auto">
               <a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#">
@@ -23,12 +14,37 @@ data-bgcolor="@if(isset($configData['navbarBgColor'])){{$configData['navbarBgCol
               </a>
             </li>
           </ul>
-          @endif
+          <div class="my-auto">
+            @push('time-script')
+              <script>
+                function checkTime(i) {
+                  if (i < 10) {
+                    i = "0" + i;
+                  }
+                  return i;
+                }
+
+                function startTime() {
+                  var today = new Date();
+                  var h = today.getHours();
+                  var m = today.getMinutes();
+                  // add a zero in front of numbers<10
+                  m = checkTime(m);
+                  document.getElementById('time').innerHTML = h + ":" + m;
+                  t = setTimeout(function() {
+                    startTime()
+                  }, 500);
+                }
+                startTime();
+              </script>
+            @endpush
+            <span id="time" class="font-medium-3"></span>
+          </div>
         </div>
         <ul class="nav navbar-nav float-right">
           <li class="dropdown dropdown-language nav-item">
             <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="flag-icon flag-icon-us"></i><span class="selected-language">English</span>
+              <i class="flag-icon flag-icon-ru"></i><span class="selected-language">Русский</span>
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdown-flag">
               <a class="dropdown-item" href="{{url('lang/en')}}" data-language="en">
@@ -40,14 +56,6 @@ data-bgcolor="@if(isset($configData['navbarBgColor'])){{$configData['navbarBgCol
             </div>
           </li>
           <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon bx bx-fullscreen"></i></a></li>
-          <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon bx bx-search"></i></a>
-            <div class="search-input">
-              <div class="search-input-icon"><i class="bx bx-search primary"></i></div>
-              <input class="input" type="text" placeholder="Explore Frest..." tabindex="-1" data-search="starter-list">
-              <div class="search-input-close"><i class="bx bx-x"></i></div>
-              <ul class="search-list"></ul>
-            </div>
-          </li>
           <li class="dropdown dropdown-notification nav-item"><a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i class="ficon bx bx-bell bx-tada bx-flip-horizontal"></i><span class="badge badge-pill badge-danger badge-up">5</span></a>
             <ul class="dropdown-menu dropdown-menu-media dropdown-menu-right">
               <li class="dropdown-menu-header">
@@ -81,7 +89,7 @@ data-bgcolor="@if(isset($configData['navbarBgColor'])){{$configData['navbarBgCol
               <span><img class="round" src="{{asset('images/profile//default.png')}}" alt="avatar" height="40" width="40"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="#"><i class="bx bx-power-off mr-50"></i> Logout</a>
+              <a class="dropdown-item" href="{{ route('logout') }}"><i class="bx bx-power-off mr-50"></i>@lang('locale.buttons.logout')</a>
             </div>
           </li>
         </ul>

@@ -24,6 +24,7 @@
     <script src="{{asset('js/scripts/components.js')}}"></script>
     <script src="{{asset('js/scripts/footer.js')}}"></script>
     <script src="{{asset('js/scripts/customizer.js')}}"></script>
+    @stack('time-script')
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->

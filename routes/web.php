@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LanguageController;
-use App\Http\Controllers\Auth\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,8 +13,8 @@ use App\Http\Controllers\Auth\LoginController;
 |
 */
 
-// Route::group(['middleware' => ['auth']], function() 
-// {
+Route::group(['middleware' => ['auth']], function() 
+{
   Route::resource('/','Admin\DashboardController', [
     'only' => ['index']
   ]);
@@ -27,14 +25,13 @@ use App\Http\Controllers\Auth\LoginController;
   Route::resource('/classes-free','Admin\FreeClassesController');
   Route::resource('/tests','Admin\TestsController');
 
-
-// });
+});
 
 
 // locale Route
 Route::get('lang/{locale}','LanguageController@swap');
 
-Route::get('/login', [LoginController::class, 'login'])->name('admin.login');
-Route::post('/', [LoginController::class, 'logout'])->name('admin.logout');
+Route::get('/login', 'Auth\LoginController@login')->name('login');
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Auth::routes();

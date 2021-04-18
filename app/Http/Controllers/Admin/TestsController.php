@@ -16,10 +16,7 @@ class TestsController extends Controller
     public function index()
     {
         $tests = Test::all();
-        $params = [
-            'tests' => $tests,
-        ];
-        return view('pages.tests.index', array_merge($params, $this->getPageBreadcrumbs('tests')));
+        return view('pages.tests.index', array_merge(['tests' => $tests], $this->getPageBreadcrumbs('tests')));
     }
 
     /**

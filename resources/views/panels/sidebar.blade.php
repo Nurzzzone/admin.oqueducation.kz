@@ -32,7 +32,7 @@
               @if(isset($menu->navheader))
                   <li class="navigation-header"><span>{{$menu->navheader}}</span></li>
               @else
-              <li class="nav-item {{(request()->is($menu->url.'*')) ? 'active' : '' }}">
+              <li class="nav-item {{ (request()->is(str_replace('/', '', $menu->url))) || (request()->is($menu->url)) ? 'active' : '' }}">
                   <a href="@if(isset($menu->url)){{asset($menu->url)}} @endif" @if(isset($menu->newTab)){{"target=_blank"}}@endif>
                   @if(isset($menu->icon))
                       <i class="menu-livicon" data-icon="{{$menu->icon}}"></i>
