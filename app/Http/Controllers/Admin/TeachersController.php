@@ -15,9 +15,9 @@ class TeachersController extends Controller
      */
     public function index()
     {
-        $teachers = Teacher::all();
-        $params = ['teachers' => $teachers];
-        return view('pages.teachers.index', array_merge($params, $this->getPageBreadcrumbs('teachers')));
+        $teachers = Teacher::paginate(10);
+        $params = array_merge(['teachers' => $teachers], $this->getPageBreadcrumbs('teachers'));
+        return view('pages.teachers.index', $params);
     }
 
     /**
@@ -40,7 +40,6 @@ class TeachersController extends Controller
             "breadcrumbs" => $breadcrumbs,
             'teacher' => $teacher,
         ];
-
         return view('pages.students.create', $params);
     }
 

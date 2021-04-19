@@ -16,10 +16,8 @@ class FreeClassesController extends Controller
     public function index()
     {
         $freeClasses = FreeClass::all();
-        $params = [
-            'free_classes' => $freeClasses
-        ];
-        return view('pages.classes-free.index', array_merge($params, $this->getPageBreadcrumbs('classes_free')));
+        $params = array_merge(['free_classes' => $freeClasses], $this->getPageBreadcrumbs('classes_free'));
+        return view('pages.classes-free.index', $params);
     }
 
     /**

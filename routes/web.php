@@ -19,11 +19,11 @@ Route::group(['middleware' => ['auth']], function()
     'only' => ['index']
   ]);
 
-  Route::resource('/teachers','Admin\TeachersController');
-  Route::resource('/students','Admin\StudentsController');
-  Route::resource('/classes','Admin\ClassesController');
+  Route::resource('/teachers',    'Admin\TeachersController');
+  Route::resource('/students',    'Admin\StudentsController');
+  Route::resource('/classes',     'Admin\ClassesController');
   Route::resource('/classes-free','Admin\FreeClassesController');
-  Route::resource('/tests','Admin\TestsController');
+  Route::resource('/tests',       'Admin\TestsController');
 
 });
 
@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth']], function()
 // locale Route
 Route::get('lang/{locale}','LanguageController@swap');
 
-Route::get('/login', 'Auth\LoginController@login')->name('login');
+Route::get('/login',  'Auth\LoginController@login')->name('login');
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 
 Auth::routes();
