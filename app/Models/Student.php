@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Lesson;
+use App\StudentParent;
+use App\StudentType;
 use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
@@ -24,15 +26,23 @@ class Student extends Model
       'surname', 
       'middle_name',
       'email_address',
+      'home_address',
       'phone_number',
       'birth_date',
       'image',
-      'description',
-      'lesson_id'
+      'password',
+      'p1_full_name',
+      'p1_phone_number',
+      'type_id'
   ];
 
-  public function classes()
+  public function parent()
   {
-    return $this->hasMany(Classes::class, 'lesson_id', 'lesson_id');
+    return $this->hasOne(StudentParent::class, 'parent_id', 'parent_id');
+  }
+
+  public function type()
+  {
+    return $this->hasOne(StudentType::class, 'type_id', 'type_id');
   }
 }
