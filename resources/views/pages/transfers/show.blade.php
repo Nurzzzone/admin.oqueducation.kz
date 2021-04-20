@@ -1,1 +1,0 @@
-resources/views/pages\transfers\show.blade.php

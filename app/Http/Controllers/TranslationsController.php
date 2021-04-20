@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class TransfersController extends Controller
+class TranslationsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +13,7 @@ class TransfersController extends Controller
      */
     public function index()
     {
-        return view('pages.transfers.index');
+        //
     }
 
     /**
@@ -24,7 +23,7 @@ class TransfersController extends Controller
      */
     public function create()
     {
-        return view('pages.transfers.create');
+        //
     }
 
     /**
@@ -46,7 +45,7 @@ class TransfersController extends Controller
      */
     public function show($id)
     {
-        return view('pages.transfers.show');
+        //
     }
 
     /**
@@ -57,7 +56,7 @@ class TransfersController extends Controller
      */
     public function edit($id)
     {
-        return view('pages.transfers.edit');
+        //
     }
 
     /**

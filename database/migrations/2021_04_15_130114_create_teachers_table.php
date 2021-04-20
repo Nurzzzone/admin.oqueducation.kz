@@ -16,14 +16,16 @@ class CreateTeachersTable extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->comment('Имя');
-            $table->string('surname', 255)->comment('Фамилия');
+            $table->string('surname', 255)->nullable()->comment('Фамилия');
             $table->string('middle_name', 255)->nullable()->comment('Отчество');
             $table->string('birth_date', 255)->nullable()->comment('Дата рождения');
             $table->string('email_address', 255)->nullable()->comment('Почта');
             $table->string('phone_number', 255)->nullable()->comment('Номер телефона');
             $table->string('image', 255)->nullable()->comment('Изображение');
-            $table->string('position', 255)->nullable()->comment('Должность');
+            $table->string('current_position', 255)->nullable()->comment('Должность');
             $table->text('description')->nullable()->comment('Описание');
+            $table->string('experience')->nullable()->comment('Данные о стаже');
+            $table->foreignId('socials_id')->nullable()->constrained('teachers_socials')->cascadeOnDelete()->cascadeOnDelete();
             $table->timestamps();
         });
     }

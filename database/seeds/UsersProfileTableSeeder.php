@@ -13,9 +13,11 @@ class UsersProfileTableSeeder extends Seeder
     public function run()
     {
         DB::table('users_profile')->insert([
-            'name' => 'Michael',
-            'surname' => 'Scott',
-            'user_id' => '1',
+            'name'       => 'Michael',
+            'surname'    => 'Scott',
+            'user_id'    => '1',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => \Carbon\Carbon::now()
         ]);
     }
 }
