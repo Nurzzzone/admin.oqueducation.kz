@@ -1,0 +1,1 @@
+resources/views/pages\translations\edit.blade.php
