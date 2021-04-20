@@ -45,7 +45,7 @@
     {
       "url": "/transfers",
       "name": "transfers",
-      "icon": "credit-card-out",
+      "icon": "globe",
       "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
     },
     {

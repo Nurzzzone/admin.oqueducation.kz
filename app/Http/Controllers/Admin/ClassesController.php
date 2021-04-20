@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClassesRequest;
 use App\Models\Classes;
-use Illuminate\Http\Request;
 
 class ClassesController extends Controller
 {
@@ -16,10 +16,8 @@ class ClassesController extends Controller
     public function index()
     {
         $classes = Classes::all();
-        $params = [
-            'classes' => $classes,
-        ];
-        return view('pages.classes.index', array_merge($params, $this->getPageBreadcrumbs('classes')));
+        $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
+        return view('pages.classes.index', $params);
     }
 
     /**
@@ -29,18 +27,24 @@ class ClassesController extends Controller
      */
     public function create()
     {
-        //
+        $class = new Classes();
+        $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
+        return view('pages.classes.create', $params);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ClassesRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClassesRequest $request)
     {
-        //
+        $class = new Classes();
+        if ($class->save()) {
+            return redirect()
+                    ->route('classes.index');
+        }
     }
 
     /**
@@ -51,7 +55,9 @@ class ClassesController extends Controller
      */
     public function show($id)
     {
-        //
+        $class = Classes::findOrFail($id);
+        $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
+        return view('pages.classes.show', $params);
     }
 
     /**
@@ -62,19 +68,25 @@ class ClassesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $class = Classes::findOrFail($id);
+        $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
+        return view('pages.classes.edit', $params);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ClassesRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ClassesRequest $request, $id)
     {
-        //
+        $class = Classes::findOrFail($id);
+        if ($class->save()) {
+            return redirect()
+                    ->route('classes.index');
+        }
     }
 
     /**
@@ -85,21 +97,10 @@ class ClassesController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Get page breadcrumbs
-     * @return array
-     */
-    private function getPageBreadcrumbs(string $name)
-    {
-        $pageConfigs = ['pageHeader' => true];
-
-        $breadcrumbs = [
-          ["link" => "/", "name" => "Home"],
-          ["name" => __('locale.pages.' . $name)]
-        ];
-        return ["pageConfigs" => $pageConfigs, "breadcrumbs" => $breadcrumbs];
+        $class = Classes::findOrFail($id);
+        if ($class->delete()) {
+            return redirect()
+                    ->route('classes.index');
+        }
     }
 }

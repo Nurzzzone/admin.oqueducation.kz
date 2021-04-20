@@ -16,7 +16,7 @@ class FreeClassesController extends Controller
     public function index()
     {
         $freeClasses = FreeClass::all();
-        $params = array_merge(['free_classes' => $freeClasses], $this->getPageBreadcrumbs('classes_free'));
+        $params = array_merge(['free_classes' => $freeClasses], $this->getPageBreadcrumbs(['pages.classes_free']));
         return view('pages.classes-free.index', $params);
     }
 
@@ -84,20 +84,5 @@ class FreeClassesController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Get page breadcrumbs
-     * @return array
-     */
-    private function getPageBreadcrumbs(string $name)
-    {
-        $pageConfigs = ['pageHeader' => true];
-
-        $breadcrumbs = [
-          ["link" => "/", "name" => "Home"],
-          ["name" => __('locale.pages.' . $name)]
-        ];
-        return ["pageConfigs" => $pageConfigs, "breadcrumbs" => $breadcrumbs];
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Teacher;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TeachersRequest;
 
 class TeachersController extends Controller
 {
@@ -16,7 +16,7 @@ class TeachersController extends Controller
     public function index()
     {
         $teachers = Teacher::paginate(10);
-        $params = array_merge(['teachers' => $teachers], $this->getPageBreadcrumbs('teachers'));
+        $params = array_merge(['teachers' => $teachers], $this->getPageBreadcrumbs(['pages.teachers']));
         return view('pages.teachers.index', $params);
     }
 
@@ -28,30 +28,23 @@ class TeachersController extends Controller
     public function create()
     {
         $teacher = new Teacher();
-        $pageConfigs = ['pageHeader' => true];
-
-        $breadcrumbs = [
-          ["link" => "/", "name" => "Home"],
-          ["name" => __('locale.pages.teachers')]
-        ];
-        
-        $params = [
-            "pageConfigs" => $pageConfigs, 
-            "breadcrumbs" => $breadcrumbs,
-            'teacher' => $teacher,
-        ];
-        return view('pages.students.create', $params);
+        $params = array_merge(['teacher' => $teacher], $this->getPageBreadcrumbs(['pages.teachers', 'buttons.create']));
+        return view('pages.teachers.create', $params);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TeachersRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TeachersRequest $request)
     {
-        //
+        $teacher = new Teacher();
+        if ($teacher->save()) {
+            return redirect()
+                    ->route('teachers.index');
+        }
     }
 
     /**
@@ -62,6 +55,9 @@ class TeachersController extends Controller
      */
     public function show($id)
     {
+        $teacher = Teacher::findOrFail($id);
+        $teacherFullName = $teacher->name .' '. $teacher->surname;
+        $params = array_merge(['teacher' => $teacher], $this->getPageBreadcrumbs(['pages.teachers'], $teacherFullName));
         return view('pages.students.show');
     }
 
@@ -73,19 +69,21 @@ class TeachersController extends Controller
      */
     public function edit($id)
     {
-        return view('pages.students.edit');
+        $teacher = Teacher::findOrFail($id);
+        $params = array_merge(['teacher' => $teacher], $this->getPageBreadcrumbs(['locale.teachers']));
+        return view('pages.students.edit', $params);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TeachersRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TeachersRequest $request, $id)
     {
-        //
+        $teacher = Teacher::findOrFail($id);
     }
 
     /**
@@ -96,21 +94,10 @@ class TeachersController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Get page breadcrumbs
-     * @return array
-     */
-    private function getPageBreadcrumbs(string $name)
-    {
-        $pageConfigs = ['pageHeader' => true];
-
-        $breadcrumbs = [
-          ["link" => "/", "name" => "Home"],
-          ["name" => __('locale.pages.' . $name)]
-        ];
-        return ["pageConfigs" => $pageConfigs, "breadcrumbs" => $breadcrumbs];
+        $teacher = Teacher::findOrFail($id);
+        if ($teacher->delete()) {
+            return redirect()
+                    ->route('teachers.index');
+        }
     }
 }

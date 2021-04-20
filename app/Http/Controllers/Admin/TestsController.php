@@ -16,7 +16,7 @@ class TestsController extends Controller
     public function index()
     {
         $tests = Test::all();
-        return view('pages.tests.index', array_merge(['tests' => $tests], $this->getPageBreadcrumbs('tests')));
+        return view('pages.tests.index', array_merge(['tests' => $tests], $this->getPageBreadcrumbs(['pages.tests'])));
     }
 
     /**
@@ -26,7 +26,7 @@ class TestsController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -83,20 +83,5 @@ class TestsController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    /**
-     * Get page breadcrumbs
-     * @return array
-     */
-    private function getPageBreadcrumbs(string $name)
-    {
-        $pageConfigs = ['pageHeader' => true];
-
-        $breadcrumbs = [
-          ["link" => "/", "name" => "Home"],
-          ["name" => __('locale.pages.' . $name)]
-        ];
-        return ["pageConfigs" => $pageConfigs, "breadcrumbs" => $breadcrumbs];
     }
 }

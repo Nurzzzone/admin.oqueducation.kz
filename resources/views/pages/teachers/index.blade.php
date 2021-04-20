@@ -5,7 +5,7 @@
 @section('content')
 <section >
   
-  {{-- create new teacher --}}
+  {{-- create new teacher button --}}
   <div class="col-12 mb-2">
     <div class="row align-items-center">
       <a class="btn btn-success" href="{{ route('teachers.create') }}">
@@ -15,6 +15,7 @@
     </div>
   </div>
 
+  {{-- teachers table --}}
   <div class="row" id="table-hover-row">
     <div class="col-12">
       <div class="card">
@@ -27,11 +28,12 @@
                   <th class="font-small-5">@lang('locale.form_fields.user.full_name')</th>
                   <th class="font-small-5">@lang('locale.form_fields.user.job_title')</th>
                   <th class="font-small-5">@lang('locale.form_fields.user.email')</th>
+                  <th class="font-small-5">@lang('locale.buttons.default')</th>
                 </tr>
               </thead>
                 @empty(!$teachers)
                 <tbody>
-                  <caption class="text-center text-muted my-2">Table is empty</caption>
+                  <caption class="text-center text-muted">Table is empty</caption>
                 </tbody>
                 @endempty
                 @empty($teachers)
@@ -52,14 +54,18 @@
             </table>
           </div>
         </div>
+
+        {{-- pagination --}}
         <div class="card-footer">
           <div class="d-flex align-items-center justify-content-between font-small-3">
             <div></div>
             <div>{{ $teachers->links() }}</div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </section>
+
 @endsection

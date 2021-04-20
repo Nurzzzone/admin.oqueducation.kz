@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Student;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StudentsRequest;
 
 class StudentsController extends Controller
 {
@@ -15,11 +15,9 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
-        $params = [
-            'students' => $students,
-        ];
-        return view('pages.students.index', array_merge($params, $this->getPageBreadcrumbs('students')));
+        $students = Student::paginate(10);
+        $params = array_merge(['students' => $students], $this->getPageBreadcrumbs(['pages.students']));
+        return view('pages.students.index', $params);
     }
 
     /**
@@ -29,18 +27,24 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        return view('pages.students.create');
+        $student = new Student();
+        $params = array_merge(['student' => $student], $this->getPageBreadcrumbs(['pages.students']));
+        return view('pages.students.create', $params);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StudentsRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StudentsRequest $request)
     {
-        //
+        $student = new Student();
+        if ($student->save()) {
+            return redirect()
+                    ->route('students.index');
+        }
     }
 
     /**
@@ -51,7 +55,9 @@ class StudentsController extends Controller
      */
     public function show($id)
     {
-        return view('pages.students.show');
+        $student = Student::findOrFail($id);
+        $params = array_merge(['student' => $student], $this->getPageBreadcrumbs(['pages.students']));
+        return view('pages.students.show', $params);
     }
 
     /**
@@ -62,19 +68,25 @@ class StudentsController extends Controller
      */
     public function edit($id)
     {
-        return view('pages.students.edit');
+        $student = Student::findOrFail($id);
+        $params = array_merge(['student' => $student], $this->getPageBreadcrumbs(['pages.students']));
+        return view('pages.students.edit', $params);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StudentsRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StudentsRequest $request, $id)
     {
-        //
+        $student = Student::findOrFail($id);
+        if ($student->save()) {
+            return redirect()
+                    ->route('students.index');
+        }
     }
 
     /**
@@ -85,21 +97,10 @@ class StudentsController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Get page breadcrumbs
-     * @return array
-     */
-    private function getPageBreadcrumbs(string $name)
-    {
-        $pageConfigs = ['pageHeader' => true];
-
-        $breadcrumbs = [
-          ["link" => "/", "name" => "Home"],
-          ["name" => __('locale.pages.' . $name)]
-        ];
-        return ["pageConfigs" => $pageConfigs, "breadcrumbs" => $breadcrumbs];
+        $student = Student::findOrFail($id);
+        if ($student->delete()) {
+            return redirect()
+                    ->route('students.index');
+        }
     }
 }
