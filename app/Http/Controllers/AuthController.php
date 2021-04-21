@@ -40,6 +40,7 @@ class AuthController extends Controller
           return response()->json(['error'=>'Provide proper details']);
     }
   }
+  
    /**
     * Login user and create token
     *
@@ -76,7 +77,8 @@ class AuthController extends Controller
             )->toDateTimeString()
         ]);
     }
-     /**
+
+    /**
     * Logout user (Revoke the token)
     *
     * @return [string] message
@@ -89,7 +91,7 @@ class AuthController extends Controller
         ]);
     }
     
-      /**
+    /**
     * Get the authenticated User
     *
     * @return [json] user object

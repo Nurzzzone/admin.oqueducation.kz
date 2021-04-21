@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Lesson;
-use App\StudentParent;
-use App\StudentType;
+use App\Models\StudentParent;
+use App\Models\StudentType;
 use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
@@ -31,8 +30,6 @@ class Student extends Model
       'birth_date',
       'image',
       'password',
-      'p1_full_name',
-      'p1_phone_number',
       'type_id'
   ];
 

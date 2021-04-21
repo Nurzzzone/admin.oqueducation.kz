@@ -166,5 +166,4 @@ return [
         'file' => 'file',
         'password' => 'password'
     ],
-
 ];

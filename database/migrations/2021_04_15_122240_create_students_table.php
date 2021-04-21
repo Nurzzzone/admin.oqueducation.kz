@@ -19,7 +19,7 @@ class CreateStudentsTable extends Migration
             $table->string('surname', 255)->comment('Фамилия');
             $table->string('middle_name', 255)->nullable()->comment('Отчество');
             $table->string('password', 255);
-            $table->string('birth_date', 255)->comment('Дата рождения');
+            $table->date('birth_date', 255)->comment('Дата рождения');
             $table->string('city', 255)->comment('Город');
             $table->string('email_address', 255)->nullable()->comment('Почта');
             $table->string('phone_number', 255)->comment('Номер телефона');
