@@ -21,7 +21,7 @@ class Student extends Model
      * @var array
      */
     protected $fillable = [
-      'name', 
+      'name',
       'surname', 
       'middle_name',
       'email_address',
@@ -30,16 +30,23 @@ class Student extends Model
       'birth_date',
       'image',
       'password',
-      'type_id'
+      'type_id',
+      'parent_id',
+      'city'
+  ];
+
+  protected $with = [
+    'parent',
+    'type'
   ];
 
   public function parent()
   {
-    return $this->hasOne(StudentParent::class, 'parent_id', 'parent_id');
+    return $this->hasOne(StudentParent::class, 'id', 'parent_id');
   }
 
   public function type()
   {
-    return $this->hasOne(StudentType::class, 'type_id', 'type_id');
+    return $this->hasOne(StudentType::class, 'id', 'type_id');
   }
 }

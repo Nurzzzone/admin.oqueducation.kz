@@ -25,7 +25,19 @@ class StudentsResource extends JsonResource
             'phone_number'  => $this->phone_number,
             'image'         => $this->image,
             'city'          => $this->city,
-            'type'          => $this->type->name
+            'type'          => $this->type->name,
         ];
+    }
+
+    /**
+     * Customize the outgoing response for the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Response  $response
+     * @return void
+     */
+    public function withResponse($request, $response)
+    {
+        $response->setEncodingOptions(JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 }

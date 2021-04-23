@@ -25,32 +25,31 @@
                 <thead>
                   <tr>
                     <th class="font-small-5">ID</th>
-                    <th class="font-small-5">@lang('locale.form_fields.user.full_name')</th>
-                    <th class="font-small-5">@lang('locale.form_fields.user.job_title')</th>
-                    <th class="font-small-5">@lang('locale.form_fields.user.email')</th>
-                    <th class="font-small-5">@lang('locale.buttons.default')</th>
+                    <th class="font-small-5">@lang('fields.full_name')</th>
+                    <th class="font-small-5">@lang('fields.job_title')</th>
+                    <th class="font-small-5">@lang('fields.email')</th>
+                    <th class="font-small-5">@lang('buttons.default')</th>
                   </tr>
                 </thead>
-                  @empty(!$students)
-                  <tbody>
-                    <caption class="text-center text-muted">Table is empty</caption>
-                  </tbody>
-                  @endempty
-                  @empty($students)
+                  @if ($students->isEmpty())
+                    <tbody>
+                      <caption class="text-center text-muted">Table is empty</caption>
+                    </tbody>
+                  @else 
                     <tbody>
                       @foreach ($students as $student)
                         <tr>
-                          <td class="text-bold-500">Michael Right</td>
-                          <td>$15/hr</td>
-                          <td class="text-bold-500">UI/UX</td>
-                          <td>Remote</td>
+                          <td class="font-small-2">{{ $student->id }}</td>
+                          <td class="font-small-2">{{ $student->name }}</td>
+                          <td class="font-small-2">{{ $student->type->name }}</td>
+                          <td class="font-small-2">{{ $student->parent->p1_full_name ?? '-'}}</td>
                           <td>Austin,Taxes</td>
                           <td><a href="#"><i
                                 class="badge-circle badge-circle-light-secondary bx bx-envelope font-medium-1"></i></a></td>
                         </tr>
                       @endforeach
                     </tbody>
-                  @endempty
+                  @endif
               </table>
             </div>
           </div>

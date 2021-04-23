@@ -19,12 +19,11 @@ Route::group(['middleware' => ['auth']], function()
     'only' => ['index']
   ]);
 
-  Route::resource('/teachers',    'Admin\TeachersController');
-  Route::resource('/students',    'Admin\StudentsController');
-  Route::resource('/classes',     'Admin\ClassesController');
+  Route::resource('/teachers', 'Admin\TeachersController');
+  Route::resource('/students', 'Admin\StudentsController');
+  Route::resource('/classes', 'Admin\ClassesController');
   Route::resource('/classes-free','Admin\FreeClassesController');
-  Route::resource('/tests',       'Admin\TestsController');
-
+  Route::resource('/tests','Admin\TestsController');
 });
 
 

@@ -22,11 +22,11 @@ class CreateStudentsTable extends Migration
             $table->date('birth_date', 255)->comment('Дата рождения');
             $table->string('city', 255)->comment('Город');
             $table->string('email_address', 255)->nullable()->comment('Почта');
-            $table->string('phone_number', 255)->comment('Номер телефона');
+            $table->string('phone_number', 255)->unique()->comment('Номер телефона');
             $table->string('home_address', 255)->comment('Домашний Адрес');
             $table->string('image', 255)->nullable()->comment('Изображение');
             $table->foreignId('type_id')->nullable()->comment('Тип')->constrained('students_types');
-            $table->foreignId('parent_id')->constrained('students_parents')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('parent_id')->comment('Родители')->constrained('students_parents')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

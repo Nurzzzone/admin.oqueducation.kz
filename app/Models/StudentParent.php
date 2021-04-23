@@ -25,8 +25,11 @@ class StudentParent extends Model
         'p2_phone_number'
     ];
 
+    /**
+     * Get the student that owns the parent.
+     */
     public function student()
     {
-        return $this->belongsTo(Student::class, 'parent_id');
+        return $this->belongsTo(Student::class, 'parent_id', 'student');
     }
 }
