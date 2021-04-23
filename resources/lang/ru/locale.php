@@ -12,30 +12,6 @@ return [
     "users"         => "Пользователи",
     "login"         => "Авторизация"
   ],
-  "form_fields" => [
-    "user" => [
-      "name"          => "Имя",
-      "surname"       => "Фамилия",
-      "middle_name"   => "Отчество",
-      "full_name"     => "ФИО",
-      "birthday"      => "Дата рождения",
-      "phone_number"  => "Номер телефона",
-      "home_address"  => "Дамашний адрес",
-      "job_title"     => "Должность",
-      "email"         => "Почта",
-      "email_address" => "Электронная почта",
-      "password"      => "Пароль" 
-    ],
-    "post" => [
-      "author"      => "Автор",
-      "title"       => "Нвзвание",
-      "header"      => "Заголовок",
-      "description" => "Описание",
-      "image"       => "Изображение",
-      "date"        => "Дата",
-      "file"        => "Файл",
-    ],
-  ],
   "buttons" => [
     "default" => "Действия",
     "add"     => "Добавить",

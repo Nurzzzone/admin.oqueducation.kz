@@ -25,18 +25,17 @@
               <thead>
                 <tr>
                   <th class="font-small-5">ID</th>
-                  <th class="font-small-5">@lang('locale.form_fields.user.full_name')</th>
-                  <th class="font-small-5">@lang('locale.form_fields.user.job_title')</th>
-                  <th class="font-small-5">@lang('locale.form_fields.user.email')</th>
-                  <th class="font-small-5">@lang('locale.buttons.default')</th>
+                  <th class="font-small-5">@lang('fields.full_name')</th>
+                  <th class="font-small-5">@lang('fields.job_title')</th>
+                  <th class="font-small-5">@lang('fields.email')</th>
+                  <th class="font-small-5">@lang('buttons.default')</th>
                 </tr>
               </thead>
-                @empty(!$teachers)
-                <tbody>
-                  <caption class="text-center text-muted">Table is empty</caption>
-                </tbody>
-                @endempty
-                @empty($teachers)
+                @if($teachers->isEmpty())
+                  <tbody>
+                    <caption class="text-center text-muted">Table is empty</caption>
+                  </tbody>
+                @else
                   <tbody>
                     @foreach ($teachers as $teacher)
                       <tr>
@@ -45,12 +44,11 @@
                         <td class="text-bold-500">UI/UX</td>
                         <td>Remote</td>
                         <td>Austin,Taxes</td>
-                        <td><a href="#"><i
-                              class="badge-circle badge-circle-light-secondary bx bx-envelope font-medium-1"></i></a></td>
+                        <td><a href="#"><i lass="badge-circle badge-circle-light-secondary bx bx-envelope font-medium-1"></i></a></td>
                       </tr>
                     @endforeach
                   </tbody>
-                @endempty
+                @endif
             </table>
           </div>
         </div>

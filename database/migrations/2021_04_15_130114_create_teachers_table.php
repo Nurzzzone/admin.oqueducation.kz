@@ -22,7 +22,8 @@ class CreateTeachersTable extends Migration
             $table->string('email_address', 255)->nullable()->comment('Почта');
             $table->string('phone_number', 255)->nullable()->comment('Номер телефона');
             $table->string('image', 255)->nullable()->comment('Изображение');
-            $table->string('current_position', 255)->nullable()->comment('Должность');
+            $table->boolean('is_active')->comment('Статус');
+            $table->string('position', 255)->nullable()->comment('Должность');
             $table->text('description')->nullable()->comment('Описание');
             $table->string('experience')->nullable()->comment('Данные о стаже');
             $table->foreignId('socials_id')->nullable()->constrained('teachers_socials')->cascadeOnDelete()->cascadeOnDelete();
