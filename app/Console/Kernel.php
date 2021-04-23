@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\CreateViewCommand::class,
+        \App\Console\Commands\CreateServiceCommand::class,
     ];
 
     /**
