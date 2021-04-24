@@ -6,12 +6,23 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Models\StudentParent;
 use Illuminate\Http\Response;
+use App\Services\StudentService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentsRequest;
+use Illuminate\Database\QueryException;
 use App\Http\Resources\StudentsResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Events\QueryExecuted;
 
 class StudentsController extends Controller
 {
+    protected $service;
+
+    public function __construct(StudentService $studentService)
+    {
+        $this->service = $studentService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -32,33 +43,20 @@ class StudentsController extends Controller
      */
     public function store(StudentsRequest $request)
     {
-        $data = $request->validated();
-        $student = Student::create([
-            'name'          => $data['name'],
-            'surname'       => $data['surname'], 
-            'middle_name'   => $data['middle_name'],
-            'email_address' => $data['email_address'],
-            'home_address'  => $data['home_address'],
-            'phone_number'  => $data['phone_number'],
-            'birth_date'    => $data['birth_date'],
-            'image'         => $data['image'],
-            'password'      => $data['password'],
-            'type_id'       => $data['type'],
-            'city'          => $data['city']
-        ]);
-        $parent = $student->parent()->create([
-            'p1_full_name'    => $data['p1_full_name'], 
-            'p1_phone_number' => $data['p1_phone_number'],
-            'p2_full_name'    => $data['p2_full_name'],
-            'p2_phone_number' => $data['p2_phone_number']
-        ]);
- 
-        $student->fill([
-            'parent_id' => $parent->id,
-        ]);
-        $student->save();
-
-        return response(['message' => 'регистрация прошла успешно', 'status' => 201])->setStatusCode(Response::HTTP_CREATED);
+        try {
+            $this->service->createStudent($request->validated());
+        } catch (QueryException $exception) {
+            return response()->json(
+                [
+                    // remove comment on development to see error message
+                    'message'=> $exception->getMessage(),
+                    'error' => 'internal server error', 
+                    'code' => 500
+                ]
+            );
+        }
+        return response(['message' => 'регистрация прошла успешно', 'code' => 201])
+             ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -69,9 +67,14 @@ class StudentsController extends Controller
      */
     public function show(Student $student)
     {
-        return (new StudentsResource($student))
-                                ->response()
-                                ->setEncodingOptions(JSON_PRETTY_PRINT);
+        try {
+            $student = (new StudentsResource($student))
+                ->response()
+                ->setEncodingOptions(JSON_PRETTY_PRINT);
+        } catch (ModelNotFoundException $exception) {
+            $this->response->errorNotFound();
+        }
+        return $student;
     }
 
     /**
@@ -84,20 +87,6 @@ class StudentsController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->validated();
-        $student = Student::findOrFail($id);
-        $student->fill([
-            'name'          => $data['name'],
-            'surname'       => $data['surname'], 
-            'middle_name'   => $data['middle_name'],
-            'email_address' => $data['email_address'],
-            'home_address'  => $data['home_address'],
-            'phone_number'  => $data['phone_number'],
-            'birth_date'    => $data['birth_date'],
-            'image'         => $data['image'],
-            'password'      => $data['password'],
-            'type_id'       => $data['type'],
-            'city'          => $data['city']
-        ]);
         // if (!is_null($data['p1_full_name']) || !is_null($data['p1_phone_number']) || !is_null($data['p2_full_name']) || !is_null($data['p2_phone_number'])) {
         //     $parent = $student->parent()->fill([
         //         'p1_full_name'    => $data['p1_full_name'], 
@@ -107,12 +96,8 @@ class StudentsController extends Controller
         //     ]);
         //     $parent->save();
         // }
-        $student->save();
 
-        return (new StudentsResource($student))
-                            ->response()
-                            ->setStatusCode(Response::HTTP_CREATED);
-
+        return response(['message' => 'операция прошла успешно', 'code' => 200])->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -123,9 +108,18 @@ class StudentsController extends Controller
      */
     public function destroy($id)
     {
-        $student = Student::findOrFail($id);
-        if ($student->delete()) {
-            return response(['message' => 'пользователь успешно удален', 'status' => 204])->setStatusCode(204);
+        try {
+            $this->service->deleteStudent($id);
+        } catch(QueryException $exception) {
+            return response()->json(
+                [
+                    // remove comment on development to see error message
+                    'message'=> $exception->getMessage(),
+                    'error' => 'internal server error', 
+                    'code' => 500
+                ]
+            );
         }
+        return response(['message' => 'пользователь успешно удален', 'code' => 200])->setStatusCode(200);
     }
 }

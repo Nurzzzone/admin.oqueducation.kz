@@ -34,7 +34,7 @@ class StudentsRequest extends FormRequest
             'home_address'     => 'required|string',
             'phone_number'     => 'required|string|unique:students,phone_number' . $this->student,
             'city'             => 'required|string|max:255',
-            'type'             => 'digits_between:1,2|nullable',
+            'type_id'          => 'digits_between:1,2|nullable',
             'password'         => 'required|min:6',
             'p1_full_name'     => 'required|string|max:255',
             'p1_phone_number'  => 'required|string|max:255',
@@ -65,8 +65,20 @@ class StudentsRequest extends FormRequest
     protected function prepareForValidation()
     {
         if ($this->has('type'))
-            if ($this->type == 'БИЛ/НИШ') $this->merge(['type' => 1]);
-            if ($this->type == 'ЕНТ') $this->merge(['type' => 2]);
+            switch ($this->type) {
+                case "БИЛ/НИШ": 
+                    $this->merge(['type_id' => 1]);
+                    break;
+                case "БИЛ":
+                    $this->merge(['type_id' => 1]);
+                    break;
+                case "НИШ":
+                    $this->merge(['type_id' => 1]);
+                    break;
+                case "ЕНТ":
+                    $this->merge(['type_id' => 2]);
+                    break;
+            }
     }
 
     /**
