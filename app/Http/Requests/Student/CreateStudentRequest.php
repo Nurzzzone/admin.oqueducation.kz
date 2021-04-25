@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Student;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentsRequest extends FormRequest
+class CreateStudentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -36,10 +36,6 @@ class StudentsRequest extends FormRequest
             'city'             => 'required|string|max:255',
             'type_id'          => 'digits_between:1,2|nullable',
             'password'         => 'required|min:6',
-            'p1_full_name'     => 'required|string|max:255',
-            'p1_phone_number'  => 'required|string|max:255',
-            'p2_full_name'     => 'nullable|string|max:255',
-            'p2_phone_number'  => 'nullable|string|max:255'    
         ];
     }
 
@@ -111,16 +107,6 @@ class StudentsRequest extends FormRequest
             'city.max'                  => trans('validation.max.string'),
             'phone_number'              => trans('validation.unique'),
             'password'                  => trans('validation.min.string'),
-            'p1_full_name.required'     => trans('validation.required'),
-            'p1_phone_number.required'  => trans('validation.required'),
-            'p1_full_name.string'       => trans('validation.string'),
-            'p1_phone_number.string'    => trans('validation.string'),
-            'p2_full_name.string'       => trans('validation.string'),
-            'p2_phone_number.string'    => trans('validation.string'),
-            'p1_full_name.max'          => trans('validation.max.string'),
-            'p1_phone_number.max'       => trans('validation.max.string'),
-            'p2_full_name.max'          => trans('validation.max.string'),
-            'p2_phone_number.max'       => trans('validation.max.string'),
         ];
     }
 
@@ -144,10 +130,6 @@ class StudentsRequest extends FormRequest
             'city'             => trans('validation.attributes.city'),
             'type'             => trans('validation.attributes.type'),
             'password'         => trans('validation.attributes.password'),
-            'p1_full_name'     => trans('validation.attributes.p1_full_name'),
-            'p1_phone_number'  => trans('validation.attributes.p1_phone_number'),
-            'p2_full_name'     => trans('validation.attributes.p2_full_name'),
-            'p2_phone_number'  => trans('validation.attributes.p2_phone_number'),
         ];
     }
 }

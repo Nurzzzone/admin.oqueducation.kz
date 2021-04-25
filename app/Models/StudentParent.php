@@ -22,7 +22,8 @@ class StudentParent extends Model
         'p1_full_name',
         'p1_phone_number',
         'p2_full_name',
-        'p2_phone_number'
+        'p2_phone_number',
+        'student_id'
     ];
 
     /**
@@ -30,6 +31,6 @@ class StudentParent extends Model
      */
     public function student()
     {
-        return $this->belongsTo(Student::class, 'parent_id', 'student');
+        return $this->hasOne(Student::class, 'student_id', 'id');
     }
 }

@@ -15,17 +15,21 @@ class StudentsResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
-            'name'          => $this->name,
-            'surname'       => $this->surname,
-            'middle_name'   => $this->middle_name,
-            'email_address' => $this->email_address,
-            'home_address'  => $this->home_address,
-            'birth_date'    => $this->birth_date,
-            'phone_number'  => $this->phone_number,
-            'image'         => $this->image,
-            'city'          => $this->city,
-            'type'          => $this->type->name,
+            'id'              => $this->id,
+            'name'            => $this->name,
+            'surname'         => $this->surname,
+            'middle_name'     => $this->middle_name,
+            'email_address'   => $this->email_address,
+            'home_address'    => $this->home_address,
+            'birth_date'      => $this->birth_date,
+            'phone_number'    => $this->phone_number,
+            'image'           => $this->image,
+            'city'            => $this->city,
+            'type'            => $this->type->name,
+            'p1_full_name'    => $this->parent->p1_full_name,
+            'p1_phone_number' => $this->parent->p1_phone_number,
+            'p2_full_name'    => $this->parent->p2_full_name,
+            'p2_phone_number'    => $this->parent->p2_phone_number
         ];
     }
 

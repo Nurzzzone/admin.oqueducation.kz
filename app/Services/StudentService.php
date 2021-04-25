@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\Student;
 use App\Services\Service;
-use App\Models\StudentParent;
 use Illuminate\Support\Facades\DB;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class StudentService extends Service
 {
@@ -16,10 +16,10 @@ class StudentService extends Service
    */
   public function createStudent($data): void
   {
-    $student = Student::make($data);
-    $parent = $student->parent()->create($data);
-    $student->fill(['parent_id' => $parent->id]);
-    $student->save();
+      $student = Student::create($data);
+      $parent = $student->parent()->make($data);
+      $parent->fill(['student_id' => $student->id]);
+      $parent->save();
   }
 
   /**
@@ -27,21 +27,24 @@ class StudentService extends Service
    * 
    * @return void
    */
-  public function updateStudent($data, $id): void
+  public function updateStudent($data, $student): void
   {
-    $student = Student::findOrFail($id);
-    $student->fill($data);
-    $student->save();
+    // $student->fill($data)->save();
+    // $parent = $student->parent()->fill($data);
+    // $parent->save();
   }
 
   /**
    * Delete existing student
    * 
-   * @return void
+   * @return bool
    */
-  public function deleteStudent($id): void
+  public function deleteStudent($student): bool
   {
-    $student = Student::findOrFail($id);
-    $student->delete();
+    if ($student->delete()) {
+      return true;
+    }
+
+    return false;
   }
 }

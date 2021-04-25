@@ -19,6 +19,7 @@ class CreateStudentsParentsTable extends Migration
             $table->string('p1_phone_number', 255)->comment('Номер телефона родителя1');
             $table->string('p2_full_name', 255)->nullable()->comment('ФИО родителя 2');
             $table->string('p2_phone_number', 255)->nullable()->comment('Номер телефона родителя 2');
+            $table->foreignId('student_id')->comment('Ученик')->constrained('students')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

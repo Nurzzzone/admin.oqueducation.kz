@@ -31,22 +31,21 @@ class Student extends Model
       'image',
       'password',
       'type_id',
-      'parent_id',
       'city'
-  ];
+    ];
 
-  protected $with = [
-    'parent',
-    'type'
-  ];
+    protected $with = [
+      'parent',
+      'type'
+    ];
 
-  public function parent()
-  {
-    return $this->hasOne(StudentParent::class, 'id', 'parent_id');
-  }
+    public function parent()
+    {
+      return $this->belongsTo(StudentParent::class, 'id');
+    }
 
-  public function type()
-  {
-    return $this->hasOne(StudentType::class, 'id', 'type_id');
-  }
+    public function type()
+    {
+      return $this->hasOne(StudentType::class, 'id', 'type_id');
+    }
 }

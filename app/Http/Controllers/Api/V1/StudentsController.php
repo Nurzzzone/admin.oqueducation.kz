@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Student;
-use Illuminate\Http\Request;
-use App\Models\StudentParent;
 use Illuminate\Http\Response;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Dotenv\Exception\ValidationException;
+use App\Models\Student;
 use App\Services\StudentService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StudentsRequest;
-use Illuminate\Database\QueryException;
 use App\Http\Resources\StudentsResource;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Events\QueryExecuted;
+use App\Http\Requests\Student\CreateStudentRequest;
+use App\Http\Requests\Student\CreateStudentParentRequest;
+use App\Http\Requests\Student\UpdateStudentParentRequest;
+use App\Http\Requests\Student\UpdateStudentRequest;
 
 class StudentsController extends Controller
 {
@@ -38,18 +39,22 @@ class StudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StudentsRequest $request
+     * @param  \App\Http\Requests\Student\CreateStudentRequest  $studentRequest
+     * @param  \App\Http\Requests\Student\CreateStudentParentRequest  $parentRequest
      * @return \Illuminate\Http\Response
      */
-    public function store(StudentsRequest $request)
+    public function store(CreateStudentRequest $studentRequest, CreateStudentParentRequest $parentRequest)
     {
         try {
-            $this->service->createStudent($request->validated());
-        } catch (QueryException $exception) {
+            $data = array_merge($studentRequest->validated(), $parentRequest->validated());
+            $this->service->createStudent($data);
+        } catch (\Exception $exception) {
             return response()->json(
                 [
-                    // remove comment on development to see error message
+                    // remove the comment on development to see error message
                     'message'=> $exception->getMessage(),
+                    // remove the comment on production to see message
+                    // 'message' => 'Whoops, looks like something went wrong',
                     'error' => 'internal server error', 
                     'code' => 500
                 ]
@@ -80,24 +85,39 @@ class StudentsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \App\Http\Requests\Student\UpdateStudentRequest
+     * @param \App\Http\Requests\Student\UpdateStudentParentRequest
+     * @param \App\Models\Student
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateStudentRequest $studentRequest, UpdateStudentParentRequest $parentRequest, Student $student)
     {
-        $data = $request->validated();
-        // if (!is_null($data['p1_full_name']) || !is_null($data['p1_phone_number']) || !is_null($data['p2_full_name']) || !is_null($data['p2_phone_number'])) {
-        //     $parent = $student->parent()->fill([
-        //         'p1_full_name'    => $data['p1_full_name'], 
-        //         'p1_phone_number' => $data['p1_phone_number'],
-        //         'p2_full_name'    => $data['p2_full_name'],
-        //         'p2_phone_number' => $data['p2_phone_number']
-        //     ]);
-        //     $parent->save();
-        // }
+        try {
+            $data = array_merge($studentRequest->validated(), $parentRequest->validated());
+            $this->service->updateStudent($data, $student);
+        } catch (QueryException $exception) {
+            return response()->json([
+                // remove comment on development to see error message
+                'message'=> $exception->getMessage(),
+                'error' => 'internal server error', 
+                'code' => 500
+            ]);
+        } catch (ModelNotFoundException $exception) {
+            return response()->json([
+                // remove comment on development to see error message
+                'message'=> 'пользователь не найден',
+                'error' => 'internal server error', 
+                'code' => 500
+            ]);
+        } catch (ValidationException $exception) {
+            return response()->json([
+                'message'=> $exception->getMessage(),
+                'error' => 'internal server error', 
+                'code' => 500
+            ]);
+        }
 
-        return response(['message' => 'операция прошла успешно', 'code' => 200])->setStatusCode(Response::HTTP_CREATED);
+        return response(['message' => 'пользователь успешно обновлен', 'code' => 200])->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -106,10 +126,10 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Student $student)
     {
         try {
-            $this->service->deleteStudent($id);
+            $this->service->deleteStudent($student);
         } catch(QueryException $exception) {
             return response()->json(
                 [
