@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Teacher;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TeachersRequest;
+use App\Http\Requests\Teacher\CreateTeacherRequest;
+use App\Http\Requests\Teacher\UpdateTeacherRequest;
 
 class TeachersController extends Controller
 {
@@ -38,7 +39,7 @@ class TeachersController extends Controller
      * @param  \App\Http\Requests\TeachersRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TeachersRequest $request)
+    public function store(CreateTeacherRequest $request)
     {
         $teacher = new Teacher();
         if ($teacher->save()) {
@@ -81,9 +82,9 @@ class TeachersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TeachersRequest $request, $id)
+    public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        $teacher = Teacher::findOrFail($id);
+        
     }
 
     /**
