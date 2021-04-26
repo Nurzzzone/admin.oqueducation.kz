@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Requests\Teacher\CreateTeacherRequest;
 use App\Http\Requests\Teacher\UpdateTeacherRequest;
-use Exception;
 
 class TeachersController extends Controller
 {
+    protected $upload_path;
+
+    public function __construct()
+    {
+        $this->upload_path = 'images'.DIRECTORY_SEPARATOR.'teachers'.DIRECTORY_SEPARATOR;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +54,13 @@ class TeachersController extends Controller
     {
         DB::beginTransaction();
         try {
-            $teacher = Teacher::create($request->validated());
+            $teacher = Teacher::make($request->validated());
+            if ($request->has('image')) 
+                if ($request->image !== null)
+                    $teacher->fill([
+                        'image' => $this->uploadImage($request)
+                    ]);
+            $teacher->save();
             foreach ($request->validated()['job_history'] as $job) {
                 $teacherJobHistory = $teacher->jobHistory()->create($job);
             }
@@ -55,11 +69,11 @@ class TeachersController extends Controller
             // dd(['message' => 'teacher created successfully']);
         } catch(\Exception $exception) {
             DB::rollBack();
-            Schema::disableForeignKeyConstraints();
-            DB::table('teachers')->truncate();
-            DB::table('teachers_jhistory')->truncate();
-            DB::table('teachers_socials')->truncate();
-            Schema::enableForeignKeyConstraints();
+            // Schema::disableForeignKeyConstraints();
+            // DB::table('teachers')->truncate();
+            // DB::table('teachers_jhistory')->truncate();
+            // DB::table('teachers_socials')->truncate();
+            // Schema::enableForeignKeyConstraints();
             dd(['message' => $exception->getMessage()]);
         }
         return redirect()
@@ -131,11 +145,38 @@ class TeachersController extends Controller
         DB::beginTransaction();
         try {
             $teacher->delete();
+            if ($teacher->image !== null) $this->deleteImage($teacher->image);
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
             dd(['message' => $exception->getMessage()]);
         }
         return redirect()->route('teachers.index');
+    }
+
+    private function uploadImage($request)
+    {
+        if ($request->hasFile('image')) {
+            if ($request->file('image')->isValid()) {
+                $file = $request->file('image');
+                $file_extension = $file->getClientOriginalExtension();
+                $file_name = 'IMG_'.date('Ymd').'_'.time().'.'.$file_extension;
+                $file->move(public_path($this->upload_path), $file_name);
+                return $file_name;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private function deleteImage($file_name)
+    {
+        $file = public_path($this->upload_path . $file_name);
+        if (File::exists($file) || !is_null($file_name)) {
+            unlink($file);
+            return true;
+        } else {
+            return null;
+        }
     }
 }

@@ -26,5 +26,7 @@ return [
     "from" => "from",
     "to"   => "tp",
   ],
+  "facebook"      => "Facebook",
+  "instagram"     => "instagram",
 
 ];

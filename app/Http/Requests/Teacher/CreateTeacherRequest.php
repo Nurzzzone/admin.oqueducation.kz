@@ -32,7 +32,7 @@ class CreateTeacherRequest extends FormRequest
             'phone_number'           => 'required|string|max:255|unique:teachers,phone_number' . $this->teacher,
             'home_address'           => 'nullable|string|max:255',
             'email_address'          => 'nullable|email|string|max:255',
-            'image'                  => 'nullable|string|max:255',
+            'image'                  => 'nullable',
             'description'            => 'nullable|string|max:4000',
             'is_active'              => 'required|boolean',
             'position'               => 'nullable|string',

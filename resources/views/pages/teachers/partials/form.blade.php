@@ -1,6 +1,26 @@
 <div class="form-body">
-  <h5>Личная инфорамация</h5>
 
+  <div class="avatar-upload">
+    <div class="avatar-edit">
+        {{ Form::file('image', ['class' => 'custom-file-input', 'id' => 'imageUpload']) }}
+        <label for="imageUpload">
+          <i class="ficon bx bxs-pencil my-50 ml-50"></i>
+        </label>
+    </div>
+    <div class="avatar-preview">
+      @php
+          if ($teacher['image'] !== null) {
+            $image = $teacher['image'];
+          } else {
+            $image = asset('images/profile/default.png');
+          }
+      @endphp
+        <div id="imagePreview" style="background-image: url({{ asset($image) }});">
+        </div>
+    </div>
+  </div>
+
+  <h5>Личная инфорамация</h5>
   <div class="row  mb-2">
     {{-- left side --}}
     <div class="col-6">
@@ -52,12 +72,11 @@
         {{ Form::label('description', trans('fields.description').':', ['class' => 'font-small-1']) }}
       </div>
       <div class="col-md-12 form-group">
-        {{ Form::textarea('description', $teacher['description'] ?? old('description'), ['class' => ['form-control', $errors->has('description') ? 'border-danger' : '']]) }}
+        {{ Form::textarea('description', $teacher['description'] ?? old('description'), ['id'=>'teacher-textarea','class' => ['form-control', $errors->has('description') ? 'border-danger' : '']]) }}
         @error('description')
             <small class="text-danger">{{ $message }}</small>
         @enderror
       </div>
-
 
     </div> {{-- end: left side --}}
 
@@ -116,33 +135,18 @@
       </div>
 
       <div class="col-md-12">
-        {{ Form::label('image', trans('fields.image').':', ['class' => 'font-small-1']) }}
-      </div>
-      <div class="col-md-12">
-        <fieldset class="form-group">
-            <div class="custom-file">
-              {{ Form::file('image', ['class' => 'custom-file-label']) }}
-              {{ Form::label('image', trans('fields.image'), ['class' => ['custom-file-label cursor-pointer', $errors->has('image') ? 'border-danger' : '']]) }}
-              @error('image')
-                <small class="text-danger">{{ $message }}</small>
-              @enderror
-            </div>
-        </fieldset>
-      </div>
-
-      <div class="col-md-12">
         {{ Form::label('is_active', trans('fields.display').':', ['class' => 'font-small-1']) }}
       </div>
 
 
       <div class="col-md-12">
-        <div class="custom-control custom-radio custom-control-inline">
-          {{ Form::radio('is_active', 1, true, ['id' => 'active', 'class' => ['custom-control-input', $errors->has('is_active') ? 'border-danger' : '']]) }}
-          {{ Form::label('active', trans('fields.active'), ['class' => 'custom-control-label text-success font-small-1 cursor-pointer']) }}
+        <div class="custom-control custom-radio pl-0 mt-50">
+          {{ Form::radio('is_active', 1, true, ['id' => 'active', 'class' => ['radio-active', $errors->has('is_active') ? 'border-danger' : '']]) }}
+          {{ Form::label('active', trans('fields.active'), ['class' => 'label-active text-success font-small-1 cursor-pointer']) }}
         </div>
-        <div class="custom-control custom-radio custom-control-inline">
-          {{ Form::radio('is_active', 0, false, ['id' => 'inactive', 'class' => ['custom-control-input', $errors->has('is_active') ? 'border-danger' : '']]) }}
-          {{ Form::label('inactive', trans('fields.inactive'), ['class' => 'custom-control-label text-danger font-small-1 cursor-pointer']) }}
+        <div class="custom-control custom-radio pl-0">
+          {{ Form::radio('is_active', 0, false, ['id' => 'inactive', 'class' => ['radio-active', $errors->has('is_active') ? 'border-danger' : '']]) }}
+          {{ Form::label('inactive', trans('fields.inactive'), ['class' => 'label-active text-danger font-small-1 cursor-pointer']) }}
         </div>
         @error('is_active')
           <small class="text-danger">{{ $message }}</small>
