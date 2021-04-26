@@ -9,7 +9,8 @@
     <div class="card-content">
       <div class="card-body">
         {{ Form::model($teacher, ['url' => route('teachers.store'), 'class' => 'form form-horizontal', 'enctype' => 'multipart/form-data']) }}
-          @include('pages.teachers.form')
+          @include('pages.teachers.partials.form')
+          @include('pages.teachers.partials.register')
           <div class="col-md-12 d-flex mt-2 justify-content-end">
             {{ Form::submit(__('buttons.create'), ['class' => 'btn btn-success']) }}
           </div>

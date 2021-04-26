@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Teacher;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTeacherRequest extends FormRequest
@@ -27,16 +28,35 @@ class UpdateTeacherRequest extends FormRequest
             'name'          => 'sometimes|string|max:255',
             'surname'       => 'nullable|string|max:255',
             'middle_name'   => 'nullable|string|max:255',
-            'birth_date'    => 'nullable|date_format:Y.m.d|before:today|max:10',
+            'birth_date'    => 'nullable|date|before:today|max:10',
             'phone_number'  => 'sometimes|string|max:255|unique' . $this->teacher,
             'home_address'  => 'nullable|string|max:255',
             'email_address' => 'nullable|email|string|max:255',
             'image'         => 'nullable|string|max:255',
             'description'   => 'nullable|string|max:4000',
             'facebook_url'  => 'nullable|string|max:255|url',
-            'instagram_url' => 'nullable|string|max:255|url'
+            'instagram_url' => 'nullable|string|max:255|url',
+            'old_password'  => 'required_with:password',
+            'password'      => 'nullable|string|min:6|different:old_password'
+
         ];
     }
+
+    /**
+     * Handle a passed validation attempt.
+     *
+     * @return void
+     */
+    // public function validated()
+    // {
+    //     $request = $this->validator->validated();
+
+    //     if ($this->has('password') && $this->filled('password'))
+    //         if(Hash::check($value, ))
+    //             $request['password'] = Hash::make($this->password);
+        
+    //     return $request;
+    // }
 
     /**
      * Get custom messages for validator errors.

@@ -27,8 +27,8 @@ return [
   "Authentication" => "Authentication",
   "password" => [
     "default" => "Password",
-    "new" => "New Password",
-    "old" => "Old Password",
+    "new" => "Новый пароль",
+    "old" => "Старый пароль",
     "forgot" => "Forgot Password",
     "reset" => "Reset Password",
     "remember" => "Remember me"

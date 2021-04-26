@@ -19,10 +19,12 @@ class Teacher extends Model
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable = 
+    [
         'name', 
         'surname', 
         'middle_name',
+        'home_address',
         'email_address',
         'phone_number',
         'birth_date',
@@ -33,9 +35,15 @@ class Teacher extends Model
         'is_active'
     ];
 
+    protected $with = 
+    [
+        'jobHistory',
+        'socials'
+    ];
+
     public function jobHistory()
     {
-        return $this->hasMany(TeacherJobHistory::class);
+        return $this->hasMany(TeacherJobHistory::class, 'teacher_id');
     }
 
     public function socials()

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Requests\Teacher\CreateTeacherRequest;
 use App\Http\Requests\Teacher\UpdateTeacherRequest;
+use Exception;
 
 class TeachersController extends Controller
 {
@@ -62,8 +63,7 @@ class TeachersController extends Controller
             dd(['message' => $exception->getMessage()]);
         }
         return redirect()
-            ->route('teachers.index')
-            ->setStatusCode(201);
+            ->route('teachers.index');
     }
 
     /**
@@ -90,7 +90,7 @@ class TeachersController extends Controller
     {
         $teacher = Teacher::findOrFail($id);
         $params = array_merge(['teacher' => $teacher], $this->getPageBreadcrumbs(['locale.teachers']));
-        return view('pages.students.edit', $params);
+        return view('pages.teachers.edit', $params);
     }
 
     /**
@@ -102,7 +102,22 @@ class TeachersController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        
+        dd($request->validated());
+        DB::beginTransaction();
+        try {
+            if ($teacher) {
+                $teacher->update([$request->validated()]);
+                $teacher->socials()->update($request->validated());
+                foreach ($request->validated()['job_title'] as $job) {
+                    $teacher->jobHistory()->update($job);
+                }
+                DB::commit();
+            }
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd(['message'=> $exception->getMessage()]);
+        }
+        return redirect()->route('teachers.index');
     }
 
     /**
@@ -111,12 +126,16 @@ class TeachersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Teacher $teacher)
     {
-        $teacher = Teacher::findOrFail($id);
-        if ($teacher->delete()) {
-            return redirect()
-                    ->route('teachers.index');
+        DB::beginTransaction();
+        try {
+            $teacher->delete();
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            dd(['message' => $exception->getMessage()]);
         }
+        return redirect()->route('teachers.index');
     }
 }

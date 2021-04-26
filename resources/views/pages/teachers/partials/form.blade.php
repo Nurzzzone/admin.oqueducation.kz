@@ -1,5 +1,6 @@
 <div class="form-body">
   <h5>Личная инфорамация</h5>
+
   <div class="row  mb-2">
     {{-- left side --}}
     <div class="col-6">
@@ -98,7 +99,7 @@
         {{ Form::label('facebook_url', trans('fields.facebook').':', ['class' => 'font-small-1']) }}
       </div>
       <div class="col-md-12 form-group">
-        {{ Form::url('facebook_url', $teacher['facebook_url'] ?? old('facebook_url'), ['class' => ['form-control form-control-sm', $errors->has('facebook_url') ? 'border-danger' : '']]) }}
+        {{ Form::url('facebook_url', $teacher->socials['facebook_url'] ?? old('facebook_url'), ['class' => ['form-control form-control-sm', $errors->has('facebook_url') ? 'border-danger' : '']]) }}
         @error('facebook_url')
             <small class="text-danger">{{ $message }}</small>
         @enderror
@@ -108,7 +109,7 @@
         {{ Form::label('instagram_url', trans('fields.instagram').':', ['class' => 'font-small-1']) }}
       </div>
       <div class="col-md-12 form-group">
-        {{ Form::url('instagram_url', $teacher['instagram_url'] ?? old('instagram_url'), ['class' => ['form-control form-control-sm', $errors->has('instagram_url') ? 'border-danger' : '']]) }}
+        {{ Form::url('instagram_url', $teacher->socials['instagram_url'] ?? old('instagram_url'), ['class' => ['form-control form-control-sm', $errors->has('instagram_url') ? 'border-danger' : '']]) }}
         @error('instagram_url')
             <small class="text-danger">{{ $message }}</small>
         @enderror
@@ -161,7 +162,7 @@
           <div class="row justify-content-between align-items-end">
             <div class="col-md-6">
               {{ Form::label('position', trans('fields.job_title').':', ['class' => 'font-small-1']) }}
-              {{ Form::text('position', $teacher['position'] ?? old('position'), ['class' => ['form-control form-control-sm', $errors->has('position') ? 'border-danger' : '']]) }}
+              {{ Form::text('position', $teacher->jobHistory['position'] ?? old('position'), ['class' => ['form-control form-control-sm', $errors->has('position') ? 'border-danger' : '']]) }}
               @error('position')
                   <small class="text-danger">{{ $message }}</small>
               @enderror
@@ -169,7 +170,7 @@
 
             <div class="col-md-6">
               {{ Form::label('workplace', trans('fields.job_place').':', ['class' => 'font-small-1']) }}
-              {{ Form::text('workplace', $teacher['workplace'] ?? old('workplace'), ['class' => ['form-control form-control-sm', $errors->has('workplace') ? 'border-danger' : '']]) }}
+              {{ Form::text('workplace', $teacher->jobHistory['workplace'] ?? old('workplace'), ['class' => ['form-control form-control-sm', $errors->has('workplace') ? 'border-danger' : '']]) }}
               @error('workplace')
                   <small class="text-danger">{{ $message }}</small>
               @enderror
@@ -210,36 +211,4 @@
       </div>
     </div>
   </div>
-
-  <h5>Авторизация</h5>
-  <div class="row">
-    <div class="col-md-6">
-      <div class="col-md-12">
-        {{ Form::label('phone_number', trans('fields.phone_number').':', ['class' => 'font-small-1']) }}
-        <span class="text-danger">*</span>
-      </div>
-      <div class="col-md-12">
-        {{ Form::tel('phone_number', $teacher['phone_numbers'] ?? old('phone_number'), ['class' => ['form-control form-control-sm', $errors->has('phone_number') ? 'border-danger' : '']]) }}
-        @error('phone_number')
-            <small class="text-danger">{{ $message }}</small>
-        @enderror
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="col-md-12">
-        {{ Form::label('password', trans('fields.password').':', ['class' => 'font-small-1']) }}
-        <span class="text-danger">*</span>
-      </div>
-      <div class="col-md-12">
-        {{ Form::password('password', ['class' => ['form-control form-control-sm', $errors->has('password') ? 'border-danger' : '']]) }}
-        @error('password')
-            <small class="text-danger">{{ $message }}</small>
-        @enderror
-      </div>
-    </div>
-
-  </div>
-
-
 </div>
