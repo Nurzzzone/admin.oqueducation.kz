@@ -8,6 +8,7 @@ return [
   "phone_number"  => "Phone Number",
   "home_address"  => "Home Address",
   "job_title"     => "Position",
+  "job_place"     => "Workplace",
   "email"         => "Email",
   "email_address" => "Email Address",
   "password"      => "Password",

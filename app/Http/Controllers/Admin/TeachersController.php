@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Teacher;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Schema;
 use App\Http\Requests\Teacher\CreateTeacherRequest;
 use App\Http\Requests\Teacher\UpdateTeacherRequest;
 
@@ -41,13 +43,27 @@ class TeachersController extends Controller
      */
     public function store(CreateTeacherRequest $request)
     {
-        dd($request->validated());
-        // $teacher = new Teacher($request->validated());
-        // dd($teacher->toArray());
-        // if ($teacher->save()) {
-        //     return redirect()
-        //             ->route('teachers.index');
-        // }
+        DB::beginTransaction();
+        try {
+            $teacher = Teacher::create($request->validated());
+            foreach ($request->validated()['job_history'] as $job) {
+                $teacherJobHistory = $teacher->jobHistory()->create($job);
+            }
+            $teacherSocials = $teacher->socials()->create($request->validated());
+            DB::commit();
+            // dd(['message' => 'teacher created successfully']);
+        } catch(\Exception $exception) {
+            DB::rollBack();
+            Schema::disableForeignKeyConstraints();
+            DB::table('teachers')->truncate();
+            DB::table('teachers_jhistory')->truncate();
+            DB::table('teachers_socials')->truncate();
+            Schema::enableForeignKeyConstraints();
+            dd(['message' => $exception->getMessage()]);
+        }
+        return redirect()
+            ->route('teachers.index')
+            ->setStatusCode(201);
     }
 
     /**

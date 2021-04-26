@@ -29,6 +29,17 @@ class Teacher extends Model
         'image',
         'description',
         'position',
+        'password',
+        'is_active'
     ];
 
+    public function jobHistory()
+    {
+        return $this->hasMany(TeacherJobHistory::class);
+    }
+
+    public function socials()
+    {
+        return $this->hasOne(TeacherSocialLink::class);
+    }
 }

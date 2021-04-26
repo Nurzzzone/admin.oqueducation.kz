@@ -85,6 +85,36 @@
       </div>
 
       <div class="col-md-12">
+        {{ Form::label('position', trans('fields.job_title').':', ['class' => 'font-small-1']) }}
+      </div>
+      <div class="col-md-12 form-group">
+        {{ Form::text('position', $teacher['position'] ?? old('position'), ['class' => ['form-control form-control-sm', $errors->has('position') ? 'border-danger' : '']]) }}
+        @error('position')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+      </div>
+
+      <div class="col-md-12">
+        {{ Form::label('facebook_url', trans('fields.facebook').':', ['class' => 'font-small-1']) }}
+      </div>
+      <div class="col-md-12 form-group">
+        {{ Form::url('facebook_url', $teacher['facebook_url'] ?? old('facebook_url'), ['class' => ['form-control form-control-sm', $errors->has('facebook_url') ? 'border-danger' : '']]) }}
+        @error('facebook_url')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+      </div>
+
+      <div class="col-md-12">
+        {{ Form::label('instagram_url', trans('fields.instagram').':', ['class' => 'font-small-1']) }}
+      </div>
+      <div class="col-md-12 form-group">
+        {{ Form::url('instagram_url', $teacher['instagram_url'] ?? old('instagram_url'), ['class' => ['form-control form-control-sm', $errors->has('instagram_url') ? 'border-danger' : '']]) }}
+        @error('instagram_url')
+            <small class="text-danger">{{ $message }}</small>
+        @enderror
+      </div>
+
+      <div class="col-md-12">
         {{ Form::label('image', trans('fields.image').':', ['class' => 'font-small-1']) }}
       </div>
       <div class="col-md-12">
@@ -106,11 +136,11 @@
 
       <div class="col-md-12">
         <div class="custom-control custom-radio custom-control-inline">
-          {{ Form::radio('is_active', true ?? old('is_active'), true, ['id' => 'active', 'class' => ['custom-control-input', $errors->has('is_active') ? 'border-danger' : '']]) }}
+          {{ Form::radio('is_active', 1, true, ['id' => 'active', 'class' => ['custom-control-input', $errors->has('is_active') ? 'border-danger' : '']]) }}
           {{ Form::label('active', trans('fields.active'), ['class' => 'custom-control-label text-success font-small-1 cursor-pointer']) }}
         </div>
         <div class="custom-control custom-radio custom-control-inline">
-          {{ Form::radio('is_active', false ?? old('is_active'), false, ['id' => 'inactive', 'class' => ['custom-control-input', $errors->has('is_active') ? 'border-danger' : '']]) }}
+          {{ Form::radio('is_active', 0, false, ['id' => 'inactive', 'class' => ['custom-control-input', $errors->has('is_active') ? 'border-danger' : '']]) }}
           {{ Form::label('inactive', trans('fields.inactive'), ['class' => 'custom-control-label text-danger font-small-1 cursor-pointer']) }}
         </div>
         @error('is_active')
@@ -129,15 +159,23 @@
       <div data-repeater-list="job_history">
         <div data-repeater-item class="col-md-12">
           <div class="row justify-content-between align-items-end">
-            <div class="col-md-4">
+            <div class="col-md-6">
               {{ Form::label('position', trans('fields.job_title').':', ['class' => 'font-small-1']) }}
               {{ Form::text('position', $teacher['position'] ?? old('position'), ['class' => ['form-control form-control-sm', $errors->has('position') ? 'border-danger' : '']]) }}
               @error('position')
                   <small class="text-danger">{{ $message }}</small>
               @enderror
             </div>
+
+            <div class="col-md-6">
+              {{ Form::label('workplace', trans('fields.job_place').':', ['class' => 'font-small-1']) }}
+              {{ Form::text('workplace', $teacher['workplace'] ?? old('workplace'), ['class' => ['form-control form-control-sm', $errors->has('workplace') ? 'border-danger' : '']]) }}
+              @error('workplace')
+                  <small class="text-danger">{{ $message }}</small>
+              @enderror
+            </div>
   
-            <div class="col-md-3">
+            <div class="col-md-6">
               {{ Form::label('start_date', trans('fields.period.from').':', ['class' => 'font-small-1']) }}
               {{ Form::date('start_date', $teacher['start_date'] ?? old('start_date'), ['class' => ['form-control form-control-sm', $errors->has('start_date') ? 'border-danger' : '']]) }}
               @error('start_date')
@@ -145,7 +183,7 @@
               @enderror
             </div>
   
-            <div class="col-md-3">
+            <div class="col-md-6">
                 {{ Form::label('end_date', trans('fields.period.to').':', ['class' => 'font-small-1']) }}
                 {{ Form::date('end_date', $teacher['end_date'] ?? old('end_date'), ['class' => ['form-control form-control-sm', $errors->has('end_date') ? 'border-danger' : '']]) }}
                 @error('end_date')
@@ -153,7 +191,7 @@
                 @enderror
             </div>
   
-              <div class="col-md-1 m-0 pr-0 form-group d-flex align-items-center pt-2">
+              <div class="col-md-12 form-group d-flex justify-content-end align-items-center pt-2">
                 <button class="btn btn-danger pt-0 px-1" data-repeater-delete type="button">
                   <i class="bx bx-x align-middle"></i>
                 </button>

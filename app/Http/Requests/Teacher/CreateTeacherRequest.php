@@ -34,15 +34,16 @@ class CreateTeacherRequest extends FormRequest
             'email_address'          => 'nullable|email|string|max:255',
             'image'                  => 'nullable|string|max:255',
             'description'            => 'nullable|string|max:4000',
-            'is_active'              => 'nullable|boolean',
+            'is_active'              => 'required|boolean',
             'position'               => 'nullable|string',
             'facebook_url'           => 'nullable|string|max:255|url',
             'instagram_url'          => 'nullable|string|max:255|url',
             'password'               => 'required|string|min:6|max:255',
             'position'               => 'nullable|string|max:255',
-            'job_history.position'   => 'nullable|string|max:255',
-            'job_history.start_date' => 'nullable|date',
-            'job_history.end_date'   => 'nullable|date',
+            'job_history.*.position'   => 'required|string|max:255',
+            'job_history.*.workplace'  => 'required|string|max:255',
+            'job_history.*.start_date' => 'required|date|max:10',
+            'job_history.*.end_date'   => 'required|date|max:10',
         ];
     }
 
