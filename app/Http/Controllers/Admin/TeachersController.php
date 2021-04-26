@@ -41,11 +41,13 @@ class TeachersController extends Controller
      */
     public function store(CreateTeacherRequest $request)
     {
-        $teacher = new Teacher();
-        if ($teacher->save()) {
-            return redirect()
-                    ->route('teachers.index');
-        }
+        dd($request->validated());
+        // $teacher = new Teacher($request->validated());
+        // dd($teacher->toArray());
+        // if ($teacher->save()) {
+        //     return redirect()
+        //             ->route('teachers.index');
+        // }
     }
 
     /**

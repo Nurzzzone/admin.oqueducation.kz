@@ -20,6 +20,10 @@ return [
   "file"          => "File",
   "active"        => "Active",
   "inactive"      => "Not active",
-  "display"       => "Display"
+  "display"       => "Display",
+  "period"         => [
+    "from" => "from",
+    "to"   => "tp",
+  ],
 
 ];

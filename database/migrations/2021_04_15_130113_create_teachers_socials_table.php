@@ -17,7 +17,7 @@ class CreateTeachersSocialsTable extends Migration
             $table->id();
             $table->string('facebook_url')->comment('Facebook');
             $table->string('instagram_url')->comment('Instagram');
-            $table->foreignId('teacher_id')->nullable()->constrained('teachers')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('teacher_id')->constrained('teachers')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

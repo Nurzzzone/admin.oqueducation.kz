@@ -29,11 +29,6 @@ class Teacher extends Model
         'image',
         'description',
         'position',
-        'lesson_id'
     ];
 
-    public function classes()
-    {
-      return $this->hasMany(Classes::class, 'lesson_id', 'lesson_id');
-    }
 }

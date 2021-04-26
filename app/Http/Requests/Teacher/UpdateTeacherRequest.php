@@ -13,7 +13,7 @@ class UpdateTeacherRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,74 @@ class UpdateTeacherRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'          => 'sometimes|string|max:255',
+            'surname'       => 'nullable|string|max:255',
+            'middle_name'   => 'nullable|string|max:255',
+            'birth_date'    => 'nullable|date_format:Y.m.d|before:today|max:10',
+            'phone_number'  => 'sometimes|string|max:255|unique' . $this->teacher,
+            'home_address'  => 'nullable|string|max:255',
+            'email_address' => 'nullable|email|string|max:255',
+            'image'         => 'nullable|string|max:255',
+            'description'   => 'nullable|string|max:4000',
+            'facebook_url'  => 'nullable|string|max:255|url',
+            'instagram_url' => 'nullable|string|max:255|url'
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return 
+        [
+            'name.string'           => trans('validation.string'),
+            'surname.string'        => trans('validation.string'),
+            'middle_name.string'    => trans('validation.string'),
+            'phone_number.string'   => trans('validation.string'),
+            'home_address.string'   => trans('validation.string'),
+            'email_address.string'  => trans('validation.string'),
+            'image.string'          => trans('validation.string'),
+            'description.string'    => trans('validation.string'),
+            'facebook_url.string'   => trans('validation.string'),
+            'instagram_url.string'  => trans('validation.string'),
+            'name.max'              => trans('validation.max.string'),
+            'surname.max'           => trans('validation.max.string'),
+            'middle_name.max'       => trans('validation.max.string'),
+            'phone_number.max'      => trans('validation.max.string'),
+            'home_address.max'      => trans('valdiation.max.string'),
+            'email_address.max'     => trans('validation.max.string'),
+            'image.max'             => trans('validation.max.string'),
+            'description'           => trans('validation.max.string'),
+            'facebook_url.max'      => trans('validation.max.string'),
+            'instagram_url.max'     => trans('validation.max.string'),
+            'facebook_url.url'      => trans('validation.url'),
+            'instagram_url.url'     => trans('validation.url'),
+            'email_address.email'   => trans('validation.email'),
+            'birth_date.date_format'=> trans('validation.date'),
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return
+        [
+            'name'          => trans('validation.attributes.name'),
+            'surname'       => trans('validation.attributes.surname'),
+            'middle_name'   => trans('validation.attributes.middle_name'),
+            'phone_number'  => trans('validation.attributes.phone_number'),
+            'email_address' => trans('validation.attributes.email_address'),
+            'image'         => trans('validation.attributes.image'),
+            'description'   => trans('validation.attributes.description'),
+            'facebook_url'  => trans('validation.attributes.facebook'),
+            'instagram_url' => trans('validation.instagram_url'),
         ];
     }
 }
