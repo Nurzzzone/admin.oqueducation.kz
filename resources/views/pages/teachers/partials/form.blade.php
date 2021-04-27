@@ -10,12 +10,12 @@
     <div class="avatar-preview">
       @php
           if ($teacher['image'] !== null) {
-            $image = $teacher['image'];
+            $image = asset('images/teachers/'.$teacher['image']);
           } else {
             $image = asset('images/profile/default.png');
           }
       @endphp
-        <div id="imagePreview" style="background-image: url({{ asset($image) }});">
+        <div id="imagePreview" style="background-image: url({{ $image }});">
         </div>
     </div>
   </div>
@@ -159,52 +159,113 @@
   </div>
 
   <h5>Стаж работы</h5>
+  @if ($jobHistory->isEmpty())
+    <div class="row">
+      <div class="col-12 repeater-default">
+        <div data-repeater-list="job_history">
+          <div data-repeater-item class="col-md-12">
+            <div class="row justify-content-between align-items-end">
+              <div class="col-md-6">
+                {{ Form::label('position', trans('fields.job_title').':', ['class' => 'font-small-1']) }}
+                {{ Form::text('position', $teacher->jobHistory['position'] ?? old('position'), ['class' => ['form-control form-control-sm', $errors->has('position') ? 'border-danger' : '']]) }}
+                @error('position')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+              </div>
+
+              <div class="col-md-6">
+                {{ Form::label('workplace', trans('fields.job_place').':', ['class' => 'font-small-1']) }}
+                {{ Form::text('workplace', $teacher->jobHistory['workplace'] ?? old('workplace'), ['class' => ['form-control form-control-sm', $errors->has('workplace') ? 'border-danger' : '']]) }}
+                @error('workplace')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+              </div>
+    
+              <div class="col-md-6">
+                {{ Form::label('start_date', trans('fields.period.from').':', ['class' => 'font-small-1']) }}
+                {{ Form::date('start_date', $teacher['start_date'] ?? old('start_date'), ['class' => ['form-control form-control-sm', $errors->has('start_date') ? 'border-danger' : '']]) }}
+                @error('start_date')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+              </div>
+    
+              <div class="col-md-6">
+                  {{ Form::label('end_date', trans('fields.period.to').':', ['class' => 'font-small-1']) }}
+                  {{ Form::date('end_date', $teacher['end_date'] ?? old('end_date'), ['class' => ['form-control form-control-sm', $errors->has('end_date') ? 'border-danger' : '']]) }}
+                  @error('end_date')
+                      <small class="text-danger">{{ $message }}</small>
+                  @enderror
+              </div>
+    
+                <div class="col-md-12 form-group d-flex justify-content-end align-items-center pt-2">
+                  <button class="btn btn-danger pt-0 px-1" data-repeater-delete type="button">
+                    <i class="bx bx-x align-middle"></i>
+                  </button>
+                </div>
+    
+            </div>
+            <hr>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-12 d-flex justify-content-center">
+            <button class="btn btn-primary" data-repeater-create type="button">
+              <i class="bx bx-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  @else
   <div class="row">
     <div class="col-12 repeater-default">
       <div data-repeater-list="job_history">
-        <div data-repeater-item class="col-md-12">
-          <div class="row justify-content-between align-items-end">
-            <div class="col-md-6">
-              {{ Form::label('position', trans('fields.job_title').':', ['class' => 'font-small-1']) }}
-              {{ Form::text('position', $teacher->jobHistory['position'] ?? old('position'), ['class' => ['form-control form-control-sm', $errors->has('position') ? 'border-danger' : '']]) }}
-              @error('position')
-                  <small class="text-danger">{{ $message }}</small>
-              @enderror
-            </div>
-
-            <div class="col-md-6">
-              {{ Form::label('workplace', trans('fields.job_place').':', ['class' => 'font-small-1']) }}
-              {{ Form::text('workplace', $teacher->jobHistory['workplace'] ?? old('workplace'), ['class' => ['form-control form-control-sm', $errors->has('workplace') ? 'border-danger' : '']]) }}
-              @error('workplace')
-                  <small class="text-danger">{{ $message }}</small>
-              @enderror
-            </div>
-  
-            <div class="col-md-6">
-              {{ Form::label('start_date', trans('fields.period.from').':', ['class' => 'font-small-1']) }}
-              {{ Form::date('start_date', $teacher['start_date'] ?? old('start_date'), ['class' => ['form-control form-control-sm', $errors->has('start_date') ? 'border-danger' : '']]) }}
-              @error('start_date')
-                  <small class="text-danger">{{ $message }}</small>
-              @enderror
-            </div>
-  
-            <div class="col-md-6">
-                {{ Form::label('end_date', trans('fields.period.to').':', ['class' => 'font-small-1']) }}
-                {{ Form::date('end_date', $teacher['end_date'] ?? old('end_date'), ['class' => ['form-control form-control-sm', $errors->has('end_date') ? 'border-danger' : '']]) }}
-                @error('end_date')
+        @foreach ($jobHistory as $job)
+          <div data-repeater-item class="col-md-12">
+            <div class="row justify-content-between align-items-end">
+                {{ Form::hidden('id', $job->id ?? null) }}
+              <div class="col-md-6">
+                {{ Form::label('position', trans('fields.job_title').':', ['class' => 'font-small-1']) }}
+                {{ Form::text('position', $job['position'] ?? old('position'), ['class' => ['form-control form-control-sm', $errors->has('position') ? 'border-danger' : '']]) }}
+                @error('position')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
-            </div>
-  
-              <div class="col-md-12 form-group d-flex justify-content-end align-items-center pt-2">
-                <button class="btn btn-danger pt-0 px-1" data-repeater-delete type="button">
-                  <i class="bx bx-x align-middle"></i>
-                </button>
               </div>
-  
+
+              <div class="col-md-6">
+                {{ Form::label('workplace', trans('fields.job_place').':', ['class' => 'font-small-1']) }}
+                {{ Form::text('workplace', $job['workplace'] ?? old('workplace'), ['class' => ['form-control form-control-sm', $errors->has('workplace') ? 'border-danger' : '']]) }}
+                @error('workplace')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+              </div>
+    
+              <div class="col-md-6">
+                {{ Form::label('start_date', trans('fields.period.from').':', ['class' => 'font-small-1']) }}
+                {{ Form::date('start_date', $job['start_date'] ?? old('start_date'), ['class' => ['form-control form-control-sm', $errors->has('start_date') ? 'border-danger' : '']]) }}
+                @error('start_date')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+              </div>
+    
+              <div class="col-md-6">
+                  {{ Form::label('end_date', trans('fields.period.to').':', ['class' => 'font-small-1']) }}
+                  {{ Form::date('end_date', $job['end_date'] ?? old('end_date'), ['class' => ['form-control form-control-sm', $errors->has('end_date') ? 'border-danger' : '']]) }}
+                  @error('end_date')
+                      <small class="text-danger">{{ $message }}</small>
+                  @enderror
+              </div>
+    
+                <div class="col-md-12 form-group d-flex justify-content-end align-items-center pt-2">
+                  <button class="btn btn-danger pt-0 px-1" data-repeater-delete type="button">
+                    <i class="bx bx-x align-middle"></i>
+                  </button>
+                </div>
+    
+            </div>
+            <hr>
           </div>
-          <hr>
-        </div>
+        @endforeach
       </div>
       <div class="form-group">
         <div class="col-12 d-flex justify-content-center">
@@ -215,4 +276,6 @@
       </div>
     </div>
   </div>
+  @endif
+
 </div>

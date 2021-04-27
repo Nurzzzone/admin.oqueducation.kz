@@ -40,7 +40,8 @@ class TeachersController extends Controller
     public function create()
     {
         $teacher = new Teacher();
-        $params = array_merge(['teacher' => $teacher], $this->getPageBreadcrumbs(['pages.teachers', 'buttons.create']));
+        $jobHistory = $teacher->jobHistory()->get();
+        $params = array_merge(['teacher' => $teacher, 'jobHistory' => $jobHistory], $this->getPageBreadcrumbs(['pages.teachers', 'buttons.create']));
         return view('pages.teachers.create', $params);
     }
 
@@ -103,7 +104,8 @@ class TeachersController extends Controller
     public function edit($id)
     {
         $teacher = Teacher::findOrFail($id);
-        $params = array_merge(['teacher' => $teacher], $this->getPageBreadcrumbs(['locale.teachers']));
+        $jobHistory = $teacher->jobHistory()->get();
+        $params = array_merge(['teacher' => $teacher, 'jobHistory' => $jobHistory], $this->getPageBreadcrumbs(['locale.teachers']));
         return view('pages.teachers.edit', $params);
     }
 
@@ -116,16 +118,63 @@ class TeachersController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        dd($request->validated());
         DB::beginTransaction();
         try {
             if ($teacher) {
-                $teacher->update([$request->validated()]);
-                $teacher->socials()->update($request->validated());
-                foreach ($request->validated()['job_title'] as $job) {
-                    $teacher->jobHistory()->update($job);
+                $data = $request->validated();
+                if ($data['new_password'] !== null && $data['old_password'] !== null) {
+                    dd('Запрос на изменение пароля находится в разработке');
                 }
+                $teacher = Teacher::findOrFail($teacher->id);
+                $teacher->update($data);
+
+                // if ($data['image'] !== null) {
+                //     $this->uploadImage($data['image']);
+                //     if ($teacher->image !== null) $this->deleteImage($teacher->image);
+                // }
+                $teacher->socials()->update([
+                    'facebook_url' => $data['facebook_url'],
+                    'instagram_url' => $data['instagram_url'],
+                ]);
+
+                if (count($data['job_history']) > $teacher->jobHistory()->count()) {
+                    $jobsArr = array_diff(array_keys($data['job_history']), array_keys($teacher->jobHistory()->get()->toArray()));
+                    $jobs = [];
+                    foreach ($jobsArr as $job) {
+                        $jobs[] = collect($data['job_history'])->filter(function($value, $key) use($job) {
+                            return $key == $job;
+                        })->toArray();
+                    }
+                    foreach ($jobs as $job) {
+                        foreach ($job as $job) {
+                            $teacherJobHistory = $teacher->jobHistory()->create($job);
+                        }
+                    }
+                } elseif (count($data['job_history']) < $teacher->jobHistory()->count()) {
+                    $jobsArr = array_diff(array_keys($teacher->jobHistory()->get()->toArray()), array_keys($data['job_history']));
+                    $jobs = [];
+                    foreach ($jobsArr as $job) {
+                        $jobs[] = $teacher->jobHistory()->get()->filter(function($value, $key) use($job) {
+                            return $key == $job;
+                        })->toArray();
+                    }
+                    foreach ($jobs as $job) {
+                        foreach ($job as $job) {
+                            Schema::disableForeignKeyConstraints();
+                            $teacherJobHistory = $teacher->jobHistory()->where('id', '=', $job['id'])->delete();
+                            Schema::enableForeignKeyConstraints();
+                        }
+                    }
+                }
+
+                foreach ($data['job_history'] as $job) {
+                    if ($job['id'] !== null) {
+                        $teacher->jobHistory()->where('id', '=', $job['id'])->update($job);
+                    }
+                }
+
                 DB::commit();
+                dd('successfully updated');
             }
         } catch (\Exception $exception) {
             DB::rollBack();

@@ -32,13 +32,18 @@ class UpdateTeacherRequest extends FormRequest
             'phone_number'  => 'sometimes|string|max:255|unique' . $this->teacher,
             'home_address'  => 'nullable|string|max:255',
             'email_address' => 'nullable|email|string|max:255',
-            'image'         => 'nullable|string|max:255',
+            'image'         => 'nullable',
             'description'   => 'nullable|string|max:4000',
+            'is_active'     => 'sometimes|boolean',
             'facebook_url'  => 'nullable|string|max:255|url',
             'instagram_url' => 'nullable|string|max:255|url',
             'old_password'  => 'required_with:password',
-            'password'      => 'nullable|string|min:6|different:old_password'
-
+            'new_password'  => 'nullable|string|min:6|different:old_password',
+            'job_history.*.id'         => 'nullable',
+            'job_history.*.position'   => 'sometimes|string|max:255',
+            'job_history.*.workplace'  => 'sometimes|string|max:255',
+            'job_history.*.start_date' => 'sometimes|date|max:10',
+            'job_history.*.end_date'   => 'sometimes|date|max:10',
         ];
     }
 
@@ -47,17 +52,19 @@ class UpdateTeacherRequest extends FormRequest
      *
      * @return void
      */
-    // public function validated()
-    // {
-    //     $request = $this->validator->validated();
+    public function validated()
+    {
+        $request = $this->validator->validated();
 
-    //     if ($this->has('password') && $this->filled('password'))
-    //         if(Hash::check($value, ))
-    //             $request['password'] = Hash::make($this->password);
+        if ($this->has('new_password') && $this->has('old_password'))
+            if($this->filled('new_password') && $this->filled('old_password'))
+                if (Hash::check($this->old_password, $this->teacher->password))
+                    $request['password'] = Hash::make($this->new_password);
         
-    //     return $request;
-    // }
+        return $request;
+    }
 
+    
     /**
      * Get custom messages for validator errors.
      *

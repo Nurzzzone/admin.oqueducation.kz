@@ -5,7 +5,7 @@
       {{ Form::label('old_password', trans('locale.password.old').':', ['class' => 'font-small-1']) }}
     </div>
     <div class="col-md-12">
-      {{ Form::tel('old_password', null, ['class' => ['form-control form-control-sm', $errors->has('old_password') ? 'border-danger' : '']]) }}
+      {{ Form::password('old_password', ['class' => ['form-control form-control-sm', $errors->has('old_password') ? 'border-danger' : '']]) }}
       @error('old_password')
           <small class="text-danger">{{ $message }}</small>
       @enderror
