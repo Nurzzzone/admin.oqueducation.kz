@@ -12,30 +12,6 @@ return [
     "users"         => "Users",
     "login"         => "Authorization"
   ],
-  "form_fields" => [
-    "user" => [
-      "name"          => "Name",
-      "surname"       => "Surname",
-      "middle_name"   => "Middle Name",
-      "full_name"     => "Full Name",
-      "birthday"      => "Birthday",
-      "phone_number"  => "Phone Number",
-      "home_address"  => "Home Address",
-      "job_title"     => "Position",
-      "email"         => "Email",
-      "email_address" => "Email Address",
-      "password"      => "Password" 
-    ],
-    "post" => [
-      "author"      => "Author",
-      "title"       => "Title",
-      "header"      => "Header",
-      "description" => "Description",
-      "image"       => "Image",
-      "date"        => "Date",
-      "file"        => "File",
-    ],
-  ],
   "buttons" => [
     "default" => "Actions",
     "add"     => "Add",

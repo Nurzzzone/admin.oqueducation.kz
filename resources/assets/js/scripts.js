@@ -12,4 +12,5 @@
         document.delete_member_form.action = "{{ url('/') }}" + "/admin/team-members/" + id;
     });
   });
+
 })(window);

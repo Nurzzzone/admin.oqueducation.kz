@@ -19,21 +19,35 @@ class Teacher extends Model
      *
      * @var array
      */
-    protected $fillable = [
+    protected $fillable = 
+    [
         'name', 
         'surname', 
         'middle_name',
+        'home_address',
         'email_address',
         'phone_number',
         'birth_date',
         'image',
         'description',
         'position',
-        'lesson_id'
+        'password',
+        'is_active'
     ];
 
-    public function classes()
+    protected $with = 
+    [
+        'jobHistory',
+        'socials'
+    ];
+
+    public function jobHistory()
     {
-      return $this->hasMany(Classes::class, 'lesson_id', 'lesson_id');
+        return $this->hasMany(TeacherJobHistory::class, 'teacher_id');
+    }
+
+    public function socials()
+    {
+        return $this->hasOne(TeacherSocialLink::class);
     }
 }
