@@ -29,7 +29,7 @@ class UpdateStudentRequest extends FormRequest
             'surname'          => 'sometimes|string|max:255',
             'middle_name'      => 'nullable|string|max:255',
             'birth_date'       => 'sometimes|date_format:Y.m.d|before:today|max:10',
-            'image'            => 'nullable|string',
+            'image'            => 'nullable',
             'email_address'    => 'nullable|string',
             'home_address'     => 'sometimes|string',
             'phone_number'     => 'sometimes|string|unique:students,phone_number' . $this->student,
@@ -78,6 +78,8 @@ class UpdateStudentRequest extends FormRequest
                     $this->merge(['type_id' => 2]);
                     break;
             }
+        if ($this->has('birth_date'))
+            $this->merge(['birth_date' => \Carbon\Carbon::parse($this->birth_date)->format('Y.m.d')]);
     }
 
     /**

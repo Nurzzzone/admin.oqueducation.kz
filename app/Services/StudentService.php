@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Student;
 use App\Services\Service;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use phpDocumentor\Reflection\Types\Boolean;
 
 class StudentService extends Service
@@ -44,7 +45,6 @@ class StudentService extends Service
     if ($student->delete()) {
       return true;
     }
-
     return false;
   }
 }

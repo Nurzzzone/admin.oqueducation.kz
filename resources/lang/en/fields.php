@@ -26,7 +26,13 @@ return [
     "from" => "from",
     "to"   => "tp",
   ],
+  "city"          => "City",
   "facebook"      => "Facebook",
   "instagram"     => "instagram",
+  "type"          => "Type",
+  "p1_full_name"     => "First parent full name",
+  "p1_phone_number"  => "First parent phone number",
+  "p2_full_name"     => "Second parent full name",
+  "p2_phone_number"  => "Second parent phone number"
 
 ];

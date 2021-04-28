@@ -26,4 +26,12 @@ return [
     "from" => "Начало работы",
     "to"   => "Конец работы",
   ],
+  "city"          => "Город",
+  "facebook"      => "Facebook",
+  "instagram"     => "instagram",
+  "type"          => "Тип",
+  "p1_full_name"     => "ФИО родителя 1",
+  "p1_phone_number"  => "Номер телефона родителя 1",
+  "p2_full_name"     => "ФИО родителя 2",
+  "p2_phone_number"  => "Номер телефона родителя 2"
 ];

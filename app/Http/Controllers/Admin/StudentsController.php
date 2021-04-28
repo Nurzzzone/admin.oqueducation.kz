@@ -2,12 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Models\Student;
+use App\Services\StudentService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StudentsRequest;
+use Illuminate\Support\Facades\File;
+use App\Http\Requests\Student\CreateStudentRequest;
+use App\Http\Requests\Student\UpdateStudentRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Http\Requests\Student\CreateStudentParentRequest;
+use App\Http\Requests\Student\UpdateStudentParentRequest;
 
 class StudentsController extends Controller
 {
+
+    protected $upload_path;
+
+    public function __construct()
+    {
+      $this->upload_path = 'images'.DIRECTORY_SEPARATOR.'students'.DIRECTORY_SEPARATOR;
+    }
+  
+
     /**
      * Display a listing of the resource.
      *
@@ -38,13 +54,23 @@ class StudentsController extends Controller
      * @param  \App\Http\Requests\StudentsRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StudentsRequest $request)
+    public function store(CreateStudentRequest $studentRequest, CreateStudentParentRequest $parentRequest)
     {
-        $student = new Student();
-        if ($student->save()) {
-            return redirect()
-                    ->route('students.index');
+        try {
+            $data = array_merge($studentRequest->validated(), $parentRequest->validated());
+            $student = Student::make($data);
+            $student->fill([
+                'image' => $studentRequest->image !== null ? $this->uploadImage($studentRequest): null
+            ])->save();
+            $parent = $student->parent()->make($data);
+            $parent->fill([
+                'student_id' => $student->id
+            ])->save();
+        } catch (\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
         }
+        return redirect()
+                ->route('students.index');
     }
 
     /**
@@ -53,10 +79,13 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Student $student)
     {
-        $student = Student::findOrFail($id);
-        $params = array_merge(['student' => $student], $this->getPageBreadcrumbs(['pages.students']));
+        try {
+            $params = array_merge(['student' => $student], $this->getPageBreadcrumbs(['pages.students']));
+        } catch (ModelNotFoundException $exception) {
+            $this->response->errorNotFound();
+        }
         return view('pages.students.show', $params);
     }
 
@@ -80,13 +109,24 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StudentsRequest $request, $id)
+    public function update(UpdateStudentRequest $studentRequest, UpdateStudentParentRequest $parentRequest, Student $student)
     {
-        $student = Student::findOrFail($id);
-        if ($student->save()) {
-            return redirect()
-                    ->route('students.index');
+        try {
+            $data = array_merge($studentRequest->validated(), $parentRequest->validated());
+            if ($studentRequest->new_password !== null && $studentRequest->old_password !== null) {
+                dd('Запрос на изменение пароля находится в разработке');
+            }
+            if (isset($data['image']) && $data['image'] !== null) {
+                $data['image' ] = $this->uploadImage($studentRequest);
+                if ($student->image !== null) $this->deleteImage($student->image);
+            }
+            $student->update($data);
+            $student->parent()->update($parentRequest->validated());
+        } catch (\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
         }
+        return redirect()
+                ->route('students.index');
     }
 
     /**
@@ -95,12 +135,53 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Student $student)
     {
-        $student = Student::findOrFail($id);
-        if ($student->delete()) {
-            return redirect()
-                    ->route('students.index');
+        try {
+            if ($student->delete() && $student->image !== null) {
+                $this->deleteImage($student->image);
+            }
+        } catch (ModelNotFoundException $exception) {
+            $this->response->errorNotFound();
         }
+        return redirect()
+            ->route('students.index');
     }
+
+      /**
+   * Upload image
+   * 
+   * @return string|null
+   */
+  private function uploadImage($request)
+  {
+      if ($request->has('image') && $request->hasFile('image')) {
+          if ($request->image !== null && $request->file('image')->isValid()) {
+              $file = $request->file('image');
+              $file_extension = $file->getClientOriginalExtension();
+              $file_name = 'IMG_'.date('Ymd').'_'.time().'.'.$file_extension;
+              $file->move(public_path($this->upload_path), $file_name);
+              return $file_name;
+          }
+      } else {
+          return null;
+      }
+  }
+
+  /**
+   * Delete old image
+   * 
+   * @param string $file_name
+   * @return bool
+   */
+  private function deleteImage($file_name): bool
+  {
+      $file = public_path($this->upload_path . $file_name);
+      if (File::exists($file) && $file_name !== null) {
+          unlink($file);
+          return true;
+      } else {
+          return null;
+      }
+  }
 }
