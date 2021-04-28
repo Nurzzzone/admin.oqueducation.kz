@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\TeachersResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class TeachersController extends Controller
 {
@@ -14,28 +17,9 @@ class TeachersController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return (TeachersResource::collection(Teacher::all()))
+                                ->response()
+                                ->setEncodingOptions(JSON_PRETTY_PRINT);
     }
 
     /**
@@ -44,20 +28,16 @@ class TeachersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Teacher $teacher)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        try {
+            $teacher = (new TeachersResource($teacher))
+                ->response()
+                ->setEncodingOptions(JSON_PRETTY_PRINT);
+        } catch (ModelNotFoundException $exception) {
+            $this->response->errorNotFound();
+        }
+        return $teacher;
     }
 
     /**
@@ -68,17 +48,6 @@ class TeachersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }

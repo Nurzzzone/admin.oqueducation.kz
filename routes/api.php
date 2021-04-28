@@ -28,8 +28,12 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function() {
       // admin.nghrdc.kz/api/user
       Route::get('/user', 'Api\V1\AuthController@user');
 
-      // admin.oqu.kz/api/v1/team-members 
+      // admin.oqu.kz/api/v1/students
       Route::apiResource('/students', 'Api\V1\StudentsController');
       // Route::post('/students', 'Api\V1\StudentsController@store');
+
+
+      // admin.oqu.kz/api/v1/teachers
+      Route::apiResource('/teachers', 'Api\V1\TeachersController');
     });
 });
