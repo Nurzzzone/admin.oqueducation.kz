@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use Illuminate\Http\Response;
-use Illuminate\Database\QueryException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Dotenv\Exception\ValidationException;
 use App\Models\Student;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Services\StudentService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
 use App\Http\Resources\StudentsResource;
+use Dotenv\Exception\ValidationException;
 use App\Http\Requests\Student\CreateStudentRequest;
+use App\Http\Requests\Student\UpdateStudentRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\Student\CreateStudentParentRequest;
 use App\Http\Requests\Student\UpdateStudentParentRequest;
-use App\Http\Requests\Student\UpdateStudentRequest;
 
 class StudentsController extends Controller
 {
@@ -22,6 +24,35 @@ class StudentsController extends Controller
     public function __construct(StudentService $studentService)
     {
         $this->service = $studentService;
+        Auth::setDefaultDriver('student');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only(['phone_number', 'password']);
+
+        $student = Student::where('phone_number', $credentials['phone_number'])->get();
+        
+        if ($student->isEmpty()) {
+            return response()->json(['error' => 'Not Found: This phone number does not exists', 'code' => 404], 404);
+        }
+
+        if (!Auth::attempt($credentials)){
+            return response()->json(['error' => 'Unauthorized', 'code' => 401], 401);
+        }
+
+        return response()->json(['message' => 'Authorization succesfully passed', 'code' => 202], 202);
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
     /**
@@ -141,5 +172,20 @@ class StudentsController extends Controller
             );
         }
         return response(['message' => 'пользователь успешно удален', 'code' => 200])->setStatusCode(200);
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'expires_in' => Auth::factory()->getTTL() * 60
+        ]);
     }
 }

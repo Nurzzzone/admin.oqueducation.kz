@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\StudentParent;
 use App\Models\StudentType;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\StudentParent;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Student extends Model
+class Student extends Authenticatable
 {
     /**
      * The table associated with the model.
@@ -14,6 +14,8 @@ class Student extends Model
      * @var string
      */
    protected $table = 'students';
+
+   protected $guard = 'student';
 
     /**
      * The attributes that are mass assignable.
@@ -37,6 +39,10 @@ class Student extends Model
     protected $with = [
       'parent',
       'type'
+    ];
+
+    protected $hidden = [
+      'password', 'remember_token'
     ];
 
     public function parent()
