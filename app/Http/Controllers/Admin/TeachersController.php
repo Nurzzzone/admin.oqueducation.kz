@@ -92,7 +92,7 @@ class TeachersController extends Controller
         $teacher = Teacher::findOrFail($id);
         $teacherFullName = $teacher->name .' '. $teacher->surname;
         $params = array_merge(['teacher' => $teacher], $this->getPageBreadcrumbs(['pages.teachers'], $teacherFullName));
-        return view('pages.students.show');
+        return view('pages.teachers.show', $params);
     }
 
     /**
@@ -126,12 +126,14 @@ class TeachersController extends Controller
                     dd('Запрос на изменение пароля находится в разработке');
                 }
                 $teacher = Teacher::findOrFail($teacher->id);
+                if (isset($data['image']) && $data['image'] !== null) {
+                    $data['image' ] = $this->uploadImage($request);
+                    if ($teacher->image !== null) {
+                        $this->deleteImage($teacher->image);
+                    }
+                }
                 $teacher->update($data);
-
-                // if ($data['image'] !== null) {
-                //     $this->uploadImage($data['image']);
-                //     if ($teacher->image !== null) $this->deleteImage($teacher->image);
-                // }
+                
                 $teacher->socials()->update([
                     'facebook_url' => $data['facebook_url'],
                     'instagram_url' => $data['instagram_url'],
@@ -221,7 +223,7 @@ class TeachersController extends Controller
     private function deleteImage($file_name)
     {
         $file = public_path($this->upload_path . $file_name);
-        if (File::exists($file) || !is_null($file_name)) {
+        if (File::exists($file) && $file_name !== null) {
             unlink($file);
             return true;
         } else {

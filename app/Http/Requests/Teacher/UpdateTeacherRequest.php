@@ -32,7 +32,7 @@ class UpdateTeacherRequest extends FormRequest
             'phone_number'  => 'sometimes|string|max:255|unique' . $this->teacher,
             'home_address'  => 'nullable|string|max:255',
             'email_address' => 'nullable|email|string|max:255',
-            'image'         => 'nullable',
+            'image'         => 'nullable|mimes:jpg,jpeg,png,bmp,gif,svg,webp',
             'description'   => 'nullable|string|max:4000',
             'is_active'     => 'sometimes|boolean',
             'facebook_url'  => 'nullable|string|max:255|url',
