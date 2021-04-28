@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Models\Teacher;
+use App\Services\TeacherService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -13,11 +14,11 @@ use App\Http\Requests\Teacher\UpdateTeacherRequest;
 
 class TeachersController extends Controller
 {
-    protected $upload_path;
+    protected $service;
 
-    public function __construct()
+    public function __construct(TeacherService $teacherService)
     {
-        $this->upload_path = 'images'.DIRECTORY_SEPARATOR.'teachers'.DIRECTORY_SEPARATOR;
+        $this->service = $teacherService;
     }
 
     /**
@@ -53,28 +54,9 @@ class TeachersController extends Controller
      */
     public function store(CreateTeacherRequest $request)
     {
-        DB::beginTransaction();
         try {
-            $teacher = Teacher::make($request->validated());
-            if ($request->has('image')) 
-                if ($request->image !== null)
-                    $teacher->fill([
-                        'image' => $this->uploadImage($request)
-                    ]);
-            $teacher->save();
-            foreach ($request->validated()['job_history'] as $job) {
-                $teacherJobHistory = $teacher->jobHistory()->create($job);
-            }
-            $teacherSocials = $teacher->socials()->create($request->validated());
-            DB::commit();
-            // dd(['message' => 'teacher created successfully']);
+            $this->service->createTeacher($request);
         } catch(\Exception $exception) {
-            DB::rollBack();
-            // Schema::disableForeignKeyConstraints();
-            // DB::table('teachers')->truncate();
-            // DB::table('teachers_jhistory')->truncate();
-            // DB::table('teachers_socials')->truncate();
-            // Schema::enableForeignKeyConstraints();
             dd(['message' => $exception->getMessage()]);
         }
         return redirect()
@@ -118,68 +100,14 @@ class TeachersController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher)
     {
-        DB::beginTransaction();
         try {
-            if ($teacher) {
-                $data = $request->validated();
-                if ($data['new_password'] !== null && $data['old_password'] !== null) {
-                    dd('Запрос на изменение пароля находится в разработке');
-                }
-                $teacher = Teacher::findOrFail($teacher->id);
-                if (isset($data['image']) && $data['image'] !== null) {
-                    $data['image' ] = $this->uploadImage($request);
-                    if ($teacher->image !== null) {
-                        $this->deleteImage($teacher->image);
-                    }
-                }
-                $teacher->update($data);
-                
-                $teacher->socials()->update([
-                    'facebook_url' => $data['facebook_url'],
-                    'instagram_url' => $data['instagram_url'],
-                ]);
-
-                if (count($data['job_history']) > $teacher->jobHistory()->count()) {
-                    $jobsArr = array_diff(array_keys($data['job_history']), array_keys($teacher->jobHistory()->get()->toArray()));
-                    $jobs = [];
-                    foreach ($jobsArr as $job) {
-                        $jobs[] = collect($data['job_history'])->filter(function($value, $key) use($job) {
-                            return $key == $job;
-                        })->toArray();
-                    }
-                    foreach ($jobs as $job) {
-                        foreach ($job as $job) {
-                            $teacherJobHistory = $teacher->jobHistory()->create($job);
-                        }
-                    }
-                } elseif (count($data['job_history']) < $teacher->jobHistory()->count()) {
-                    $jobsArr = array_diff(array_keys($teacher->jobHistory()->get()->toArray()), array_keys($data['job_history']));
-                    $jobs = [];
-                    foreach ($jobsArr as $job) {
-                        $jobs[] = $teacher->jobHistory()->get()->filter(function($value, $key) use($job) {
-                            return $key == $job;
-                        })->toArray();
-                    }
-                    foreach ($jobs as $job) {
-                        foreach ($job as $job) {
-                            Schema::disableForeignKeyConstraints();
-                            $teacherJobHistory = $teacher->jobHistory()->where('id', '=', $job['id'])->delete();
-                            Schema::enableForeignKeyConstraints();
-                        }
-                    }
-                }
-
-                foreach ($data['job_history'] as $job) {
-                    if ($job['id'] !== null) {
-                        $teacher->jobHistory()->where('id', '=', $job['id'])->update($job);
-                    }
-                }
-
-                DB::commit();
-                dd('successfully updated');
-            }
+            $jobs = $request->validated()['job_history'];
+            $links = [
+                'facebook_url' => $request->validated()['facebook_url'],
+                'instagram_url' => $request->validated()['instagram_url'],
+            ];
+            $this->service->updateTeacher($request, $teacher, $jobs, $links);
         } catch (\Exception $exception) {
-            DB::rollBack();
             dd(['message'=> $exception->getMessage()]);
         }
         return redirect()->route('teachers.index');
@@ -193,41 +121,11 @@ class TeachersController extends Controller
      */
     public function destroy(Teacher $teacher)
     {
-        DB::beginTransaction();
         try {
-            $teacher->delete();
-            if ($teacher->image !== null) $this->deleteImage($teacher->image);
-            DB::commit();
+            $this->service->deleteTeacher($teacher);
         } catch (\Exception $exception) {
-            DB::rollBack();
             dd(['message' => $exception->getMessage()]);
         }
         return redirect()->route('teachers.index');
-    }
-
-    private function uploadImage($request)
-    {
-        if ($request->hasFile('image')) {
-            if ($request->file('image')->isValid()) {
-                $file = $request->file('image');
-                $file_extension = $file->getClientOriginalExtension();
-                $file_name = 'IMG_'.date('Ymd').'_'.time().'.'.$file_extension;
-                $file->move(public_path($this->upload_path), $file_name);
-                return $file_name;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    private function deleteImage($file_name)
-    {
-        $file = public_path($this->upload_path . $file_name);
-        if (File::exists($file) && $file_name !== null) {
-            unlink($file);
-            return true;
-        } else {
-            return null;
-        }
     }
 }
