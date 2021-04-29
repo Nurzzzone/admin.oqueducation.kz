@@ -23,6 +23,7 @@ $(document).ready(function(){
         $('html, body').animate({scrollTop : 0},1000);
     });
 
+    // upload image on teacher create page
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -39,10 +40,8 @@ $(document).ready(function(){
           readURL(this);
     });
 
-
-    $(document).ready( function() {
-        $('#class-loader').addClass('d-none');
-        $('#class-content').fadeIn(400);
-        $('ul [role="tablist"]').addClass('pl-4');
-    });
+    // remove loader after page is loaded on classes page
+    $('#class-loader').addClass('d-none');
+    $('#class-content').fadeIn(400);
+    $('ul[role="tablist"]').addClass('pl-4');
 });

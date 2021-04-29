@@ -38,7 +38,7 @@
                 @endphp
                 {{ Form::text('question', $class['question'] ?? old('question'), $options) }}
                 <div class="text-right">
-                  {{ Form::label('image', 'Прикрепить изображение к вопросу', ['class' => 'cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
+                  {{ Form::label('image', 'прикрепить изображение к вопросу', ['class' => 'cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
                   {{ Form::file('image', ['class' => 'd-none']) }}
                 </div>
                 @error('question')
@@ -49,6 +49,11 @@
               
               <div class="row">
                 <div class="col-12 inner-repeater">
+                  <div class="">
+                    <button class="btn p-0 pl-1 font-small-1" style="text-decoration: underline;" data-repeater-create type="button">
+                      добавить вопрос
+                    </button>
+                  </div>
                   <div data-repeater-list="answers">
                     <div data-repeater-item class="col-md-12">
                       <div class="row justify-content-between align-items-end">
@@ -70,13 +75,6 @@
                             <div class="col-6 d-flex justify-content-center pt-2">
                               <button class="btn btn-danger pt-0 px-1" data-repeater-delete type="button">
                                 <i class="bx bx-x align-middle"></i>
-                              </button>
-                            </div>
-                          </div>
-                          <div>
-                            <div class="col-6 d-flex justify-content-center pt-2">
-                              <button class="btn btn-primary pt-0 px-1" data-repeater-create type="button">
-                                <i class="bx bx-plus align-middle"></i>
                               </button>
                             </div>
                           </div>

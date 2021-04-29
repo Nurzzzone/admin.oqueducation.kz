@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClassesTable extends Migration
+class CreateClassesAnswersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateClassesTable extends Migration
      */
     public function up()
     {
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::create('classes_answers', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 255)->comment('Название');
-            $table->string('source_url', 255)->nullable()->comment('Источник');
-            $table->foreignId('type_id')->nullable()->constrained('classes_types');
+            $table->string('name', 255)->comment('Ответ');
+            $table->foreignId('question_id')->comment('Вопрос')->constrained('questions')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateClassesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('classes');
+        Schema::dropIfExists('classes_answers');
     }
 }

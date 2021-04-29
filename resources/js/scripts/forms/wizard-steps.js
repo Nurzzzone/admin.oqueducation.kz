@@ -14,12 +14,40 @@ $(".wizard-horizontal").steps({
   bodyTag: "fieldset",
   transitionEffect: "fade",
   titleTemplate: '<span class="step">#index#</span> #title#',
-  labels: {
-    finish: 'Submit'
+  onStepChanging: function () {
+    let form = $(this);
+    form.validate({
+      rules: {
+        title: {
+          required: true,
+          maxlength: 255,
+        },
+        source_url: {
+          required: true,
+          maxlength: 255,
+          url: true,
+        },
+        type: {
+          required: true,
+        },
+      },
+      highlight: function(element) {
+        $(element).addClass('border-danger').removeClass('border-success');
+      },
+      unhighlight: function(element) {
+        $(element).removeClass('border-danger').addClass('border-success');
+      },
+    });
+    return form.valid();
   },
   onFinished: function (event, currentIndex) {
     let form = $(this);
     form.submit();
+  },
+  labels: {
+    finish: $('html[lang]').attr("lang") == "ru"? "Подтвердить": "Submit",
+    next: $('html[lang]').attr("lang") == "ru"? "Следующий шаг": "Next",
+    previous: $('html[lang]').attr("lang") == "ru"? "Предыдущий шаг": "Previous",
   }
 });
 //        vertical Wizard       //
