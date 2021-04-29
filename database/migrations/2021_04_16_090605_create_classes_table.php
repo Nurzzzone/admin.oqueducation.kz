@@ -19,7 +19,6 @@ class CreateClassesTable extends Migration
             $table->text('description')->nullable()->comment('Описание');
             $table->string('source_url', 255)->nullable()->comment('Источник');
             $table->foreignId('type_id')->nullable()->constrained('classes_types');
-            $table->foreignId('teacher_id')->nullable()->constrained('teachers');
             $table->timestamps();
         });
     }

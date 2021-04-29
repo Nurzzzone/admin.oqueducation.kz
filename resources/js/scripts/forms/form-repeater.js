@@ -14,11 +14,15 @@ $(document).ready(function () {
     show: function () {
       $(this).slideDown();
     },
+    repeaters: [{
+      selector: '.inner-repeater',
+    }],
     hide: function (deleteElement) {
       if (confirm('Are you sure you want to delete this element?')) {
         $(this).slideUp(deleteElement);
       }
-    }
+    },
+
   });
 
 });

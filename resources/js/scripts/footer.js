@@ -37,5 +37,12 @@ $(document).ready(function(){
       
       $("#imageUpload").change(function() {
           readURL(this);
-      });
+    });
+
+
+    $(document).ready( function() {
+        $('#class-loader').addClass('d-none');
+        $('#class-content').fadeIn(400);
+        $('ul [role="tablist"]').addClass('pl-4');
+    });
 });

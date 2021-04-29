@@ -1,20 +1,11 @@
 @if($configData['mainLayoutType'] == 'vertical-menu')
   <div class="main-menu menu-fixed @if($configData['theme'] === 'light') {{"menu-light"}} @else {{'menu-dark'}} @endif menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
-      <ul class="nav navbar-nav flex-row">
+      <ul class="nav navbar-nav flex-row align-items-center">
         <li class="nav-item mr-auto">
-            <a class="navbar-brand" href="{{asset('/')}}">
-            <div class="brand-logo">
-              <img src="{{asset('images/logo/logo.png')}}" class="logo" alt="">
-            </div>
-            <h2 class="brand-text mb-0">
-              @if(!empty($configData['templateTitle']) && isset($configData['templateTitle']))
-              {{$configData['templateTitle']}}
-              @else
-              Frest
-              @endif
-            </h2>
-            </a>
+          <a class="navbar-brand" href="/">
+            <img src="{{asset('images/logo/logo.svg')}}" class="logo img-fluid" width="150" alt="">
+          </a>
         </li>
         <li class="nav-item nav-toggle">
           <a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse">
@@ -25,7 +16,7 @@
       </ul>
     </div>
     <div class="shadow-bottom"></div>
-    <div class="main-menu-content">
+    <div class="main-menu-content mt-2">
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation" data-icon-style="lines">
           @if(!empty($menuData[0]) && isset($menuData[0]))
           @foreach ($menuData[0]->menu as $menu)

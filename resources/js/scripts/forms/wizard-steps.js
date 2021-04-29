@@ -18,7 +18,8 @@ $(".wizard-horizontal").steps({
     finish: 'Submit'
   },
   onFinished: function (event, currentIndex) {
-    alert("Form submitted.");
+    let form = $(this);
+    form.submit();
   }
 });
 //        vertical Wizard       //

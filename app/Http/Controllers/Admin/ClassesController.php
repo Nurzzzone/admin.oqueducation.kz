@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Classes;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClassesRequest;
-use App\Models\Classes;
 
 class ClassesController extends Controller
 {
@@ -28,7 +29,7 @@ class ClassesController extends Controller
     public function create()
     {
         $class = new Classes();
-        $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
+        $params = array_merge(compact('class'), $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.create', $params);
     }
 
@@ -38,8 +39,9 @@ class ClassesController extends Controller
      * @param  \App\Http\Requests\ClassesRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ClassesRequest $request)
+    public function store(Request $request)
     {
+        dd($request->all());
         $class = new Classes();
         if ($class->save()) {
             return redirect()

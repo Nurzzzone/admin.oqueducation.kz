@@ -65,7 +65,7 @@ data-bgcolor="@if(isset($configData['navbarBgColor'])){{$configData['navbarBgCol
                 <div class="d-flex justify-content-between cursor-pointer">
                   <div class="media d-flex align-items-center border-0">
                     <div class="media-left pr-0">
-                      <div class="avatar mr-1 m-0"><img src="{{asset('images/portrait/small/avatar-s-16.jpg')}}" alt="avatar" height="39" width="39"></div>
+                      <div class="avatar mr-1 m-0"><img src="{{asset('images/profile/default.png')}}" alt="avatar" height="39" width="39"></div>
                     </div>
                     <div class="media-body">
                       <h6 class="media-heading"><span class="text-bold-500">New customer</span> comment recieved</h6><small class="notification-text">2 days ago</small>
