@@ -6,6 +6,7 @@ use App\Models\Classes;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Classes\CreateClassRequest;
 use App\Http\Requests\ClassesRequest;
+use Doctrine\DBAL\Query\QueryException;
 use Illuminate\Support\Facades\DB;
 
 class ClassesController extends Controller
@@ -18,7 +19,7 @@ class ClassesController extends Controller
     public function index()
     {
         $classes = Classes::paginate(15);
-        $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
+        $params = array_merge(['classes' => $classes], $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.index', $params);
     }
 
@@ -30,7 +31,7 @@ class ClassesController extends Controller
     public function create()
     {
         $class = new Classes();
-        $params = array_merge(compact('class'), $this->getPageBreadcrumbs(['pages.classes']));
+        $params = array_merge(['class' => $class], $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.create', $params);
     }
 
@@ -42,25 +43,28 @@ class ClassesController extends Controller
      */
     public function store(CreateClassRequest $request)
     {
-            $data = $request->validated();
-            $class = new Classes($data);
-            foreach ($data['questions'] as $questionKey => $question) {
-                foreach ($data['questions'][$questionKey]['answers'] as $answerKey => $answers) {
-                    $question = $class->questions()->make($data['questions'][$questionKey]);
-                    // $question->fill(['class_id' => $class->id]);
-                    $ans = $question->answers()->make($answers);
-                    // $ans->fill(['question_id' => $question->id]);
-                }
+        $data = $request->validated();
+        $class = Classes::create($data);
+        foreach ($data['questions'] as $questionKey => $question) {
+            foreach ($data['questions'][$questionKey]['answers'] as $answerKey => $answers) {
+                $question = $class->questions()->create($data['questions'][$questionKey]);
+                $question->answers()->create($data['questions'][$questionKey]['answers'][$answerKey]);
             }
-            $class->push();
-            return redirect()->route('classes.index');
+        }
 
-            // foreach ($data['questions '] as $questionKey => $question) {
-            //     foreach ($data['questions '][$questionKey]['answers'] as $answerKey => $answer) {
-            //         $question = $class->questions()->make($data['questions '][$questionKey]);
-            //         $question->answers()->make($data['questions '][$questionKey]['answers']);
-            //     }
-            // }
+        $hometask = $class->hometasks()->create($data['hometask']);
+        foreach ($data['hometask']['tasks'] as $taskKey => $task) {
+            $hometask->tasks()->create($data['hometask']['tasks'][$taskKey]);
+        }
+
+        return redirect()->route('classes.index');
+
+        // foreach ($data['questions '] as $questionKey => $question) {
+        //     foreach ($data['questions '][$questionKey]['answers'] as $answerKey => $answer) {
+        //         $question = $class->questions()->make($data['questions '][$questionKey]);
+        //         $question->answers()->make($data['questions '][$questionKey]['answers']);
+        //     }
+        // }
     }
 
     /**
@@ -72,7 +76,7 @@ class ClassesController extends Controller
     public function show($id)
     {
         $class = Classes::findOrFail($id);
-        $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
+        $params = array_merge(['class' => $class], $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.show', $params);
     }
 

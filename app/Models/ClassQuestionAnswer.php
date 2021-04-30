@@ -9,8 +9,25 @@ class ClassQuestionAnswer extends Model
 {
     use HasFactory;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = "classes_answers";
 
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'id';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
         'image',
@@ -19,6 +36,6 @@ class ClassQuestionAnswer extends Model
 
     public function question()
     {
-        return $this->belongsTo(ClassQuestion::class, 'question_id');
+        return $this->belongsTo(ClassQuestion::class, 'question_id', 'id');
     }
 }

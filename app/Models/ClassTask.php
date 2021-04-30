@@ -20,6 +20,6 @@ class ClassTask extends Model
 
     public function hometask()
     {
-        return $this->belongsTo(ClassTask::class);
+        return $this->belongsTo(ClassTask::class, 'hometask_id');
     }
 }

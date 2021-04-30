@@ -43,15 +43,19 @@ class CreateClassRequest extends FormRequest
      *
      * @return void
      */
-    // public function validated()
-    // {
-    //     $request = $this->validator->validated();
-
-    //     if ($this->has('password') && $this->filled('password'))
-    //             $request['password'] = Hash::make($this->password);
+    public function validated()
+    {
+        $request = $this->validator->validated();
         
-    //     return $request;
-    // }
+        if ($this->has('hometask') && $this->filled('hometask'))
+            $request['hometask'] = [
+                'name' => $this->hometask,
+                'tasks' => $this->tasks,
+            ];
+            unset($request['tasks']);
+        
+        return $request;
+    }
 
     /**
      * Prepare the data for validation.
