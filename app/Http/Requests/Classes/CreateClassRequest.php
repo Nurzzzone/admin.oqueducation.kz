@@ -24,19 +24,36 @@ class CreateClassRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'                         => 'required',
-            'source_url'                    => 'required',
-            'type_id'                       => 'required',
-            'questions.*.question'          => 'required',
-            'questions.*.image'             => 'nullalbe',
-            'questions.*.answers.*.answer'  => 'nullable',
-            'tasks.*.task'                  => 'required',
-            'tasks.*.hint'                  => 'nullable',
+            'title'                         => 'required|string|max:255',
+            'source_url'                    => 'required|string|max:255|url',
+            'type_id'                       => 'required|digits_between:1,3',
+            'hometask'                      => 'required|string|max:255',
+            'questions.*.name'              => 'required|string|max:255',
+            'questions.*.image'             => 'nullable',
+            'questions.*.answers.*.name'    => 'nullable|string|max:255',
+            'questions.*.answers.*.image'   => 'nullable',
+            'tasks.*.name'                  => 'nullable|string|max:255',
+            'tasks.*.hint'                  => 'nullable|string|max:255',
             'tasks.*.image'                 => 'nullable'
         ];
     }
 
-        /**
+    /**
+     * Handle a passed validation attempt.
+     *
+     * @return void
+     */
+    // public function validated()
+    // {
+    //     $request = $this->validator->validated();
+
+    //     if ($this->has('password') && $this->filled('password'))
+    //             $request['password'] = Hash::make($this->password);
+        
+    //     return $request;
+    // }
+
+    /**
      * Prepare the data for validation.
      *
      * @return void
@@ -45,9 +62,6 @@ class CreateClassRequest extends FormRequest
     {
         if ($this->has('type'))
             switch ($this->type) {
-                case "БИЛ/НИШ": 
-                    $this->merge(['type_id' => 1]);
-                    break;
                 case "БИЛ":
                     $this->merge(['type_id' => 1]);
                     break;

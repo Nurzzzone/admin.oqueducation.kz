@@ -9,6 +9,15 @@
 
 @section('content')
   <section id="icon-tabs">
+    @if ($errors->any())
+      <div class="alert alert-danger">
+          <ul>
+            @foreach ($errors->all() as $error)
+                <li class="font-small-1 text-white">{{ $error }}</li>
+            @endforeach
+          </ul>
+      </div>
+    @endif
     <div class="row">
       <div class="col-12">
         <div class="card">

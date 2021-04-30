@@ -24,9 +24,6 @@
               ];
           @endphp
           {{ Form::text('title', $class['title'] ?? old('title'), $options) }}
-          @error('title')
-            <small class="text-danger">{{ $message }}</small>
-          @enderror
         </div>
       </div>
       <div class="col-md-6">
@@ -35,10 +32,7 @@
           <span class="text-danger">*</span>
         </div>
         <div class="col-12 form-group">
-          {{ Form::select('type', ['1' => 'БИЛ', '2' => 'НИШ', '3' => 'ЕНТ'], $student->type->id ?? null, ['class' => ['form-control form-control-sm', $errors->has('type') ? 'border-danger' : '']]) }}
-          @error('type')
-            <small>{{ $message }} </small>
-          @enderror
+          {{ Form::select('type', ['БИЛ' => 'БИЛ', 'НИШ' => 'НИШ', 'ЕНТ' => 'ЕНТ'], $class->type->id ?? 'БИЛ', ['class' => ['form-control form-control-sm', $errors->has('type') ? 'border-danger' : '']]) }}
         </div>
       </div>
     </div>
@@ -57,10 +51,7 @@
                 'autocomplete' => 'off',
               ];
           @endphp
-          {{ Form::text('source_url', $class['source_url'] ?? old('source_url'), $options) }}
-          @error('source_url')
-              <small class="text-danger">{{ $message }}</small>
-          @enderror
+          {{ Form::url('source_url', $class['source_url'] ?? old('source_url'), $options) }}
         </div>
       </div>
     </div>

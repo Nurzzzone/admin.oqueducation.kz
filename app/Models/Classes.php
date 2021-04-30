@@ -12,19 +12,25 @@ class Classes extends Model
      * @var string
      */
     protected $table = 'classes';
+
+    protected $fillable = [
+      'title',
+      'source_ulr',
+      'type_id',
+    ];
     
     public function type()
     {
-      return $this->hasOne(ClassType::class, 'type_id', 'type_id');
+      return $this->hasOne(ClassType::class, 'id', 'type_id');
     }
 
     public function questions()
     {
-      return $this->hasMany(ClassQuestion::class);
+      return $this->hasMany(ClassQuestion::class, 'class_id', 'class_id');
     }
 
     public function hometasks()
     {
-      return $this->hasMany(ClassHomeTask::class);
+      return $this->hasMany(ClassHomeTask::class, 'class_id', 'class_id');
     }
 }

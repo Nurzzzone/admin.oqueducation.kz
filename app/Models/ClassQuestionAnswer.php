@@ -19,6 +19,6 @@ class ClassQuestionAnswer extends Model
 
     public function question()
     {
-        return $this->belongsTo(ClassQuestion::class);
+        return $this->belongsTo(ClassQuestion::class, 'question_id');
     }
 }

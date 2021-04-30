@@ -9,34 +9,26 @@
       <h6 class="py-50">Шаг 3 — Создание домашнего задания</h6>
     </div>
   </div>
-
   
   <div id="hometasks" class="border col-12 pt-2 mb-2">
     <div class="row">
-      <div class="col-md-12 px-0">
-        <div class="col-12">
-          {{ Form::label('hometask', trans('fields.hometask').':', ['class' => 'font-small-1']) }}
-          <span class="text-danger">*</span>
-        </div>
-        <div class="col-12 form-group">
-          @php
-          $options = [
-            'class' => ['form-control form-control-sm', $errors->has('answer') ? 'border-danger' : ''],
-            'placeholder' => 'Например...',
-            'autocomplete' => 'off',
-          ];
-          @endphp
-          {{ Form::text('hometask', $class['hometask'] ?? old('hometask'), $options) }}
-          @error('hometask')
-              <small class="text-danger">{{ $message }}</small>
-          @enderror
-          <hr class="mb-0">
-        </div>
-      </div>
-    </div>
-    <div class="row">
       <div class="col-12 px-0 repeater-default">
         <div data-repeater-list="tasks">
+          <div class="col-12">
+            {{ Form::label('hometask', trans('fields.hometask').':', ['class' => 'font-small-1']) }}
+            <span class="text-danger">*</span>
+          </div>
+          <div class="col-12 form-group">
+            @php
+            $options = [
+              'class' => ['form-control form-control-sm', $errors->has('answer') ? 'border-danger' : ''],
+              'placeholder' => 'Например...',
+              'autocomplete' => 'off',
+            ];
+            @endphp
+            {{ Form::text('hometask', $class['hometask'] ?? old('hometask'), $options) }}
+            <hr class="mb-0">
+          </div>
           <div data-repeater-item class="col-md-12 task">
             <div class="row justify-content-between align-items-end">
               <div class="col-md-11">
@@ -61,9 +53,6 @@
                 </div>
                 
                 <div class="hint-box position-relative d-flex justify-content-end">
-                  <div>
-
-                  </div>
                   {{ Form::button('добавить подсказку', [
                     'class' => 'hint-button btn cursor-pointer font-small-1 m-0 p-0', 
                     'type' => 'button',
@@ -81,19 +70,24 @@
                   {{ Form::textarea('hint', $teacher->jobHistory['hint'] ?? old('hint'), $options) }}
                   </div>
                 </div>
-                @error('task')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
               </div>
+
+
+              {{-- button: delete task --}}
               <div class="col-md-1 d-flex justify-content-center pb-2 pr-2">
                 <button class="btn btn-danger pt-0 px-1" data-repeater-delete type="button">
                   <i class="bx bx-x align-middle"></i>
                 </button>
               </div>
+              {{-- end-button: delete task --}}
     
+
             </div>
           </div>
         </div>
+
+
+        {{-- button: add task --}}
         <div class="form-group">
           <div class="col-12 d-flex justify-content-center">
             <button id="add-task" class="btn btn-primary" data-repeater-create type="button">
@@ -101,6 +95,7 @@
             </button>
           </div>
         </div>
+        {{-- end-button: add task --}}
       </div>
     </div>
   </div>

@@ -19,6 +19,11 @@ class ClassQuestion extends Model
 
     public function class()
     {
-        return $this->belongsTo(Classes::class);
+        return $this->belongsTo(Classes::class, 'class_id');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(ClassQuestionAnswer::class, 'question_id');
     }
 }

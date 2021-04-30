@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Classes;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Classes\CreateClassRequest;
 use App\Http\Requests\ClassesRequest;
+use Illuminate\Support\Facades\DB;
 
 class ClassesController extends Controller
 {
@@ -16,7 +17,7 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        $classes = Classes::all();
+        $classes = Classes::paginate(15);
         $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.index', $params);
     }
@@ -39,14 +40,27 @@ class ClassesController extends Controller
      * @param  \App\Http\Requests\ClassesRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateClassRequest $request)
     {
-        dd($request->all());
-        $class = new Classes();
-        if ($class->save()) {
-            return redirect()
-                    ->route('classes.index');
-        }
+            $data = $request->validated();
+            $class = new Classes($data);
+            foreach ($data['questions'] as $questionKey => $question) {
+                foreach ($data['questions'][$questionKey]['answers'] as $answerKey => $answers) {
+                    $question = $class->questions()->make($data['questions'][$questionKey]);
+                    // $question->fill(['class_id' => $class->id]);
+                    $ans = $question->answers()->make($answers);
+                    // $ans->fill(['question_id' => $question->id]);
+                }
+            }
+            $class->push();
+            return redirect()->route('classes.index');
+
+            // foreach ($data['questions '] as $questionKey => $question) {
+            //     foreach ($data['questions '][$questionKey]['answers'] as $answerKey => $answer) {
+            //         $question = $class->questions()->make($data['questions '][$questionKey]);
+            //         $question->answers()->make($data['questions '][$questionKey]['answers']);
+            //     }
+            // }
     }
 
     /**
