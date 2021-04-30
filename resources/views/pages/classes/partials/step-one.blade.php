@@ -20,7 +20,7 @@
               $options = [
                 'class' => ['form-control form-control-sm', $errors->has('source_url') ? 'border-danger' : ''],
                 'placeholder' => 'Например...',
-                'required' => '',
+                'autocomplete' => 'off',
               ];
           @endphp
           {{ Form::text('title', $class['title'] ?? old('title'), $options) }}
@@ -53,7 +53,8 @@
           @php
               $options = [
                 'class' => ['form-control form-control-sm', $errors->has('source_url') ? 'border-danger' : ''],
-                'placeholder' => 'https://...'
+                'placeholder' => 'https://...',
+                'autocomplete' => 'off',
               ];
           @endphp
           {{ Form::text('source_url', $class['source_url'] ?? old('source_url'), $options) }}

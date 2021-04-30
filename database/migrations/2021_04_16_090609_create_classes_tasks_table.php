@@ -15,9 +15,10 @@ class CreateClassesTasksTable extends Migration
     {
         Schema::create('classes_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('Задание');
-            $table->text('hint', 255)->comment('Подсказка');
-            $table->foreignId('hometask_id')->comment('Домашнее задание')->constrained('hometasks')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('name'. 255)->comment('Задание');
+            $table->string('image', 255)->nullable()->comment('Изображение');
+            $table->text('hint', 255)->nullable()->comment('Подсказка');
+            $table->foreignId('hometask_id')->comment('Домашнее задание')->constrained('classes_hometasks')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

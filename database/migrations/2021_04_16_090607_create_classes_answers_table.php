@@ -16,7 +16,8 @@ class CreateClassesAnswersTable extends Migration
         Schema::create('classes_answers', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255)->comment('Ответ');
-            $table->foreignId('question_id')->comment('Вопрос')->constrained('questions')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('image', 255)->comment('Изображение');
+            $table->foreignId('question_id')->comment('Вопрос')->constrained('classes_questions')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -13,18 +13,18 @@ class Classes extends Model
      */
     protected $table = 'classes';
     
-    public function student()
-    {
-      return $this->belongsTo(Student::class, 'student_id');
-    }
-
-    public function teacher()
-    {
-      return $this->belongsTo(Teacher::class, 'lesson_id');
-    }
-
     public function type()
     {
       return $this->hasOne(ClassType::class, 'type_id', 'type_id');
+    }
+
+    public function questions()
+    {
+      return $this->hasMany(ClassQuestion::class);
+    }
+
+    public function hometasks()
+    {
+      return $this->hasMany(ClassHomeTask::class);
     }
 }
