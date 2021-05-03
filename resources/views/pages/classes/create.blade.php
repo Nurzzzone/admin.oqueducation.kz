@@ -32,9 +32,9 @@
                 ];
               @endphp
               {{ Form::model($class, $options) }}
-                @include('pages.classes.partials.step-one')
-                @include('pages.classes.partials.step-two')
-                @include('pages.classes.partials.step-three')
+                @include('pages.classes.partials.1-index')
+                @include('pages.classes.partials.2-index')
+                @include('pages.classes.partials.3-index')
               {{ Form::close() }}
             </div>
             @include('pages.classes.partials.loader')

@@ -32,7 +32,7 @@
           <span class="text-danger">*</span>
         </div>
         <div class="col-12 form-group">
-          {{ Form::select('type', ['БИЛ' => 'БИЛ', 'НИШ' => 'НИШ', 'ЕНТ' => 'ЕНТ'], $class->type->id ?? 'БИЛ', ['class' => ['form-control form-control-sm', $errors->has('type') ? 'border-danger' : '']]) }}
+          {{ Form::select('type', ['БИЛ' => 'БИЛ', 'НИШ' => 'НИШ', 'ЕНТ' => 'ЕНТ'], $class->type->name ?? 'БИЛ', ['class' => ['form-control form-control-sm', $errors->has('type') ? 'border-danger' : '']]) }}
         </div>
       </div>
     </div>

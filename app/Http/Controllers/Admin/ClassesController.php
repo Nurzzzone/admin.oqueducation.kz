@@ -3,14 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Classes;
+use App\Services\ClassService;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Classes\CreateClassRequest;
-use App\Http\Requests\ClassesRequest;
-use Doctrine\DBAL\Query\QueryException;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Classes\UpdateClassRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ClassesController extends Controller
 {
+
+    protected $service;
+
+
+    public function __construct(ClassService $classService)
+    {
+        $this->service = $classService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,33 +48,17 @@ class ClassesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\ClassesRequest  $request
+     * @param  \App\Http\Requests\Classes\CreateClassRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(CreateClassRequest $request)
     {
-        $data = $request->validated();
-        $class = Classes::create($data);
-        foreach ($data['questions'] as $questionKey => $question) {
-            foreach ($data['questions'][$questionKey]['answers'] as $answerKey => $answers) {
-                $question = $class->questions()->create($data['questions'][$questionKey]);
-                $question->answers()->create($data['questions'][$questionKey]['answers'][$answerKey]);
-            }
-        }
-
-        $hometask = $class->hometasks()->create($data['hometask']);
-        foreach ($data['hometask']['tasks'] as $taskKey => $task) {
-            $hometask->tasks()->create($data['hometask']['tasks'][$taskKey]);
-        }
-
+        try {
+            $this->service->createClass($request->validated());
+        } catch (\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
+        }  
         return redirect()->route('classes.index');
-
-        // foreach ($data['questions '] as $questionKey => $question) {
-        //     foreach ($data['questions '][$questionKey]['answers'] as $answerKey => $answer) {
-        //         $question = $class->questions()->make($data['questions '][$questionKey]);
-        //         $question->answers()->make($data['questions '][$questionKey]['answers']);
-        //     }
-        // }
     }
 
     /**
@@ -73,9 +67,8 @@ class ClassesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Classes $class)
     {
-        $class = Classes::findOrFail($id);
         $params = array_merge(['class' => $class], $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.show', $params);
     }
@@ -86,27 +79,28 @@ class ClassesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Classes $class)
     {
-        $class = Classes::findOrFail($id);
-        $params = array_merge(compact('classes'), $this->getPageBreadcrumbs(['pages.classes']));
+        $params = array_merge(['class' => $class], $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.edit', $params);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\ClassesRequest  $request
+     * @param  \App\Http\Requests\Classes\UpdateClassRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ClassesRequest $request, $id)
+    public function update(UpdateClassRequest $request, Classes $class)
     {
-        $class = Classes::findOrFail($id);
-        if ($class->save()) {
-            return redirect()
-                    ->route('classes.index');
+        try {
+            $this->service->updateClass($request->validated(), $class);
+        } catch(ModelNotFoundException $exception) {
+            dd(['message' => $exception->getMessage()]);
         }
+        return redirect()
+            ->route('classes.index');
     }
 
     /**
@@ -115,12 +109,13 @@ class ClassesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Classes $class)
     {
-        $class = Classes::findOrFail($id);
-        if ($class->delete()) {
-            return redirect()
-                    ->route('classes.index');
+        try {
+            $this->service->deleteClass($class);
+        } catch(ModelNotFoundException $exception) {
+            dd(['message' => $exception->getMessage()]);
         }
+        return redirect()->route('classes.index');
     }
 }

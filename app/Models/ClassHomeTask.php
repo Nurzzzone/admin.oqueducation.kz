@@ -13,9 +13,7 @@ class ClassHomeTask extends Model
 
     protected $fillable = [
         'name',
-        'image',
-        'hint',
-        'hometask_id'
+        'class_id'
     ];
 
     public function class()

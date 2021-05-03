@@ -49,6 +49,6 @@ class Classes extends Model
 
     public function hometasks()
     {
-      return $this->hasMany(ClassHomeTask::class, 'class_id', 'id');
+      return $this->hasOne(ClassHomeTask::class, 'class_id', 'id');
     }
 }
