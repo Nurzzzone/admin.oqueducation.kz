@@ -5,9 +5,18 @@ namespace App\Services;
 use App\Models\Classes;
 use App\Services\Service;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class ClassService extends Service
 {
+  protected $upload_path;
+  protected $file_subdirs;
+
+  public function __construct()
+  {
+    $this->upload_path = 'images'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR;
+    $this->file_subdirs = ['questins', 'answers', 'tasks'];
+  }
 
   /**
    * Create new class
@@ -35,8 +44,22 @@ class ClassService extends Service
    */
   private function createQuestions($questions, $class): void
   {
-    foreach ($questions as $questionKey => $question) {
-      foreach ($questions[$questionKey]['answers'] as $answerKey => $answers) {
+    foreach ($questions as $questionKey => $questionValue) {
+      // save question image
+      if (array_key_exists('image', $questionValue)) {
+        if ($questionValue['image'] !== null && is_file($questionValue['image'])) {
+          $questions[$questionKey]['image'] = $this->uploadImage($questionValue['image'], 'questions');
+        }
+      }
+
+      foreach ($questions[$questionKey]['answers'] as $answerKey => $answer) {
+        // save answer image
+        if (array_key_exists('image', $answer)) {
+          if ($answer['image'] !== null && is_file($answer['image'])) {
+            $questions[$questionKey]['answers'][$answerKey]['image'] = $this->uploadImage($answer['image'], 'answers');
+          }
+        }
+
         $question = $class->questions()->create($questions[$questionKey]);
         $question->answers()->create($questions[$questionKey]['answers'][$answerKey]);
       }
@@ -53,6 +76,12 @@ class ClassService extends Service
     $hometask = $class->hometasks()->create($data);
     if ($data['tasks'] !== null && !empty($data['tasks'])) {
       foreach ($data['tasks'] as $taskKey => $task) {
+        if (array_key_exists('image', $task)) {
+          if ($task['image'] !== null && is_file($task['image'])) {
+            $data['tasks'][$taskKey]['image'] = $this->uploadImage($task['image'], 'tasks');
+          }
+        }
+
         $hometask->tasks()->create($data['tasks'][$taskKey]);
       }
     }
@@ -92,7 +121,18 @@ class ClassService extends Service
 
     foreach ($questions as $questionKey => $questionValue) { // update existing questions
       if ($questionValue['id'] !== null) {
-        $question = $class->questions()->find($questionValue['id'])->update($questions[$questionKey]);
+        $question = $class->questions()->find($questionValue['id']);
+
+        // update question image
+        if (isset($questions[$questionKey]['image']) && $questions[$questionKey]['image'] !== null) {
+          $questions[$questionKey]['image'] = $this->uploadImage($questions[$questionKey]['image'], 'questions');
+
+          if ($question->image !== null) {
+            $this->deleteImage($question->image, 'questions');
+          }
+        }
+        $question->update($questions[$questionKey]);
+
         foreach ($questions[$questionKey]['answers'] as $answerKey => $answer) {
           $this->updateAnswers($questions[$questionKey]['answers'], $class->questions->find($questionValue['id']));
         }
@@ -133,7 +173,11 @@ class ClassService extends Service
         })->toArray();
       }
       foreach ($oldQuestions as $oldQuestion) {
-        $class->questions->find($oldQuestion['id'])->delete();
+        $question = $class->questions->find($oldQuestion['id']);
+        if ($question->image !== null) {
+          $this->deleteImage($question->image, 'questions');
+        }
+        $questions->delete();
       }
     }
   }
@@ -153,7 +197,18 @@ class ClassService extends Service
 
     foreach ($answers as $answerKey => $answer) {
       if ($answer['id'] !== null) {
-        $question->answers->find($answer['id'])->update($answer);
+        $ans = $question->answers->find($answer['id']);
+
+        // update answer image
+        if (isset($answer['image']) && $answer['image'] !== null) {
+          $answer['image'] = $this->uploadImage($answer['image'], 'answers');
+
+          if ($ans->image !== null) {
+            $this->deleteImage($ans->image, 'answers');
+          }
+        }
+
+        $ans->update($answer);
       }
     }
   }
@@ -165,6 +220,7 @@ class ClassService extends Service
    */
   private function updateWithNewAnswers($answers, $question): void
   {
+    dd($answers);
     if (!empty($answers) && $answers !== null) {
       $newAnswersKeys = array_diff(array_keys($answers), array_keys($question->answers->toArray()));
       foreach ($newAnswersKeys as $newAnswersKey) {
@@ -193,6 +249,7 @@ class ClassService extends Service
         })->toArray();
       }
       foreach ($oldAnswers as $oldAnswer) {
+        dd($oldAnswer);
         $question->answers()->find($oldAnswer['id'])->delete();
       }
     }
@@ -206,16 +263,27 @@ class ClassService extends Service
   private function updateHometask($data, $class): void
   {
     $hometask = $class->hometasks->update($data);
-    
     if (count($data['tasks']) > $class->hometasks->tasks->count()) { // create new task
       $this->updateWithNewTask($data['tasks'], $class->hometasks);
     } elseif (count($data['tasks']) < $class->hometasks->tasks->count()) { // delete old task
       $this->updateWithoutOldTask($data['tasks'], $class->hometasks);
     }
 
-    foreach ($data['tasks'] as $taskKey => $task) {
-      if ($task['id'] !== null) {
-        $class->hometasks->tasks()->find($task['id'])->update($data['tasks'][$taskKey]);
+    // update tasks
+    foreach ($data['tasks'] as $taskKey => $taskValue) {
+      if ($taskValue['id'] !== null) {
+        $task = $class->hometasks->tasks()->find($taskValue['id']);
+        
+        // update task image
+        if (isset($task['image']) && $task['image'] !== null) {
+          $data['tasks'][$taskKey]['image'] = $this->uploadImage($taskValue['image'], 'tasks');
+
+          if ($task->image !== null) {
+            $this->deleteImage($task->image, 'tasks');
+          }
+        }
+
+        $task->update($data['tasks'][$taskKey]);
       }
     }
   }
@@ -255,6 +323,7 @@ class ClassService extends Service
         })->toArray();
       }
       foreach ($oldTasks as $oldTask) {
+        dd($oldTask);
         $hometask->tasks->find($oldTask['id'])->delete();
       }
     }
@@ -269,6 +338,60 @@ class ClassService extends Service
   {
     DB::transaction(function () use ($class) {
       $class->delete();
+
+      // delete question image
+      if ($class->questions->isNotEmpty()) {
+        foreach ($class->questions as $question) {
+          $this->deleteImage($question->image, 'questions');
+
+          // delete answer image
+          if ($question->answers->isNotEmpty()) {
+            foreach ($question->answers as $answer) {
+              $this->deleteImage($answer->image, 'answers');
+            }
+          }
+        }
+      }
+
+      // delete task image
+      if ($class->hometasks->tasks->isNotEmpty()) {
+        foreach ($class->hometasks->tasks as $task) {
+          $this->deleteImage($task->image, 'tasks');
+        }
+      }
     });
+  }
+
+  /**
+   * Upload image
+   * 
+   */
+  private function uploadImage($file, $subdir)
+  {
+    if ($file !== null && is_file($file)) {
+      $upload_path = $this->upload_path . $subdir.DIRECTORY_SEPARATOR;
+      $file_extension = $file->getClientOriginalExtension();
+      $file_name = 'IMG_'.date('Ymd').'_'.time().'.'.$file_extension;
+      $file->move(public_path($upload_path), $file_name);
+      return $file_name;
+    }
+  }
+
+  /**
+   * Delete image
+   * 
+   */
+  private function deleteImage($file_name, $subdir)
+  {
+    if ($file_name !== null) {
+      $file_path = $this->upload_path . $subdir.DIRECTORY_SEPARATOR;
+      $file = public_path($file_path . $file_name);
+
+      if (File::exists($file)) {
+        unlink($file);
+        return true;
+      }
+      return false;
+    }
   }
 }

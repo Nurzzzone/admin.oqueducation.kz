@@ -16,6 +16,10 @@ class ClassHomeTask extends Model
         'class_id'
     ];
 
+    protected $with = [
+        'tasks',
+    ];
+
     public function class()
     {
         return $this->belongsTo(Classes::class, 'hometask_id');

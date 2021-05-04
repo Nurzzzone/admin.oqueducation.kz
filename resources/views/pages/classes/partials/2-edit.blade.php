@@ -35,12 +35,12 @@
             ];
           @endphp
           {{-- question_image: input --}}
-          {{ Form::label('image', '<i class="bx bxs-file-image"></i>', $options, false) }}
-          {{ Form::file('image', ['class' => 'd-none']) }}
+          {{ Form::label('question-image', '<i class="bx bxs-file-image"></i>', $options, false) }}
+          {{ Form::file('image', ['class' => 'd-none', 'id' => 'question-image']) }}
         </div>
         <div class="text-right">
           {{-- question_image: label --}}
-          {{ Form::label('image', 'прикрепить изображение', ['class' => 'text-right cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
+          {{ Form::label('question-image', 'прикрепить изображение', ['class' => 'text-right cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
         </div>
         <hr>
       </div>
@@ -78,13 +78,13 @@
                         ];
                       @endphp
                       {{-- answer_image: input --}}
-                      {{ Form::label('image', '<i class="bx bxs-file-image"></i>', $options, false) }}
-                      {{ Form::file('image', ['class' => 'd-none']) }}
+                      {{ Form::label('answer-image', '<i class="bx bxs-file-image"></i>', $options, false) }}
+                      {{ Form::file('image', ['class' => 'd-none', 'id' => 'answer-image']) }}
                     </div>
 
                     {{-- answer_name: label --}}
                     <div class="text-right">
-                      {{ Form::label('image', 'прикрепить изображение', ['class' => 'text-right cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
+                      {{ Form::label('answer-image', 'прикрепить изображение', ['class' => 'text-right cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
                     </div>
                   </div>
 

@@ -25,8 +25,8 @@
             'style' => "top: 7px; right: 10px;",
           ];
         @endphp
-        {{ Form::label('image', $value, $options, false) }}
-        {{ Form::file('image', ['class' => 'd-none']) }}
+        {{ Form::label('task-image', $value, $options, false) }}
+        {{ Form::file('image', ['class' => 'd-none', 'id' => 'task-image']) }}
       </div>
       
       <div class="hint-box position-relative d-flex justify-content-end">
