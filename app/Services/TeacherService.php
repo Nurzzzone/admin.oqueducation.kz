@@ -51,9 +51,6 @@ class TeacherService extends Service
     DB::beginTransaction();
     try {
       $data = $request->validated();
-      if ($data['new_password'] !== null && $data['old_password'] !== null) {
-          dd('Запрос на изменение пароля находится в разработке');
-      }
       if (isset($data['image']) && $data['image'] !== null) {
           $data['image' ] = $this->uploadImage($request);
           if ($teacher->image !== null) $this->deleteImage($teacher->image);

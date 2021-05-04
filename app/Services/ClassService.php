@@ -220,7 +220,6 @@ class ClassService extends Service
    */
   private function updateWithNewAnswers($answers, $question): void
   {
-    dd($answers);
     if (!empty($answers) && $answers !== null) {
       $newAnswersKeys = array_diff(array_keys($answers), array_keys($question->answers->toArray()));
       foreach ($newAnswersKeys as $newAnswersKey) {
@@ -249,7 +248,6 @@ class ClassService extends Service
         })->toArray();
       }
       foreach ($oldAnswers as $oldAnswer) {
-        dd($oldAnswer);
         $question->answers()->find($oldAnswer['id'])->delete();
       }
     }
@@ -323,7 +321,6 @@ class ClassService extends Service
         })->toArray();
       }
       foreach ($oldTasks as $oldTask) {
-        dd($oldTask);
         $hometask->tasks->find($oldTask['id'])->delete();
       }
     }

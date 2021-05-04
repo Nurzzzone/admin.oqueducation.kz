@@ -58,10 +58,27 @@ class UpdateTeacherRequest extends FormRequest
 
         if ($this->has('new_password') && $this->has('old_password'))
             if($this->filled('new_password') && $this->filled('old_password'))
-                if (Hash::check($this->old_password, $this->teacher->password))
-                    $request['password'] = Hash::make($this->new_password);
+                $request['password'] = Hash::make($this->new_password);
+                unset($request['new_password']);
+                unset($request['old_password']);
         
         return $request;
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ( !Hash::check($this->old_password, $this->teacher->password) ) {
+                $validator->errors()->add('old_password', 'Your current password is incorrect.');
+            }
+        });
+        return;
     }
 
     
