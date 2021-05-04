@@ -31,9 +31,11 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function() {
       // admin.oqu.kz/api/v1/students
       Route::apiResource('/students', 'Api\V1\StudentsController');
       Route::post('/students/login', 'Api\V1\StudentsController@login');
+      Route::post('/students/register', 'Api\V1\StudentsController@login');
 
 
       // admin.oqu.kz/api/v1/teachers
       Route::apiResource('/teachers', 'Api\V1\TeachersController');
+      Route::post('/teachers/login', 'Api\V1\TeachersController@login');
     });
 });

@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Exception;
 use App\Models\Teacher;
 use App\Services\TeacherService;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
 use App\Http\Requests\Teacher\CreateTeacherRequest;
 use App\Http\Requests\Teacher\UpdateTeacherRequest;
 

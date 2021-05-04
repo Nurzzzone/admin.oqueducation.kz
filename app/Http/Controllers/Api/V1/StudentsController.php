@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Student;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Services\StudentService;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\QueryException;
 use App\Http\Resources\StudentsResource;
-use Dotenv\Exception\ValidationException;
 use App\Http\Requests\Student\CreateStudentRequest;
 use App\Http\Requests\Student\UpdateStudentRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\Student\CreateStudentParentRequest;
 use App\Http\Requests\Student\UpdateStudentParentRequest;
+use Dotenv\Exception\ValidationException;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StudentsController extends Controller
 {
@@ -37,11 +37,38 @@ class StudentsController extends Controller
             return response()->json(['error' => 'Not Found: This phone number does not exists', 'code' => 404], 404);
         }
 
-        if (!Auth::attempt($credentials)){
+        if (!$token = Auth::attempt($credentials)){
             return response()->json(['error' => 'Unauthorized', 'code' => 401], 401);
         }
 
-        return response()->json(['message' => 'Authorization succesfully passed', 'code' => 202], 202);
+        $ttl = Auth::factory()->setTTL(43800);
+
+        return response()->json([
+            'access_token' => $token,
+            'message' => 'Authorization succesfully passed',
+            'expires_in' => 43800 * 60 // one month
+        ], 202);
+    }
+
+    public function register(CreateStudentRequest $studentRequest, CreateStudentParentRequest $parentRequest)
+    {
+        try {
+            $data = array_merge($studentRequest->validated(), $parentRequest->validated());
+            $this->service->createStudent($data);
+        } catch (\Exception $exception) {
+            return response()->json(
+                [
+                    // remove the comment on development to see error message
+                    'message'=> $exception->getMessage(),
+                    // remove the comment on production to see message
+                    // 'message' => 'Whoops, looks like something went wrong',
+                    'error' => 'internal server error', 
+                    'code' => 500
+                ]
+            );
+        }
+        return response(['message' => 'регистрация прошла успешно', 'code' => 201])
+             ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -65,34 +92,6 @@ class StudentsController extends Controller
         return (StudentsResource::collection(Student::all()))
                                 ->response()
                                 ->setEncodingOptions(JSON_PRETTY_PRINT);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\Student\CreateStudentRequest  $studentRequest
-     * @param  \App\Http\Requests\Student\CreateStudentParentRequest  $parentRequest
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CreateStudentRequest $studentRequest, CreateStudentParentRequest $parentRequest)
-    {
-        try {
-            $data = array_merge($studentRequest->validated(), $parentRequest->validated());
-            $this->service->createStudent($data);
-        } catch (\Exception $exception) {
-            return response()->json(
-                [
-                    // remove the comment on development to see error message
-                    'message'=> $exception->getMessage(),
-                    // remove the comment on production to see message
-                    // 'message' => 'Whoops, looks like something went wrong',
-                    'error' => 'internal server error', 
-                    'code' => 500
-                ]
-            );
-        }
-        return response(['message' => 'регистрация прошла успешно', 'code' => 201])
-             ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**

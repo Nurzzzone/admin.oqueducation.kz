@@ -47,12 +47,12 @@ return [
         ],
 
         'student' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'students',
         ],
 
         'teacher' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'teachers'
         ],
     ],
