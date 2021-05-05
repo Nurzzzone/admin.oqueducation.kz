@@ -113,9 +113,6 @@ class StudentsController extends Controller
     {
         try {
             $data = array_merge($studentRequest->validated(), $parentRequest->validated());
-            if ($studentRequest->new_password !== null && $studentRequest->old_password !== null) {
-                dd('Запрос на изменение пароля находится в разработке');
-            }
             if (isset($data['image']) && $data['image'] !== null) {
                 $data['image' ] = $this->uploadImage($studentRequest);
                 if ($student->image !== null) $this->deleteImage($student->image);

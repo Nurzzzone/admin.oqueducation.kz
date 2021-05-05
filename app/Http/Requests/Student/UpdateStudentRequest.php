@@ -35,7 +35,8 @@ class UpdateStudentRequest extends FormRequest
             'phone_number'     => 'sometimes|string|unique:students,phone_number' . $this->student,
             'city'             => 'sometimes|string|max:255',
             'type_id'          => 'digits_between:1,2|nullable',
-            'password'         => 'sometimes|min:6',
+            'old_password'     => 'required_with:password',
+            'new_password'     => 'nullable|string|min:6|different:old_password',
         ];
     }
 
@@ -48,12 +49,31 @@ class UpdateStudentRequest extends FormRequest
     {
         $request = $this->validator->validated();
 
-        if ($this->filled('new_password'))
-            // get current user password
-            if (Hash::check($request[], $request['password']))
+        if ($this->has('new_password') && $this->has('old_password'))
+            if($this->filled('new_password') && $this->filled('old_password'))
                 $request['password'] = Hash::make($this->new_password);
+                unset($request['new_password']);
+                unset($request['old_password']);
         
         return $request;
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if ($this->has('new_password') && $this->has('old_password'))
+                if($this->filled('new_password') && $this->filled('old_password'))
+                    if ( !Hash::check($this->old_password, $this->student->password) ) {
+                        $validator->errors()->add('old_password', trans('validation.password'));
+                    }
+        });
+        return;
     }
 
     /**
