@@ -82,6 +82,10 @@ class StudentsController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+    public function reset() {
+        return response()->json(['message' => 'works']);
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -44,6 +44,12 @@ class TeachersController extends Controller
         ], 202);
     }
 
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+
     /**
      * Display the specified resource.
      *
