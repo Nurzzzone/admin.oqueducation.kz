@@ -11,13 +11,14 @@
 
       {{-- question_name: label --}}
       <div class="col-12">
-        {{ Form::label('name', trans('fields.question').':', ['class' => 'font-small-1']) }}
+        {{ Form::label('question_0', trans('fields.question').':', ['class' => 'font-small-1']) }}
         <span class="text-danger">*</span>
       </div>
 
       <div class="col-12">
         @php
             $options = [
+              'id' => 'question_0',
               'class' => ['form-control form-control-sm', $errors->has('name') ? 'border-danger' : ''],
               'placeholder' => 'Как будет выглядеть ваш вопрос?',
               'autocomplete' => 'off',
