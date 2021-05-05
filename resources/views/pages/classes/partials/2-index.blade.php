@@ -14,7 +14,7 @@
 
   <div class="row">
     <div class="col-12 repeater-default">
-      <div data-repeater-list="questions">
+      <div data-repeater-list="questions" id='questions'>
         @if ($class->questions->isNotEmpty())
           @include('pages.classes.partials.2-edit')
         @else

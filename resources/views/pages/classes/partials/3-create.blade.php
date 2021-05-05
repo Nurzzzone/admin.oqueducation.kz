@@ -24,7 +24,7 @@
           ];
         @endphp
         {{ Form::label('task-image', $value, $options, false) }}
-        {{ Form::file('image', ['class' => 'd-none', 'id' => 'task-image']) }}
+        {{ Form::file('image', ['class' => 'd-none taskImageUpload', 'id' => 'task-image']) }}
       </div>
       
       <div class="hint-box position-relative d-flex justify-content-end">

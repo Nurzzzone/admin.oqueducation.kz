@@ -130,3 +130,63 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 			}
 	}
 }
+
+.quesitonImage-preview {
+  margin: 0 auto;
+  width: 70%;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+	button {
+		position: absolute;
+		top: 15px;
+		right: 10px;
+		padding: 0 3px 0 3px;
+
+		i {
+			top: 0;
+		}
+	}
+}
+
+.answerImage-preview {
+  margin: 0 auto;
+  width: 70%;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+	button {
+		position: absolute;
+		top: 15px;
+		right: 10px;
+		padding: 0 3px 0 3px;
+
+		i {
+			top: 0;
+		}
+	}
+}
+
+.taskImage-preview {
+  margin: 0 auto;
+  width: 70%;
+  height: 300px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+	button {
+		position: absolute;
+		top: 15px;
+		right: 10px;
+		padding: 0 3px 0 3px;
+
+		i {
+			top: 0;
+		}
+	}
+}

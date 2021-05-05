@@ -1,4 +1,4 @@
-<div data-repeater-item class="col-md-12 px-0">
+<div data-repeater-item class="col-md-12 px-0 question">
   <div>
     <div class="border mb-1 pb-2">
 
@@ -34,7 +34,7 @@
           @endphp
           {{-- question_image: input --}}
           {{ Form::label('image', '<i class="bx bxs-file-image"></i>', $options, false) }}
-          {{ Form::file('image', ['class' => 'd-none']) }}
+          {{ Form::file('image', ['class' => 'd-none questionImageUpload']) }}
         </div>
         <div class="text-right">
           {{-- question_image: label --}}
@@ -52,7 +52,7 @@
             </button>
           </div>
           <div data-repeater-list="answers">
-            <div data-repeater-item class="col-md-12">
+            <div data-repeater-item class="col-md-12 answer">
               <div class="row justify-content-between align-items-start">
                 <div class="col-12 d-flex">
                   <div class="col-10 pl-0">
@@ -75,7 +75,7 @@
                       @endphp
                       {{-- answer_image: input --}}
                       {{ Form::label('answer-image', '<i class="bx bxs-file-image"></i>', $options, false) }}
-                      {{ Form::file('image', ['class' => 'd-none', 'id' => 'answer-image']) }}
+                      {{ Form::file('image', ['class' => 'd-none answerImageUpload', 'id' => 'answer-image']) }}
                     </div>
 
                     {{-- answer_name: label --}}
