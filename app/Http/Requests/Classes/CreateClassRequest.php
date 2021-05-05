@@ -32,7 +32,7 @@ class CreateClassRequest extends FormRequest
             'questions.*.image'             => 'nullable',
             'questions.*.answers.*.name'    => 'nullable|string|max:255',
             'questions.*.answers.*.image'   => 'nullable',
-            'tasks.*.name'                  => 'nullable|string|max:255',
+            'tasks.*.name'                  => 'required|string|max:255',
             'tasks.*.hint'                  => 'nullable|string|max:255',
             'tasks.*.image'                 => 'nullable'
         ];

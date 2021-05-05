@@ -51,16 +51,17 @@ class ClassService extends Service
           $questions[$questionKey]['image'] = $this->uploadImage($questionValue['image'], 'questions');
         }
       }
-
+      $question = $class->questions()->create($questions[$questionKey]);
+      
       foreach ($questions[$questionKey]['answers'] as $answerKey => $answer) {
         // save answer image
         if (array_key_exists('image', $answer)) {
           if ($answer['image'] !== null && is_file($answer['image'])) {
             $questions[$questionKey]['answers'][$answerKey]['image'] = $this->uploadImage($answer['image'], 'answers');
+            sleep(1); // unless will create one image
           }
         }
 
-        $question = $class->questions()->create($questions[$questionKey]);
         $question->answers()->create($questions[$questionKey]['answers'][$answerKey]);
       }
     }
@@ -74,11 +75,13 @@ class ClassService extends Service
   private function createHometask($data, $class): void
   {
     $hometask = $class->hometasks()->create($data);
+
     if ($data['tasks'] !== null && !empty($data['tasks'])) {
       foreach ($data['tasks'] as $taskKey => $task) {
         if (array_key_exists('image', $task)) {
           if ($task['image'] !== null && is_file($task['image'])) {
             $data['tasks'][$taskKey]['image'] = $this->uploadImage($task['image'], 'tasks');
+            sleep(1); // unless will create one image
           }
         }
 
