@@ -71,7 +71,7 @@ class Student extends Authenticatable implements JWTSubject
 
     public function parent()
     {
-      return $this->belongsTo(StudentParent::class, 'id');
+      return $this->belongsTo(StudentParent::class);
     }
 
     public function type()

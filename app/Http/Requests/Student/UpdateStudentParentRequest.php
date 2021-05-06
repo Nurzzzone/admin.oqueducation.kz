@@ -25,11 +25,38 @@ class UpdateStudentParentRequest extends FormRequest
     {
         return 
         [
-            'p1_full_name'      => 'required|string|max:255',
-            'p1_phone_number'   => 'required|string|max:255',
+            'p1_full_name'      => 'sometimes|string|max:255',
+            'p1_phone_number'   => 'sometimes|string|max:255',
             'p2_full_name'      => 'nullable|string|max:255',
             'p2_phone_number'   => 'nullable|string|max:255'    
         ];
+    }
+
+    /**
+     * Handle a passed validation attempt.
+     *
+     * @return void
+     */
+    public function validated()
+    {
+        $request = $this->validator->validated();
+        
+        if ($this->has('p1_full_name') 
+         || $this->has('p1_phone_number') 
+         || $this->has('p2_full_name')
+         || $this->has('p2_phone_number'))
+            $request['parents'] = [
+                'p1_full_name'    => $this->p1_full_name ?? null,
+                'p1_phone_number' => $this->p1_phone_number ?? null,
+                'p2_full_name'    => $this->p2_full_name ?? null,
+                'p2_phone_number' => $this->p2_phone_number ?? null,
+            ];
+            unset($request['p1_full_name']);
+            unset($request['p1_phone_number']);
+            unset($request['p2_full_name']);
+            unset($request['p2_phone_number']);
+        
+        return $request;
     }
 
     /**
@@ -41,8 +68,6 @@ class UpdateStudentParentRequest extends FormRequest
     {
         return
         [
-            'p1_full_name.required'     => trans('validation.required'),
-            'p1_phone_number.required'  => trans('validation.required'),
             'p1_full_name.string'       => trans('validation.string'),
             'p1_phone_number.string'    => trans('validation.string'),
             'p2_full_name.string'       => trans('validation.string'),

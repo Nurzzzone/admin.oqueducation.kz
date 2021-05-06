@@ -35,7 +35,7 @@ class UpdateStudentRequest extends FormRequest
             'phone_number'     => 'sometimes|string|unique:students,phone_number' . $this->student,
             'city'             => 'sometimes|string|max:255',
             'type_id'          => 'digits_between:1,2|nullable',
-            'old_password'     => 'required_with:password',
+            'old_password'     => 'required_with:new_password',
             'new_password'     => 'nullable|string|min:6|different:old_password',
         ];
     }

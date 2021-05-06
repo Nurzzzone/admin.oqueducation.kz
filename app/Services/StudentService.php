@@ -28,11 +28,12 @@ class StudentService extends Service
    * 
    * @return void
    */
-  public function updateStudent($data, $student): void
+  public function updateStudent($data, $student)
   {
-    // $student->fill($data)->save();
-    // $parent = $student->parent()->fill($data);
-    // $parent->save();
+    $student->update($data);
+    if (isset($data['parents'])) {
+      $student->parent()->update($data['parents']);
+    }
   }
 
   /**
