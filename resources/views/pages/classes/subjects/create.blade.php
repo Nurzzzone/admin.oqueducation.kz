@@ -1,0 +1,1 @@
+resources/views/pages\classes\subjects\create.blade.php

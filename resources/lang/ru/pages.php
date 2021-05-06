@@ -4,10 +4,12 @@ return [
   "teachers"      => "Учетеля",
   "students"      => "Ученики",
   "classes"       => "Уроки",
+  "subjects"      => "Предметы",
+  "results"       => "Результаты уроков",
   "classes_free"  => "Пробные уроки",
   "tests"         => "Проверка знаний",
-  "payment"       => "Оплата",
-  "transfers"     => "Переводы",
+  "payments"      => "Оплата",
+  "translations"  => "Переводы",
   "users"         => "Пользователи",
   "login"         => "Авторизация"
 ];

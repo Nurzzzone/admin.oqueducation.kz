@@ -22,8 +22,12 @@ Route::group(['middleware' => ['auth']], function()
   Route::resource('/teachers', 'Admin\TeachersController');
   Route::resource('/students', 'Admin\StudentsController');
   Route::resource('/classes', 'Admin\ClassesController');
+  Route::resource('/subjects', 'Admin\SubjectsController');
+  Route::resource('/results', 'Admin\ClassesResultsController');
   Route::resource('/classes-free','Admin\FreeClassesController');
   Route::resource('/tests','Admin\TestsController');
+  Route::resource('/payments', 'Admin\PaymentsController');
+  Route::resource('/translations', 'Admin\TranslationsController');
 });
 
 

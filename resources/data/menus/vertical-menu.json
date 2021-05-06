@@ -19,10 +19,27 @@
       "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
     },
     {
-      "url": "/classes",
+      "url": "",
       "name": "classes",
       "icon": "grid",
-      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
+      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2",
+      "submenu": [
+        {
+          "url": "/classes",
+          "name": "classes",
+          "icon": "bx bx-right-arrow-alt"
+        },
+        {
+          "url": "/subjects",
+          "name": "subjects",
+          "icon": "bx bx-right-arrow-alt"
+        },
+        {
+          "url": "/results",
+          "name": "results",
+          "icon": "bx bx-right-arrow-alt"
+        }
+      ]
     },
     {
       "url": "/classes-free",
@@ -37,14 +54,14 @@
       "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
     },
     {
-      "url": "/payment",
-      "name": "payment",
+      "url": "/payments",
+      "name": "payments",
       "icon": "coins",
       "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
     },
     {
-      "url": "/transfers",
-      "name": "transfers",
+      "url": "/translations",
+      "name": "translations",
       "icon": "globe",
       "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
     },

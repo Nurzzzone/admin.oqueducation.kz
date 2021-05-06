@@ -47,6 +47,11 @@ class Classes extends Model
       return $this->hasMany(ClassQuestion::class, 'class_id', 'id');
     }
 
+    public function subject()
+    {
+      return $this->hasOne(Subject::class, 'id, subject_id');
+    }
+
     public function hometasks()
     {
       return $this->hasOne(ClassHomeTask::class, 'class_id', 'id');

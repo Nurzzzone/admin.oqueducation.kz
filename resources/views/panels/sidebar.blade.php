@@ -29,7 +29,7 @@
                       <i class="menu-livicon" data-icon="{{$menu->icon}}"></i>
                   @endif
                   @if(isset($menu->name))
-                      <span class="menu-title">{{ __('locale.pages.'.$menu->name)}}</span>
+                      <span class="menu-title">{{ trans('pages.'.$menu->name)}}</span>
                   @endif
                   @if(isset($menu->tag))
                   <span class="{{$menu->tagcustom}}">{{$menu->tag}}</span>
