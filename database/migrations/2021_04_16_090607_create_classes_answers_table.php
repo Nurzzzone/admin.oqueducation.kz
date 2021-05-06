@@ -17,6 +17,7 @@ class CreateClassesAnswersTable extends Migration
             $table->id();
             $table->string('name', 255)->comment('Ответ');
             $table->string('image', 255)->nullable()->comment('Изображение');
+            $table->boolean('is_correct')->commect('Правильный ответ');
             $table->foreignId('question_id')->comment('Вопрос')->constrained('classes_questions')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

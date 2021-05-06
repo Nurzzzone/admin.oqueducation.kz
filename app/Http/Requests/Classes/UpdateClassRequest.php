@@ -24,20 +24,21 @@ class UpdateClassRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'                         => 'sometimes|string|max:255',
-            'source_url'                    => 'sometimes|string|max:255|url',
-            'type_id'                       => 'sometimes|digits_between:1,3',
-            'hometask'                      => 'sometimes|string|max:255',
-            'questions.*.id'                => 'nullable',
-            'questions.*.name'              => 'sometimes|string|max:255',
-            'questions.*.image'             => 'nullable',
-            'questions.*.answers.*.id'      => 'nullable',
-            'questions.*.answers.*.name'    => 'nullable|string|max:255',
-            'questions.*.answers.*.image'   => 'nullable',
-            'tasks.*.id'                    => 'nullable',
-            'tasks.*.name'                  => 'nullable|string|max:255',
-            'tasks.*.hint'                  => 'nullable|string|max:255',
-            'tasks.*.image'                 => 'nullable'
+            'title'                             => 'sometimes|string|max:255',
+            'source_url'                        => 'sometimes|string|max:255|url',
+            'type_id'                           => 'sometimes|digits_between:1,3',
+            'hometask'                          => 'sometimes|string|max:255',
+            'questions.*.id'                    => 'nullable',
+            'questions.*.name'                  => 'sometimes|string|max:255',
+            'questions.*.image'                 => 'nullable',
+            'questions.*.answers.*.id'          => 'nullable',
+            'questions.*.answers.*.name'        => 'nullable|string|max:255',
+            'questions.*.answers.*.image'       => 'nullable',
+            'questions.*.answers.*.is_correct'  => 'sometimes|boolean',
+            'tasks.*.id'                        => 'nullable',
+            'tasks.*.name'                      => 'nullable|string|max:255',
+            'tasks.*.hint'                      => 'nullable|string|max:255',
+            'tasks.*.image'                     => 'nullable'
         ];
     }
 

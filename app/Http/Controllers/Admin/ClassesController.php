@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Classes;
+use App\Models\Subject;
+use App\Models\Teacher;
 use App\Services\ClassService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -41,7 +43,13 @@ class ClassesController extends Controller
     public function create()
     {
         $class = new Classes();
-        $params = array_merge(['class' => $class], $this->getPageBreadcrumbs(['pages.classes']));
+        $subjects = Subject::all();
+        $teachers = Teacher::all()->each(function($teacher) {
+            return $teacher->only('name', 'surname', 'middle_name');
+        })->toArray();
+
+        dd($teachers);
+        $params = array_merge(['class' => $class, 'subjects' => $subjects, 'teachers' => $teachers], $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.create', $params);
     }
 

@@ -62,6 +62,13 @@ class ClassService extends Service
           }
         }
 
+        if (isset($questions[$questionKey]['answers'][$answerKey]['is_correct']))
+          foreach ($questions[$questionKey]['answers'][$answerKey]['is_correct'] as $is_correct) {
+            $questions[$questionKey]['answers'][$answerKey]['is_correct'] = true;
+          }
+        else
+          $questions[$questionKey]['answers'][$answerKey]['is_correct'] = false;
+
         $question->answers()->create($questions[$questionKey]['answers'][$answerKey]);
       }
     }

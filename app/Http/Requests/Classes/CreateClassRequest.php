@@ -24,17 +24,18 @@ class CreateClassRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'                         => 'required|string|max:255',
-            'source_url'                    => 'required|string|max:255|url',
-            'type_id'                       => 'required|digits_between:1,3',
-            'hometask'                      => 'required|string|max:255',
-            'questions.*.name'              => 'required|string|max:255',
-            'questions.*.image'             => 'nullable',
-            'questions.*.answers.*.name'    => 'nullable|string|max:255',
-            'questions.*.answers.*.image'   => 'nullable',
-            'tasks.*.name'                  => 'required|string|max:255',
-            'tasks.*.hint'                  => 'nullable|string|max:255',
-            'tasks.*.image'                 => 'nullable'
+            'title'                             => 'required|string|max:255',
+            'source_url'                        => 'required|string|max:255|url',
+            'type_id'                           => 'required|digits_between:1,3',
+            'hometask'                          => 'required|string|max:255',
+            'questions.*.name'                  => 'required|string|max:255',
+            'questions.*.image'                 => 'nullable',
+            'questions.*.answers.*.name'        => 'nullable|string|max:255',
+            'questions.*.answers.*.image'       => 'nullable',
+            'questions.*.answers.*.is_correct.*'=> 'required|boolean',
+            'tasks.*.name'                      => 'required|string|max:255',
+            'tasks.*.hint'                      => 'nullable|string|max:255',
+            'tasks.*.image'                     => 'nullable'
         ];
     }
 

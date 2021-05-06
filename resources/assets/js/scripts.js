@@ -64,9 +64,13 @@
     
         function setAnswersIdentifier() {
             $('.answer').each((index, element) => {
+                let checkboxInput = $(element).find('input[id="is_correct"]');
+                let checkboxLabel = $(element).find('label[for="is_correct"]');
                 let imgInput =  $(element).find('.answerImageUpload');
                 let imgLabels = $(element).find('label[for="answer-image"]');
                 
+                    $(checkboxInput).attr('id', `is_correct_${index}`);
+                    $(checkboxLabel).attr('for', `is_correct_${index}`);
                     $(imgInput).attr('id', index + 'answerImage');
                     $(imgLabels).each(function(i, e) {
                         $(e).attr('for', index + 'answerImage');
@@ -132,7 +136,7 @@
                             let imageContainer = `<div style='background-image: url();' class='answerImage-preview users-avatar-shadow' width="240" height="240">
                                                     <button type='button' class="btn m-0 remove-answer"><i class="bx bx-x align-middle text-danger"></i></button>
                                                     </div>`;
-                            let parentContainer = $(element).find('div[class="col-10 pl-0"]');
+                            let parentContainer = $(element).find('div[class="row justify-content-between align-items-start"]');
                             $(imageContainer).prependTo(parentContainer);
                         }
 

@@ -31,6 +31,7 @@ class ClassQuestionAnswer extends Model
     protected $fillable = [
         'name',
         'image',
+        'is_correct',
         'question_id',
     ];
 
