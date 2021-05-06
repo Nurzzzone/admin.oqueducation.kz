@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Subject;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Subject\CreateSubjectRequest;
 
 class SubjectsController extends Controller
 {
@@ -14,7 +16,9 @@ class SubjectsController extends Controller
      */
     public function index()
     {
-        return view('pages.classes.subjects.index');
+        $subjects = Subject::paginate(10);
+        $params = array_merge(['subjects' => $subjects], $this->getPageBreadcrumbs(['pages.subjects']));
+        return view('pages.classes.subjects.index', $params);
     }
 
     /**
@@ -24,52 +28,28 @@ class SubjectsController extends Controller
      */
     public function create()
     {
-        //
+        $subject = new Subject();
+        $params = array_merge(['subject' => $subject], $this->getPageBreadcrumbs(['pages.subjects']));
+        return view('pages.classes.subjects.create', $params);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \App\Http\Requests\Subject\CreateSubjectRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateSubjectRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        try {
+            DB::transaction(function () use ($request) {
+                $subject = Subject::create($request->validated());
+            });
+        } catch(\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
+        }
+        return redirect()
+            ->route('subjects.index');
     }
 
     /**
@@ -78,8 +58,14 @@ class SubjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Subject $subject)
     {
-        //
+        try {
+            $subject->delete();
+        } catch(\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
+        }
+        return redirect()
+            ->route('subjects.index');
     }
 }
