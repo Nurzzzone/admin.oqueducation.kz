@@ -52,6 +52,7 @@
 @endsection
 
 @section('page-scripts')
+<script src="{{asset('assets/js/scripts.js')}}"></script>
 <script src="{{asset('js/scripts/forms/wizard-steps.js')}}"></script>
 <script src="{{asset('js/scripts/forms/form-repeater.js')}}"></script>
 @endsection

@@ -19,7 +19,7 @@ class TeachersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -28,33 +28,11 @@ class TeachersController extends Controller
                                 ->setEncodingOptions(JSON_PRETTY_PRINT);
     }
 
-    public function login(Request $request)
-    {
-        $credentials = $request->only(['phone_number', 'password']);
-
-        if (!$token = Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized', 'code' => 401], 401);
-        }
-
-        $ttl = Auth::factory()->setTTL(43800);
-        return response()->json([
-            'access_token' => $token,
-            'message' => 'Authorization succesfully passed',
-            'expires_in' => 43800 * 60 // one month
-        ], 202);
-    }
-
-    public function logout()
-    {
-        Auth::logout();
-        return response()->json(['message' => 'Successfully logged out']);
-    }
-
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Teacher $teacher)
     {
@@ -73,7 +51,7 @@ class TeachersController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
