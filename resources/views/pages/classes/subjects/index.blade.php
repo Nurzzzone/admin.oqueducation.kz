@@ -48,9 +48,6 @@
                             <span class="bx bx-dots-vertical-rounded font-medium-3 nav-hide-arrow cursor-pointer"
                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="menu"></span>
                             <div class="dropdown-menu dropdown-menu-right">
-                              <a class="dropdown-item font-small-2" href="{{ route('subjects.edit', $id) }}">
-                                <i class="ficon bx bxs-pencil mr-1"></i>{{ trans('buttons.edit') }}
-                              </a>
                               @php
                                   $html = '<i class="ficon bx bx-trash mr-1 text-danger"></i>';
                                   $value = $html . trans('buttons.delete');
