@@ -20,8 +20,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'api', 'prefix' => 'v1'], function() {
     Route::group(['prefix' => 'auth'], function () {
+
+      // admin.oqueducation.kz/api/v1/auth/login
       Route::post('/login', 'Api\V1\AuthController@login');
+
+      // admin.oqueducation.kz/api/v1/auth/logout
       Route::get('/logout', 'Api\V1\AuthController@logout');
+
+      // admin.oqueducation.kz/api/v1/auth/register
+      Route::post('/client/register', 'Api\V1\ClientAuthController@register');
     });
 
     Route::group(['middleware' => 'jwt'], function() {
@@ -38,25 +45,13 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function() {
       Route::get('/teachers', 'Api\V1\TeachersController@index');
     });
 
-    // admin.oqu.kz/api/v1/teachers/login
-    Route::post('/teachers/login', 'Api\V1\TeachersAuthController@login');
-
-    // admin.oqu.kz/api/v1/teachers/logout
-    Route::post('/teachers/logout', 'Api\V1\TeachersAuthController@logout');
-
-    // admin.oqu.kz/api/v1/students/login
-    Route::post('/students/login', 'Api\V1\StudentsAuthController@login');
-
-    // admin.oqu.kz/api/v1/students/logout
-    Route::post('/students/logout', 'Api\V1\StudentsAuthController@logout');
+    
 
     Route::group(['middleware' => 'jwt.auth:student'], function() {
       Route::apiResource('/students', 'Api\V1\StudentsController', ['only' => ['show', 'destroy', 'update']]);
-      Route::post('/students/reset', 'Api\V1\StudentsController@reset'); // *
     });
 
     Route::group(['middleware' => 'jwt.auth:teacher'], function() {
       Route::apiResource('/teachers', 'Api\V1\TeachersController', ['only' => ['show', 'update']]);
-      Route::post('/teachers/reset', 'Api\V1\TeachersController@reset'); // *
     });
 });

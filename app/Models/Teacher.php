@@ -3,11 +3,10 @@
 namespace App\Models;
 
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 
-class Teacher extends Authenticatable implements JWTSubject
+class Teacher extends Authenticatable
 {
     /**
      * The table associated with the model.
@@ -30,12 +29,10 @@ class Teacher extends Authenticatable implements JWTSubject
         'middle_name',
         'home_address',
         'email_address',
-        'phone_number',
         'birth_date',
         'image',
         'description',
         'position',
-        'password',
         'is_active'
     ];
 
@@ -56,25 +53,5 @@ class Teacher extends Authenticatable implements JWTSubject
     public function socials()
     {
         return $this->hasOne(TeacherSocialLink::class);
-    }
-
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
     }
 }

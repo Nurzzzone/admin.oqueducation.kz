@@ -32,7 +32,7 @@ class CreateStudentRequest extends FormRequest
             'image'            => 'nullable',
             'email_address'    => 'nullable|string',
             'home_address'     => 'required|string',
-            'phone_number'     => 'required|string|unique:students,phone_number' . $this->student,
+            'phone_number'     => 'required|string|unique:client_users,phone_number' . $this->student,
             'city'             => 'required|string|max:255',
             'type_id'          => 'digits_between:1,2|nullable',
             'password'         => 'required|min:6',
@@ -48,7 +48,12 @@ class CreateStudentRequest extends FormRequest
     {
         $request = $this->validator->validated();
 
-        if ($this->filled('password')) $request['password'] = Hash::make($this->password);
+        if ($this->has('password') && $this->filled('password'))
+            $request['auth']['user_type'] = 1;
+            $request['auth']['phone_number'] = $this->phone_number;
+            $request['auth']['password'] = Hash::make($this->password);
+            unset($request['password']);
+            unset($request['phone_number']);
         
         return $request;
     }

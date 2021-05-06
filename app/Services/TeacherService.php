@@ -7,7 +7,7 @@ use App\Services\Service;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use App\Http\Requests\Teacher\UpdateTeacherRequest;
+use App\Models\ClientUser;
 
 class TeacherService extends Service
 {
@@ -28,12 +28,14 @@ class TeacherService extends Service
   {
     DB::beginTransaction();
     try {
-        $teacher = Teacher::make($request->validated());
+        $data = $request->validated();
+        $teacher = Teacher::make($data);
+        ClientUser::create($data['auth']);
         $teacher->fill([
             'image' => $this->uploadImage($request)
         ])->save();
-        $teacher->socials()->create($request->validated());
-        $this->createTeacherJobHistory($teacher, $request->validated()['job_history']);
+        $teacher->socials()->create($data);
+        $this->createTeacherJobHistory($teacher, $data['job_history']);
         DB::commit();
     } catch(\Exception $exception) {
         DB::rollBack();

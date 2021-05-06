@@ -29,7 +29,7 @@ class CreateTeacherRequest extends FormRequest
             'surname'                => 'nullable|string|max:255',
             'middle_name'            => 'nullable|string|max:255',
             'birth_date'             => 'nullable|date|before:today|max:10',
-            'phone_number'           => 'required|string|max:255|unique:teachers,phone_number' . $this->teacher,
+            'phone_number'           => 'required|string|max:255|unique:client_users,phone_number' . $this->teacher,
             'home_address'           => 'nullable|string|max:255',
             'email_address'          => 'nullable|email|string|max:255',
             'image'                  => 'nullable|mimes:jpg,jpeg,png,bmp,gif,svg,webp',
@@ -57,7 +57,11 @@ class CreateTeacherRequest extends FormRequest
         $request = $this->validator->validated();
 
         if ($this->has('password') && $this->filled('password'))
-                $request['password'] = Hash::make($this->password);
+            $request['auth']['user_type'] = 2;
+            $request['auth']['phone_number'] = $this->phone_number;
+            $request['auth']['password'] = Hash::make($this->password);
+            unset($request['password']);
+            unset($request['phone_number']);
         
         return $request;
     }

@@ -4,11 +4,10 @@ namespace App\Models;
 
 use App\Models\StudentType;
 use App\Models\StudentParent;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Student extends Authenticatable implements JWTSubject
+class Student extends Authenticatable
 {
     use Notifiable;
     /**
@@ -31,10 +30,8 @@ class Student extends Authenticatable implements JWTSubject
       'middle_name',
       'email_address',
       'home_address',
-      'phone_number',
       'birth_date',
       'image',
-      'password',
       'type_id',
       'city'
     ];
@@ -47,28 +44,7 @@ class Student extends Authenticatable implements JWTSubject
     protected $hidden = [
       'password', 'remember_token'
     ];
-
     
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
     public function parent()
     {
       return $this->belongsTo(StudentParent::class);

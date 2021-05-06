@@ -8,13 +8,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Student\CreateStudentRequest;
 use App\Http\Requests\Student\CreateStudentParentRequest;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
-class StudentsAuthController extends Controller
+class ClientAuthController extends Controller
 {
-    public function __construct()
-    {
-        Auth::setDefaultDriver('student');
-    }
 
     /**
      * Get a JWT via given credentials.
@@ -24,16 +21,14 @@ class StudentsAuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only(['phone_number', 'password']);
+        $ttl = ['exp' => \Carbon\Carbon::now()->addDays(7)->timestamp];
 
-        if (!$token = Auth::attempt($credentials)){
+        if (!$token = JWTAuth::guard('client')->attempt($credentials, $ttl)){
             return response()->json(['error' => 'Unauthorized', 'code' => 401], 401);
         }
 
-        Auth::factory()->setTTL(43800);
         return response()->json([
             'access_token' => $token,
-            'message' => 'Authorization succesfully passed',
-            'expires_in' => 43800 * 60 // one month
         ], 202);
     }
 
@@ -61,20 +56,5 @@ class StudentsAuthController extends Controller
         }
         return response(['message' => 'регистрация прошла успешно', 'code' => 201])
              ->setStatusCode(Response::HTTP_CREATED);
-    }
-
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function logout()
-    {
-        Auth::logout();
-        return response()->json(['message' => 'Successfully logged out']);
-    }
-
-    public function reset() {
-        return response()->json(['message' => 'works']);
     }
 }

@@ -46,14 +46,9 @@ return [
             'provider' => 'users',
         ],
 
-        'student' => [
+        'client' => [
             'driver' => 'jwt',
-            'provider' => 'students',
-        ],
-
-        'teacher' => [
-            'driver' => 'jwt',
-            'provider' => 'teachers'
+            'provider' => 'clients',
         ],
     ],
 
@@ -79,13 +74,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'students' => [
+
+        'clients' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Student::class,
-        ],
-        'teachers' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Teacher::class
+            'model' => App\Models\ClientUser::class,
         ],
 
         // 'users' => [

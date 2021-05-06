@@ -21,8 +21,6 @@ class CreateTeachersTable extends Migration
             $table->string('birth_date', 255)->nullable()->comment('Дата рождения');
             $table->string('email_address', 255)->nullable()->comment('Почта');
             $table->string('home_address', 255)->nullable()->comment('Домашний адрес');
-            $table->string('phone_number', 255)->comment('Номер телефона');
-            $table->string('password', 255)->comment('Пароль');
             $table->string('image', 255)->nullable()->comment('Изображение');
             $table->boolean('is_active')->comment('Отображение');
             $table->string('position', 255)->nullable()->comment('Должность');

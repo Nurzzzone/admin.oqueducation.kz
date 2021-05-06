@@ -18,11 +18,9 @@ class CreateStudentsTable extends Migration
             $table->string('name', 255)->comment('Имя');
             $table->string('surname', 255)->comment('Фамилия');
             $table->string('middle_name', 255)->nullable()->comment('Отчество');
-            $table->string('password', 255);
             $table->date('birth_date', 255)->comment('Дата рождения');
             $table->string('city', 255)->comment('Город');
             $table->string('email_address', 255)->nullable()->comment('Почта');
-            $table->string('phone_number', 255)->unique()->comment('Номер телефона');
             $table->string('home_address', 255)->comment('Домашний Адрес');
             $table->string('image', 255)->nullable()->comment('Изображение');
             $table->foreignId('type_id')->nullable()->comment('Тип')->constrained('students_types');

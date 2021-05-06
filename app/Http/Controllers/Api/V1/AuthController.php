@@ -15,13 +15,28 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only(['email', 'password']);
+        if ($request->has('email') && $request->filled('email')) {
+            $credentials = $request->only(['email', 'password']);
+            Auth::setDefaultDriver('api');
 
-        if (!$token = Auth::attempt($credentials)){
-            return response()->json(['error' => 'Unauthorized'], 401);
+            if (!$token = Auth::attempt($credentials)) {
+                return $this->respondWithError();
+            }
+            return $this->respondWithToken($token);
         }
-        
-        return $this->respondWithToken($token);
+
+        if ($request->has('phone_number') && $request->filled('phone_number')) {
+
+            $credentials = $request->only(['phone_number', 'password']);
+
+            Auth::setDefaultDriver('client');
+
+            if ($token = Auth::attempt($credentials)) {
+                return $this->respondWithToken($token);
+            }
+            return $this->respondWithError();
+
+        }
     }
 
     /**
@@ -54,10 +69,23 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        if (Auth::getDefaultDriver() == 'api') {
+            return response()->json([
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => Auth::factory()->getTTL() * 60,
+            ]);
+        }
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60
+            'type' => Auth::user()->type->name,
         ]);
+    }
+
+    protected function respondWithError()
+    {
+       return response()->json(['error' => 'Unauthorized', 'code' => 401], 401);
     }
 }

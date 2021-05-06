@@ -12,6 +12,7 @@ use App\Http\Requests\Student\UpdateStudentRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\Student\CreateStudentParentRequest;
 use App\Http\Requests\Student\UpdateStudentParentRequest;
+use App\Models\ClientUser;
 
 class StudentsController extends Controller
 {
@@ -59,6 +60,7 @@ class StudentsController extends Controller
         try {
             $data = array_merge($studentRequest->validated(), $parentRequest->validated());
             $student = Student::make($data);
+            ClientUser::create($data['auth']);
             $student->fill([
                 'image' => $studentRequest->image !== null ? $this->uploadImage($studentRequest): null
             ])->save();

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Exception;
 use App\Models\Teacher;
 use App\Services\TeacherService;
 use App\Http\Controllers\Controller;
