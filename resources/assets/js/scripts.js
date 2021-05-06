@@ -38,6 +38,7 @@
             mutations.forEach((mutation) => {
                 setTasksIdentifier();
                 readTasksUrl();
+                setHintsIdentifiers();
             });    
         });
     
@@ -47,9 +48,13 @@
     
         function setQuestionsIdentifier() {
             $('.question').each((index, element) => {
-                let imgInput =  $(element).find('.questionImageUpload');
-                let imgLabels = $(element).find('label[for="image"]');
+                let questionInput = $(element).find('#question_0'),
+                    questionLabel = $(element).find('label[for="question_0"]'),
+                    imgInput =  $(element).find('.questionImageUpload'),
+                    imgLabels = $(element).find('label[for="image"]');
                 
+                    $(questionInput).attr('id', `question_${index}`);
+                    $(questionLabel).attr('for', `question_${index}`);
                     $(imgInput).attr('id', index + 'questionImage');
                     $(imgLabels).each(function(i, e) {
                         $(e).attr('for', index + 'questionImage');
@@ -184,6 +189,27 @@
                     }
                 })
             })
+        }
+        
+        function setHintsIdentifiers() {
+            $('.task').each((index, element) => {
+                ++index;
+                let taskLabel = $(element).find('label');
+                let taskInput = $(element).find('input');
+                    $(taskLabel).attr('for', `task_${index}`);
+                    $(taskInput).attr('id', `task_${index}`);
+                    
+            
+                let button = $(element).find('#hint-button');
+                let hintbox = $(element).find('#hint-popover');
+        
+                $(button).attr('id', `hintButton_${index}`);
+                $(hintbox).attr('id', `hintBox_${index}`);
+        
+                $(`#hintButton_${index}`).on('click', () => {
+                    $(`#hintBox_${index}`).toggle();
+                });
+            });
         }
     
         // let hintObserver = new MutationObserver(function(mutations) {

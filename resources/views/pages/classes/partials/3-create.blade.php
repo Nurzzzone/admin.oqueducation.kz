@@ -5,10 +5,11 @@
           $value = trans('fields.task').':';
           $options = ['class' => 'font-small-1'];
       @endphp
-      {{ Form::label('name', $value, $options) }}
+      {{ Form::label('task_0', $value, $options) }}
       @php
         $value = $task['name'] ?? old('name');
         $options = [
+          'id' => 'task_0',
           'class' => ['pr-3 form-control form-control-sm', $errors->has('answer') ? 'border-danger' : ''],
           'placeholder' => 'Введите ваш вопрос для ученика',
           'autocomplete' => 'off',
@@ -30,13 +31,14 @@
       <div class="hint-box position-relative d-flex justify-content-end">
         @php
           $options = [
-            'class' => 'hint-button btn cursor-pointer font-small-1 m-0 p-0', 
+            'id' => 'hint-button',
+            'class' => 'btn cursor-pointer font-small-1 m-0 p-0', 
             'type'  => 'button',
             'style' => "text-decoration: underline;",
           ]
         @endphp
         {{ Form::button('добавить подсказку', $options) }}
-        <div class="hint-popover position-absolute" style="right: 0px; top: 100%; z-index: 1000; display: none;">
+        <div id="hint-popover" class="position-absolute" style="right: 0px; top: 100%; z-index: 1000; display: none;">
           @php
             $value = $task['hint'] ?? old('hint');
             $options = [
