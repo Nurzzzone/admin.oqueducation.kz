@@ -29,11 +29,11 @@ class TeacherService extends Service
     DB::beginTransaction();
     try {
         $data = $request->validated();
-        $teacher = Teacher::make($data);
-        ClientUser::create($data['auth']);
-        $teacher->fill([
-            'image' => $this->uploadImage($request)
-        ])->save();
+        if (isset($data['image'])) {
+          $data['image'] =  $this->uploadImage($request);
+        }
+        $user = ClientUser::create($data['auth']);
+        $teacher = $user->teacher()->create($data);
         $teacher->socials()->create($data);
         $this->createTeacherJobHistory($teacher, $data['job_history']);
         DB::commit();

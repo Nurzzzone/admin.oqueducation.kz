@@ -24,6 +24,7 @@ class CreateStudentsTable extends Migration
             $table->string('home_address', 255)->comment('Домашний Адрес');
             $table->string('image', 255)->nullable()->comment('Изображение');
             $table->foreignId('type_id')->nullable()->comment('Тип')->constrained('students_types');
+            $table->foreignId('credentials_id')->constrained('client_users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

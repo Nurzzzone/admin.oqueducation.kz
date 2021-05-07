@@ -26,10 +26,10 @@ class StudentsResource extends JsonResource
             'image'           => $this->image,
             'city'            => $this->city,
             'type'            => $this->type->name,
-            'p1_full_name'    => $this->parent->p1_full_name,
-            'p1_phone_number' => $this->parent->p1_phone_number,
-            'p2_full_name'    => $this->parent->p2_full_name,
-            'p2_phone_number'    => $this->parent->p2_phone_number
+            // 'p1_full_name'    => $this->parent->p1_full_name,
+            // 'p1_phone_number' => $this->parent->p1_phone_number,
+            // 'p2_full_name'    => $this->parent->p2_full_name,
+            // 'p2_phone_number'    => $this->parent->p2_phone_number
         ];
     }
 

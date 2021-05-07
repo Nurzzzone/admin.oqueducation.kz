@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
 Route::group(['middleware' => 'api', 'prefix' => 'v1'], function() {
     Route::group(['prefix' => 'auth'], function () {
 
@@ -28,24 +23,22 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function() {
       Route::get('/logout', 'Api\V1\AuthController@logout');
 
       // admin.oqueducation.kz/api/v1/auth/register
-      Route::post('/client/register', 'Api\V1\ClientAuthController@register');
+      Route::post('/register', 'Api\V1\ClientAuthController@register');
     });
 
     Route::group(['middleware' => 'jwt'], function() {
-      // admin.nghrdc.kz/api/user
+      // admin.nghrdc.kz/api/v1/user
       Route::get('/user', 'Api\V1\AuthController@user');
 
       // admin.oqu.kz/api/v1/students -> get all students
       Route::get('/students', 'Api\V1\StudentsController@index');
 
-      // admin.oqu.kz/api/v1/students/register -> register new student
-      Route::post('/students/register', 'Api\V1\StudentsController@register');
-
       // admin.oqu.kz/api/v1/teachers -> get all students
       Route::get('/teachers', 'Api\V1\TeachersController@index');
-    });
 
-    
+      // admin.oqu.kz/api/v1/classes -> get all classes
+      Route::get('/classes', 'Api\V1\ClassesController@index');
+    });
 
     Route::group(['middleware' => 'jwt.auth:student'], function() {
       Route::apiResource('/students', 'Api\V1\StudentsController', ['only' => ['show', 'destroy', 'update']]);

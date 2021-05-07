@@ -25,6 +25,7 @@ class CreateTeachersTable extends Migration
             $table->boolean('is_active')->comment('Отображение');
             $table->string('position', 255)->nullable()->comment('Должность');
             $table->text('description')->nullable()->comment('Описание');
+            $table->foreignId('credentials_id')->constrained('client_users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

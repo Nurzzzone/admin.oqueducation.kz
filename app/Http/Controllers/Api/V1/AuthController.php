@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\StudentsResource;
+use App\Http\Resources\TeachersResource;
 use App\Http\Controllers\Api\V1\Controller;
 
 class AuthController extends Controller
@@ -26,13 +28,13 @@ class AuthController extends Controller
         }
 
         if ($request->has('phone_number') && $request->filled('phone_number')) {
-
             $credentials = $request->only(['phone_number', 'password']);
 
             Auth::setDefaultDriver('client');
 
             if ($token = Auth::attempt($credentials)) {
-                return $this->respondWithToken($token);
+                $user = Auth::user();
+                return $this->respondWithToken($token, $user);
             }
             return $this->respondWithError();
 
@@ -67,7 +69,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $user = null)
     {
         if (Auth::getDefaultDriver() == 'api') {
             return response()->json([
@@ -77,11 +79,18 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([
+        if ($user->type->name = 'teacher') {
+            $userData = ['user_data' => (new TeachersResource($user->teacher))];
+        }
+        if ($user->type->name = 'student') {
+            $userData = ['user_data' => (new StudentsResource($user->student))];
+        }
+
+        return response()->json(array_merge([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'type' => Auth::user()->type->name,
-        ]);
+            'user_type' => $user->type->name,
+        ], $userData));
     }
 
     protected function respondWithError()

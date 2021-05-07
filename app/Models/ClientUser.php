@@ -27,10 +27,19 @@ class ClientUser extends Authenticatable implements JWTSubject
         'password',
         'user_type'
     ];
-
     public function type()
     {
         return $this->hasOne(ClientUserType::class, 'id', 'user_type');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'credentials_id', 'id');
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class, 'credentials_id', 'id');
     }
 
     /**

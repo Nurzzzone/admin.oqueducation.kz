@@ -33,12 +33,14 @@ class Student extends Authenticatable
       'birth_date',
       'image',
       'type_id',
-      'city'
+      'city',
+      'credentials_id',
     ];
 
     protected $with = [
       'parent',
-      'type'
+      'type',
+      'credentials'
     ];
 
     protected $hidden = [
@@ -53,5 +55,10 @@ class Student extends Authenticatable
     public function type()
     {
       return $this->hasOne(StudentType::class, 'id', 'type_id');
+    }
+
+    public function credentials()
+    {
+      return $this->belongsTo(ClientUser::class, 'credentials_id', 'id');
     }
 }

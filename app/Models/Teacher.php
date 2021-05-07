@@ -33,12 +33,14 @@ class Teacher extends Authenticatable
         'image',
         'description',
         'position',
-        'is_active'
+        'is_active',
+        'credentials_id',
     ];
 
     protected $with = [
         'jobHistory',
-        'socials'
+        'socials',
+        'credentials'
     ];
 
     protected $hidden = [
@@ -53,5 +55,10 @@ class Teacher extends Authenticatable
     public function socials()
     {
         return $this->hasOne(TeacherSocialLink::class);
+    }
+
+    public function credentials()
+    {
+        return $this->belongsTo(ClientUser::class, 'credentials_id', 'id');
     }
 }

@@ -59,11 +59,11 @@ class StudentsController extends Controller
     {
         try {
             $data = array_merge($studentRequest->validated(), $parentRequest->validated());
-            $student = Student::make($data);
-            ClientUser::create($data['auth']);
-            $student->fill([
-                'image' => $studentRequest->image !== null ? $this->uploadImage($studentRequest): null
-            ])->save();
+            $user = ClientUser::create($data['auth']);
+            if (isset($data['image'])) {
+                $data['image'] =  $this->uploadImage($studentRequest);
+            }
+            $student = $user->student()->create($data);
             $parent = $student->parent()->make($data);
             $parent->fill([
                 'student_id' => $student->id
