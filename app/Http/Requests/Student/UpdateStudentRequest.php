@@ -30,9 +30,9 @@ class UpdateStudentRequest extends FormRequest
             'middle_name'      => 'nullable|string|max:255',
             'birth_date'       => 'sometimes|date_format:Y.m.d|before:today|max:10',
             'image'            => 'nullable',
-            'email_address'    => 'nullable|string',
-            'home_address'     => 'sometimes|string',
-            'phone_number'     => 'sometimes|string|unique:students,phone_number' . $this->student,
+            'email_address'    => 'nullable|string|email',
+            'home_address'     => 'sometimes|string|max:255',
+            'phone_number'     => 'sometimes|string|unique:client_users,phone_number' . $this->student,
             'city'             => 'sometimes|string|max:255',
             'type_id'          => 'digits_between:1,2|nullable',
             'old_password'     => 'required_with:new_password',
@@ -51,9 +51,13 @@ class UpdateStudentRequest extends FormRequest
 
         if ($this->has('new_password') && $this->has('old_password'))
             if($this->filled('new_password') && $this->filled('old_password'))
-                $request['password'] = Hash::make($this->new_password);
+                $request['auth']['password'] = Hash::make($this->new_password);
                 unset($request['new_password']);
                 unset($request['old_password']);
+        
+        if ($this->has('phone_number') && $this->filled('phone_number'))
+            $request['auth']['phone_number'] = $this->phone_number;
+            unset($this->phone_number);
         
         return $request;
     }
@@ -69,7 +73,7 @@ class UpdateStudentRequest extends FormRequest
         $validator->after(function ($validator) {
             if ($this->has('new_password') && $this->has('old_password'))
                 if($this->filled('new_password') && $this->filled('old_password'))
-                    if ( !Hash::check($this->old_password, $this->student->password) ) {
+                    if ( !Hash::check($this->old_password, $this->student->credentials->password) ) {
                         $validator->errors()->add('old_password', trans('validation.password'));
                     }
         });

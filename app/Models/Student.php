@@ -49,7 +49,7 @@ class Student extends Authenticatable
     
     public function parent()
     {
-      return $this->belongsTo(StudentParent::class);
+      return $this->hasOne(StudentParent::class, 'student_id', 'id');
     }
 
     public function type()

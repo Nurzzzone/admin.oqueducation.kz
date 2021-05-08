@@ -107,8 +107,8 @@ class StudentsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\StudentsRequest $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\Student\UpdateStudentRequest $studentRequest
+     * @param  \App\Http\Requests\Student\UpdateStudentParentRequest $parentRequest
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateStudentRequest $studentRequest, UpdateStudentParentRequest $parentRequest, Student $student)
@@ -119,8 +119,11 @@ class StudentsController extends Controller
                 $data['image' ] = $this->uploadImage($studentRequest);
                 if ($student->image !== null) $this->deleteImage($student->image);
             }
-            $student->update($data);
-            $student->parent()->update($parentRequest->validated());
+            $student->update((array) $data);
+            if (isset($data['auth'])) {
+                $student->credentials()->update($data['auth']);
+            }
+            $student->parent()->update($data['parents']);
         } catch (\Exception $exception) {
             dd(['message' => $exception->getMessage()]);
         }
@@ -137,7 +140,7 @@ class StudentsController extends Controller
     public function destroy(Student $student)
     {
         try {
-            if ($student->delete() && $student->image !== null) {
+            if ($student->credentials()->delete() && $student->image !== null) {
                 $this->deleteImage($student->image);
             }
         } catch (ModelNotFoundException $exception) {

@@ -58,6 +58,9 @@ class TeacherService extends Service
           if ($teacher->image !== null) $this->deleteImage($teacher->image);
       }
       $teacher->update($data);
+      if (isset($data['auth'])) {
+        $teacher->credentials()->update($data['auth']);
+      }
       $teacher->socials()->update($links);
       if (count($jobHistory) > $teacher->jobHistory()->count()) {
         $this->updateWithNewTeacherHistory($jobHistory, $teacher);
@@ -81,8 +84,9 @@ class TeacherService extends Service
   {
     DB::beginTransaction();
     try {
-        $teacher->delete();
-        if ($teacher->image !== null) $this->deleteImage($teacher->image);
+        if ($teacher->credentials()->delete() && $teacher->image !== null) {
+          $this->deleteImage($teacher->image);
+        }
         DB::commit();
     } catch (\Exception $exception) {
         DB::rollBack();

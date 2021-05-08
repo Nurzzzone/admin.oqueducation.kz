@@ -29,11 +29,12 @@ class UpdateTeacherRequest extends FormRequest
             'surname'       => 'nullable|string|max:255',
             'middle_name'   => 'nullable|string|max:255',
             'birth_date'    => 'nullable|date|before:today|max:10',
-            'phone_number'  => 'sometimes|string|max:255|unique' . $this->teacher,
+            'phone_number'  => 'sometimes|string|max:255|unique:client_users,phone_number' . $this->teacher,
             'home_address'  => 'nullable|string|max:255',
             'email_address' => 'nullable|email|string|max:255',
             'image'         => 'nullable|mimes:jpg,jpeg,png,bmp,gif,svg,webp',
             'description'   => 'nullable|string|max:4000',
+            'position'      => 'nullable|string|max:255',
             'is_active'     => 'sometimes|boolean',
             'facebook_url'  => 'nullable|string|max:255|url',
             'instagram_url' => 'nullable|string|max:255|url',
@@ -57,10 +58,14 @@ class UpdateTeacherRequest extends FormRequest
         $request = $this->validator->validated();
 
         if ($this->has('new_password') && $this->has('old_password'))
-            if($this->filled('new_password') && $this->filled('old_password'))
-                $request['password'] = Hash::make($this->new_password);
+            if ($this->filled('new_password') && $this->filled('old_password'))
+                $request['auth']['password'] = Hash::make($this->new_password);
                 unset($request['new_password']);
                 unset($request['old_password']);
+
+        if ($this->has('phone_number') && $this->filled('phone_number'))
+            $request['auth']['phone_number'] = $this->phone_number;
+            unset($request['phone_number']);
         
         return $request;
     }
@@ -76,7 +81,7 @@ class UpdateTeacherRequest extends FormRequest
         $validator->after(function ($validator) {
             if ($this->has('new_password') && $this->has('old_password'))
                 if($this->filled('new_password') && $this->filled('old_password'))
-                    if ( !Hash::check($this->old_password, $this->teacher->password) ) {
+                    if ( !Hash::check($this->old_password, $this->teacher->credentials->password) ) {
                         $validator->errors()->add('old_password', trans('validation.password'));
                     }
         });

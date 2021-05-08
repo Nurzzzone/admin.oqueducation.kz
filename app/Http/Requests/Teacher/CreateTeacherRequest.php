@@ -35,7 +35,6 @@ class CreateTeacherRequest extends FormRequest
             'image'                  => 'nullable|mimes:jpg,jpeg,png,bmp,gif,svg,webp',
             'description'            => 'nullable|string|max:4000',
             'is_active'              => 'required|boolean',
-            'position'               => 'nullable|string',
             'facebook_url'           => 'nullable|string|max:255|url',
             'instagram_url'          => 'nullable|string|max:255|url',
             'password'               => 'required|string|min:6|max:255',
