@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TeachersResource extends JsonResource
@@ -23,7 +24,7 @@ class TeachersResource extends JsonResource
             'position'        => $this->position,
             'home_address'    => $this->home_address,
             'birth_date'      => $this->birth_date,
-            'phone_number'    => $this->phone_number,
+            'phone_number'    => Auth::user()->phone_number,
             'image'           => $this->image,
             'is_active'       => $this->is_active,
             'facebook_url'    => $this->socials->facebook_url ?? null,

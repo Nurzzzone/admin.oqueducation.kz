@@ -79,18 +79,20 @@ class AuthController extends Controller
             ]);
         }
 
-        if ($user->type->name = 'teacher') {
-            $userData = ['user_data' => (new TeachersResource($user->teacher))];
-        }
-        if ($user->type->name = 'student') {
-            $userData = ['user_data' => (new StudentsResource($user->student))];
+        switch($user->type->name) {
+            case 'teacher':
+                $user_data = ['user_data' => (new TeachersResource($user->teacher))];
+                break;
+            case 'student':
+                $user_data = ['user_data' => (new StudentsResource($user->student))];
+                break;
         }
 
         return response()->json(array_merge([
             'access_token' => $token,
             'token_type' => 'bearer',
             'user_type' => $user->type->name,
-        ], $userData));
+        ], $user_data));
     }
 
     protected function respondWithError()
