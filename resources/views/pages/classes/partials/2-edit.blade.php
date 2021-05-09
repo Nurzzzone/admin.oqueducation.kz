@@ -1,4 +1,4 @@
-@foreach ($class->questions as $question)
+@foreach ($data['class']->questions as $question)
 <div data-repeater-item class="col-md-12 px-0">
   <div>
     <div class="border mb-1 pb-2">

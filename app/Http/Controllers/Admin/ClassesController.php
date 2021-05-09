@@ -42,14 +42,14 @@ class ClassesController extends Controller
      */
     public function create()
     {
-        $class = new Classes();
-        $subjects = Subject::all();
-        $teachers = Teacher::all()->each(function($teacher) {
-            return $teacher->only('name', 'surname', 'middle_name');
-        })->toArray();
-
-        dd($teachers);
-        $params = array_merge(['class' => $class, 'subjects' => $subjects, 'teachers' => $teachers], $this->getPageBreadcrumbs(['pages.classes']));
+        try {
+            $class = new Classes();
+            $data = $this->service->prepareForHtml();
+            $data['class'] = $class;
+            $params = array_merge(compact('data'), $this->getPageBreadcrumbs(['pages.classes']));
+        } catch (\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
+        }
         return view('pages.classes.create', $params);
     }
 
@@ -89,7 +89,9 @@ class ClassesController extends Controller
      */
     public function edit(Classes $class)
     {
-        $params = array_merge(['class' => $class], $this->getPageBreadcrumbs(['pages.classes']));
+        $data = $this->service->prepareForHtml();
+        $data['class'] = $class;
+        $params = array_merge(compact('data'), $this->getPageBreadcrumbs(['pages.classes']));
         return view('pages.classes.edit', $params);
     }
 

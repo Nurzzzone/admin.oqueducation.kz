@@ -24,17 +24,18 @@
           </div>
           <div class="col-12 form-group">
             @php
-              $value = $class->hometasks['name'] ?? old('hometask');
+              $value = $data['class']->hometasks['name'] ?? old('hometask');
               $options = [
                 'class'        => ['form-control form-control-sm', $errors->has('answer') ? 'border-danger' : ''],
                 'placeholder'  => 'Например...',
                 'autocomplete' => 'off',
+                'required' => ''
               ];
             @endphp
             {{ Form::text('hometask', $value, $options) }}
             <hr class="mb-0">
           </div>
-          @if ($class->hometasks !== null)
+          @if ($data['class']->hometasks !== null)
             @include('pages.classes.partials.3-edit')
           @else
             @include('pages.classes.partials.3-create')

@@ -13,6 +13,7 @@
           'class' => ['pr-3 form-control form-control-sm', $errors->has('answer') ? 'border-danger' : ''],
           'placeholder' => 'Введите ваш вопрос для ученика',
           'autocomplete' => 'off',
+          'required' => ''
         ];
       @endphp
       <div class="position-relative">

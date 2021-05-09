@@ -97,11 +97,11 @@
                     $(imgInput).change(function() {
                         if (this.files && this.files[0]) {
                             let reader = new FileReader();
+                            let parentContainer = $(element).find('div[class="border mb-1 pb-2"]');
                             if (!$(element).find('.quesitonImage-preview').length) {
                                 let imageContainer = `<div style='background-image: url();' class='quesitonImage-preview users-avatar-shadow' width="240" height="240">
                                                     <button type='button' class="btn m-0 remove-question"><i class="bx bx-x align-middle text-danger"></i></button>
                                                     </div>`;
-                                let parentContainer = $(element).find('div[class="border mb-1 pb-2"]');
                                 $(imageContainer).prependTo(parentContainer);
                             }
             
@@ -116,6 +116,7 @@
             
                             $(element).find('.remove-question').on('click', function(e) {
                                 e.preventDefault();
+                                $(parentContainer).find('input[type="file"]').val('');
                                 $(imgPreview).fadeOut(650);
                                 $(imgPreview).css('background-image', 'url()');
                                 $(imgPreview).remove();
@@ -132,11 +133,11 @@
                 $(imgInput).change(function() {
                     if (this.files && this.files[0]) {
                         let reader = new FileReader();
+                        let parentContainer = $(element).find('div[class="row justify-content-between align-items-start"]');
                         if (!$(element).find('.answerImage-preview').length) {
                             let imageContainer = `<div style='background-image: url();' class='answerImage-preview users-avatar-shadow' width="240" height="240">
                                                     <button type='button' class="btn m-0 remove-answer"><i class="bx bx-x align-middle text-danger"></i></button>
                                                     </div>`;
-                            let parentContainer = $(element).find('div[class="row justify-content-between align-items-start"]');
                             $(imageContainer).prependTo(parentContainer);
                         }
 
@@ -151,6 +152,7 @@
 
                         $(element).find('.remove-answer').on('click', function(e) {
                             e.preventDefault();
+                            $(parentContainer).find('input[type="file"]').val('');
                             $(imgPreview).fadeOut(650);
                             $(imgPreview).css('background-image', 'url()');
                             $(imgPreview).remove();
@@ -167,11 +169,11 @@
                 $(imgInput).change(function() {
                     if (this.files && this.files[0]) {
                         let reader = new FileReader();
+                        let parentContainer = $(element).find('div[class="col-md-11"]');
                         if (!$(element).find('.taskImage-preview').length) {
                             let imageContainer = `<div style='background-image: url();' class='taskImage-preview users-avatar-shadow' width="240" height="240">
                                                     <button type='button' class="btn m-0 remove-task"><i class="bx bx-x align-middle text-danger"></i></button>
                                                     </div>`;
-                            let parentContainer = $(element).find('div[class="col-md-11"]');
                             $(imageContainer).prependTo(parentContainer);
                         }
 
@@ -186,6 +188,7 @@
 
                         $(element).find('.remove-task').on('click', function(e) {
                             e.preventDefault();
+                            $(parentContainer).find('input[type="file"]').val('');
                             $(imgPreview).fadeOut(650);
                             $(imgPreview).css('background-image', 'url()');
                             $(imgPreview).remove();

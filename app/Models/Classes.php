@@ -29,6 +29,7 @@ class Classes extends Model
       'title',
       'source_url',
       'type_id',
+      'is_active',
     ];
 
     protected $with = [
@@ -56,4 +57,14 @@ class Classes extends Model
     {
       return $this->hasOne(ClassHomeTask::class, 'class_id', 'id');
     }
+
+    public function teacher()
+    {
+      return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
+    }
+
+    // public function student()
+    // {
+    //   return $this->belongsTo(Student::class, 'student_id', 'id');
+    // }
 }

@@ -31,7 +31,7 @@
                   'enctype' => 'multipart/form-data'
                 ];
               @endphp
-              {{ Form::model($class, $options) }}
+              {{ Form::model($data['class'], $options) }}
                 @include('pages.classes.partials.1-index')
                 @include('pages.classes.partials.2-index')
                 @include('pages.classes.partials.3-index')

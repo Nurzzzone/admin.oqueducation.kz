@@ -12,26 +12,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ClientAuthController extends Controller
 {
-
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function login(Request $request)
-    {
-        $credentials = $request->only(['phone_number', 'password']);
-        $ttl = ['exp' => \Carbon\Carbon::now()->addDays(7)->timestamp];
-
-        if (!$token = JWTAuth::guard('client')->attempt($credentials, $ttl)){
-            return response()->json(['error' => 'Unauthorized', 'code' => 401], 401);
-        }
-
-        return response()->json([
-            'access_token' => $token,
-        ], 202);
-    }
-
     /**
      * Register a new user
      *

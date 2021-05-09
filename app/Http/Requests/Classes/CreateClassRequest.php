@@ -27,7 +27,10 @@ class CreateClassRequest extends FormRequest
             'title'                             => 'required|string|max:255',
             'source_url'                        => 'required|string|max:255|url',
             'type_id'                           => 'required|digits_between:1,3',
+            'is_active'                         => 'required|boolean',
             'hometask'                          => 'required|string|max:255',
+            'teacher_id'                        => 'nullable|numeric',
+            'subject_id'                        => 'nullable|numeric',
             'questions.*.name'                  => 'required|string|max:255',
             'questions.*.image'                 => 'nullable',
             'questions.*.answers.*.name'        => 'nullable|string|max:255',
@@ -77,5 +80,6 @@ class CreateClassRequest extends FormRequest
                     $this->merge(['type_id' => 3]);
                     break;
             }
+        
     }
 }

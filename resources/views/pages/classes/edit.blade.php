@@ -25,14 +25,14 @@
               @php
                 $options = [
                   'id' => 'update-class',
-                  'url' => route('classes.update', $class->id),
+                  'url' => route('classes.update', $data['class']->id),
                   'method' => 'PATCH',
                   'class' => 'wizard-horizontal form form-horizontal', 
                   'enctype' => 'multipart/form-data'
                 ];
               @endphp
-              {{ Form::model($class, $options) }}
-                @include('pages.classes.partials.1-edit')
+              {{ Form::model($data['class'], $options) }}
+                @include('pages.classes.partials.1-index')
                 @include('pages.classes.partials.2-index')
                 @include('pages.classes.partials.3-index')
               {{ Form::close() }}

@@ -61,4 +61,9 @@ class Teacher extends Authenticatable
     {
         return $this->belongsTo(ClientUser::class, 'credentials_id', 'id');
     }
+
+    public function class()
+    {
+        return $this->hasOne(Classes::class, 'teacher_id', 'id');
+    }
 }

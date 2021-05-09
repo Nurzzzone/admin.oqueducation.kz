@@ -1,4 +1,4 @@
-@foreach ($class->hometasks->tasks as $task)
+@foreach ($data['class']->hometasks->tasks as $task)
 <div data-repeater-item class="col-md-12 task">
   <div class="row justify-content-between align-items-end">
     <div class="col-md-11">

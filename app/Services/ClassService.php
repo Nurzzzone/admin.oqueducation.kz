@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Classes;
+use App\Models\Subject;
+use App\Models\Teacher;
 use App\Services\Service;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -16,6 +18,20 @@ class ClassService extends Service
   {
     $this->upload_path = 'images'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR;
     $this->file_subdirs = ['questins', 'answers', 'tasks'];
+  }
+
+  public function prepareForHTML()
+  {
+    $subjects = Subject::all()->toArray();
+    $teachers = Teacher::all()->map(function($item) {
+        $fullNameArray = $item->only('name', 'surname', ('middle_name' ?? null));
+        return ['id' => $item['id'], 'full_name' => trim(implode(' ', $fullNameArray))];
+    })->toArray();
+    
+    return [
+      'subjects' => $subjects,
+      'teachers' => $teachers
+    ];
   }
 
   /**
@@ -51,6 +67,7 @@ class ClassService extends Service
           $questions[$questionKey]['image'] = $this->uploadImage($questionValue['image'], 'questions');
         }
       }
+      // save question
       $question = $class->questions()->create($questions[$questionKey]);
       
       foreach ($questions[$questionKey]['answers'] as $answerKey => $answer) {
