@@ -29,6 +29,8 @@ class Classes extends Model
       'title',
       'source_url',
       'type_id',
+      'teacher_id',
+      'subject_id',
       'is_active',
     ];
 

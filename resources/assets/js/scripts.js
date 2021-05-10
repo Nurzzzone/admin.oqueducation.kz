@@ -16,6 +16,13 @@
             mutations.forEach((mutation) => {
                 setQuestionsIdentifier();
                 readQuestionUrl();
+
+                $('div[data-repeater-list="answers"]').each(function(index, element) {
+                    console.log(element);
+                    answerObserver.observe(element, {
+                        childList: true, 
+                    });
+                });
             });    
         });
     
@@ -38,7 +45,6 @@
             mutations.forEach((mutation) => {
                 setTasksIdentifier();
                 readTasksUrl();
-                setHintsIdentifiers();
             });    
         });
     
@@ -60,10 +66,31 @@
                         $(e).attr('for', index + 'questionImage');
                     });
             });
+            
+            let answers = $('#questions').find('.answer');
+            answers.each((index, element) => {
+                if ($('#questions').find(`#is_correct_${index}`).length) {
+                    ++index;
+                }
+                let checkboxInput = $(element).find('input[id="is_correct"]');
+                let checkboxLabel = $(element).find('label[for="is_correct"]');
+                let imgInput =  $(element).find('.answerImageUpload');
+                let imgLabels = $(element).find('label[for="answer-image"]');
+                
+                    $(checkboxInput).attr('id', `is_correct_${index}`);
+                    $(checkboxLabel).attr('for', `is_correct_${index}`);
+                    $(imgInput).attr('id', index + 'answerImage');
+                    $(imgLabels).each(function(i, e) {
+                        $(e).attr('for', index + 'answerImage');
+                    });
+            });
         }
     
         function setAnswersIdentifier() {
             $('.answer').each((index, element) => {
+                if ($('#questions').find(`#is_correct_${index}`).length) {
+                    ++index;
+                }
                 let checkboxInput = $(element).find('input[id="is_correct"]');
                 let checkboxLabel = $(element).find('label[for="is_correct"]');
                 let imgInput =  $(element).find('.answerImageUpload');
@@ -82,7 +109,17 @@
             $('.task').each((index, element) => {
                 let imgInput =  $(element).find('.taskImageUpload');
                 let imgLabels = $(element).find('label[for="task-image"]');
-                
+                let taskLabel = $(element).find('label');
+                let taskInput = $(element).find('input');
+                let button = $(element).find('#hint-button');
+                let hintBox = $(element).find('#hint-popover');
+
+                    $(button).attr('id', `hintButton_${index}`);
+                    $(hintBox).attr('id', `hintBox_${index}`);
+                    setHintsIdentifiers(index);
+
+                    $(taskLabel).attr('for', `task_${index}`);
+                    $(taskInput).attr('id', `task_${index}`);
                     $(imgInput).attr('id', index + 'taskImage');
                     $(imgLabels).each(function(i, e) {
                         $(e).attr('for', index + 'taskImage');
@@ -192,32 +229,24 @@
                             $(imgPreview).fadeOut(650);
                             $(imgPreview).css('background-image', 'url()');
                             $(imgPreview).remove();
-                        })
+                        });
                     }
                 })
             })
         }
         
-        function setHintsIdentifiers() {
-            $('.task').each((index, element) => {
-                ++index;
-                let taskLabel = $(element).find('label');
-                let taskInput = $(element).find('input');
-                    $(taskLabel).attr('for', `task_${index}`);
-                    $(taskInput).attr('id', `task_${index}`);
-                    
-            
-                let button = $(element).find('#hint-button');
-                let hintbox = $(element).find('#hint-popover');
-        
-                $(button).attr('id', `hintButton_${index}`);
-                $(hintbox).attr('id', `hintBox_${index}`);
-        
-                $(`#hintButton_${index}`).on('click', () => {
-                    $(`#hintBox_${index}`).toggle();
-                });
+        function setHintsIdentifiers(index) {
+            $(`#hintButton_${index}`).off()
+            $(`#hintButton_${index}`).click((e) => {
+                e.preventDefault();
+                $(`#hintBox_${index}`).toggle();
             });
         }
+
+        $('#hint-button').on('click', (e) => {
+            e.preventDefault();
+            $('#hint-popover').toggle();
+        });
     
         // let hintObserver = new MutationObserver(function(mutations) {
         //     mutations.forEach(function(mutation) {

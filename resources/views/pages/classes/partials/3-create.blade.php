@@ -33,13 +33,13 @@
         @php
           $options = [
             'id' => 'hint-button',
-            'class' => 'btn cursor-pointer font-small-1 m-0 p-0', 
+            'class' => 'hint-button btn cursor-pointer font-small-1 m-0 p-0', 
             'type'  => 'button',
             'style' => "text-decoration: underline;",
           ]
         @endphp
         {{ Form::button('добавить подсказку', $options) }}
-        <div id="hint-popover" class="position-absolute" style="right: 0px; top: 100%; z-index: 1000; display: none;">
+        <div id="hint-popover" class="hint-popover position-absolute" style="right: 0px; top: 100%; z-index: 1000; display: none;">
           @php
             $value = $task['hint'] ?? old('hint');
             $options = [

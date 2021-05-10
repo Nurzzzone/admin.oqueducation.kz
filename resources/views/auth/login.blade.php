@@ -17,7 +17,7 @@
           <div class="card disable-rounded-right mb-0 p-2 h-100 d-flex justify-content-center">
             <div class="card-header pb-1">
               <div class="card-title">
-                <h4 class="text-center">@lang('locale.pages.login')</h4>
+                <h4 class="text-center">@lang('pages.login')</h4>
               </div>
             </div>
 
@@ -28,7 +28,7 @@
                 {{ Form::model(['url' => route('login')]) }}
 
                   <div class="form-group mb-50">
-                    <label class="font-small-1" for="email">@lang('locale.form_fields.user.email_address')</label>
+                    <label class="font-small-1" for="email">@lang('fields.email_address')</label>
                     <input id="email" type="email" class="form-control @error('email') border-danger @enderror" name="email" value="{{ old('email') }}"  autocomplete="email" autofocus placeholder="example@example.com">
                     @error('email')
                       <small class="text-danger">{{ $message }}</small class="text-danger">
@@ -36,7 +36,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label class="font-small-1" for="password">@lang('locale.form_fields.user.password')</label>
+                    <label class="font-small-1" for="password">@lang('fields.password')</label>
                     <input id="password" type="password" class="form-control @error('password') border-danger @enderror" name="password"  autocomplete="current-password">
                     @error('password')
                       <small class="text-danger">{{ $message }}</small class="text-danger">
