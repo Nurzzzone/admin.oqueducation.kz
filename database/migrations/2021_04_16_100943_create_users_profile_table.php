@@ -19,7 +19,7 @@ class CreateUsersProfileTable extends Migration
             $table->string('surname', 255)->comment('Фамилия');
             $table->string('middle_name', 255)->nullable()->comment('Отчество');
             $table->string('image')->nullable()->comment('Изображение');
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -26,6 +26,7 @@ return [
     "from" => "from",
     "to"   => "tp",
   ],
+  "login"         => "Login",
   "city"          => "City",
   "source_url"    => "Source",
   "facebook"      => "Facebook",

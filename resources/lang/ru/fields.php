@@ -26,6 +26,7 @@ return [
     "from" => "Начало работы",
     "to"   => "Конец работы",
   ],
+  "login"         => "Логин",
   "city"          => "Город",
   "source_url"    => "Источник",
   "facebook"      => "Facebook",

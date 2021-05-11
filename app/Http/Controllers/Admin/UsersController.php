@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 
 class UsersController extends Controller
 {
+
+    protected $service;
+
+    public function __construct(UserService $userService)
+    {
+        $this->service = $userService;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +25,9 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return view('pages.users.index');
+        $users = User::paginate(10);
+        $params = array_merge(['users' => $users], $this->getPageBreadcrumbs(['pages.users']));
+        return view('pages.users.index', $params);
     }
 
     /**
@@ -24,18 +37,26 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('pages.users.create');
+        $user = new User;
+        $params = array_merge(['user' => $user], $this->getPageBreadcrumbs(['pages.users', 'buttons.create']));
+        return view('pages.users.create', $params);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\User\CreateUserRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
-        //
+        try {
+            $this->service->create($request->validated());
+        } catch(\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
+        }
+        return redirect()
+            ->route('users.index');
     }
 
     /**
@@ -44,7 +65,7 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
         return view('pages.users.show');
     }
@@ -55,21 +76,28 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        return view('pages.users.edit');
+        $params = array_merge(['user' => $user], $this->getPageBreadcrumbs(['pages.users']));
+        return view('pages.users.edit', $params);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Http\Requests\User\UpdateUserRequest  $request
+     * @param  \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        try {
+            $this->service->update($request->validated(), $user);
+        } catch (\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
+        }
+        return redirect()
+            ->route('users.index');
     }
 
     /**
@@ -78,8 +106,14 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        try {
+            $this->service->delete($user);
+        } catch(\Exception $exception) {
+            dd(['message' => $exception->getMessage()]);
+        }
+        return redirect()
+            ->route('users.index');
     }
 }

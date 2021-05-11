@@ -1,10 +1,11 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+namespace Database\Seeders;
 
-class UserSeeder extends Seeder
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
+
+class RoleTableSeeder extends Seeder
 {
     /**
      *  Role permissions
@@ -13,8 +14,8 @@ class UserSeeder extends Seeder
      */
     protected $rolePermission = [
         'superAdmin' => [
-            'frontend-view',
             'backend-view',
+            'frontend-view',
             'users-view'
         ],
         'moderator' => [
@@ -23,29 +24,25 @@ class UserSeeder extends Seeder
         ]
     ];
 
-     /**
+    /**
      * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        User::create([
+        Role::create([
             'name' => 'superAdmin',
-            'email' => 'superAdmin@admin.com',
-            'password' => password_hash('secret', PASSWORD_DEFAULT),
+            'guard_name' => 'web',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
-        ])->assignRole('superAdmin')
-          ->givePermissionTo($this->rolePermission['superAdmin']);
+        ])->givePermissionTo($this->rolePermission['superAdmin']);
 
-        User::create([
+        Role::create([
             'name' => 'moderator',
-            'email' => 'moderator@admin.com',
-            'password' => password_hash('secret', PASSWORD_DEFAULT),
+            'guard_name' => 'web',
             'created_at' => \Carbon\Carbon::now(),
             'updated_at' => \Carbon\Carbon::now(),
-        ])->assignRole('moderator')
-          ->givePermissionTo($this->rolePermission['moderator']);
+        ])->givePermissionTo($this->rolePermission['moderator']);
     }
 }

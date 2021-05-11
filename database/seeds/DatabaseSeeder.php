@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\ClientUserTypesTableSeeder;
+use Database\Seeders\PermissionTableSeeder;
+use Database\Seeders\RoleTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,6 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(PermissionTableSeeder::class);
+        $this->call(RoleTableSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(UsersProfileTableSeeder::class);
         $this->call(TranslationsLanguagesTableSeeder::class);
