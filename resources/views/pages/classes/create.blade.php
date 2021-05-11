@@ -1,8 +1,7 @@
 @extends('layouts.contentLayoutMaster')
-{{-- title --}}
+
 @section('title', trans('pages.classes'))
 
-{{-- page style --}}
 @section('page-styles')
 <link rel="stylesheet" type="text/css" href="{{asset('css/plugins/forms/wizard.css')}}">
 @endsection
@@ -51,7 +50,6 @@
 <script src="{{asset('vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
 @endsection
 
-{{-- page scripts --}}
 @section('page-scripts')
 <script src="{{asset('assets/js/scripts.js')}}"></script>
 <script src="{{asset('js/scripts/forms/wizard-steps.js')}}"></script>

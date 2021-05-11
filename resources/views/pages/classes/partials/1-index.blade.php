@@ -30,7 +30,6 @@
       <div class="col-md-6">
         <div class="col-12">
           {{ Form::label('subject', 'Добавьте предмет'.':', ['class' => 'font-small-1']) }}
-          <span class="text-danger">*</span>
         </div>
         <div class="col-12 form-group">
           @php
@@ -81,7 +80,6 @@
       <div class="col-md-6">
         <div class="col-12">
           {{ Form::label('teacher_id', 'Добавьте учителя'.':', ['class' => 'font-small-1']) }}
-          <span class="text-danger">*</span>
         </div>
         <div class="col-12 form-group">
           @php
@@ -98,6 +96,7 @@
       <div class="col-md-6">
         <div class="col-12">
           {{ Form::label('is_active', trans('fields.display').':', ['class' => 'font-small-1']) }}
+          <span class="text-danger">*</span>
         </div>
   
         <div class="col-12 row align-items-center mt-25">

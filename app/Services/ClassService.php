@@ -145,21 +145,23 @@ class ClassService extends Service
     } elseif (count($questions) < $class->questions->count()) { // delete old question
       $this->updateWithoutOldQuestions($questions, $class);
     }
-
+    
     foreach ($questions as $questionKey => $questionValue) { // update existing questions
       if ($questionValue['id'] !== null) {
         $question = $class->questions()->find($questionValue['id']);
-
+        
         // update question image
-        if (isset($questions[$questionKey]['image']) && $questions[$questionKey]['image'] !== null) {
-          $questions[$questionKey]['image'] = $this->uploadImage($questions[$questionKey]['image'], 'questions');
+        if (isset($questions[$questionKey]['image'])) {
+          if ($questions[$questionKey]['image'] !== null) {
+            $questions[$questionKey]['image'] = $this->uploadImage($questions[$questionKey]['image'], 'questions');
 
-          if ($question->image !== null) {
-            $this->deleteImage($question->image, 'questions');
+            if ($question->image !== null) {
+              $this->deleteImage($question->image, 'questions');
+            }
           }
         }
         $question->update($questions[$questionKey]);
-
+        
         foreach ($questions[$questionKey]['answers'] as $answerKey => $answer) {
           $this->updateAnswers($questions[$questionKey]['answers'], $class->questions->find($questionValue['id']));
         }
@@ -222,6 +224,7 @@ class ClassService extends Service
       $this->updateWithoutOldAnswers($answers, $question);
     }
 
+
     foreach ($answers as $answerKey => $answer) {
       if ($answer['id'] !== null) {
         $ans = $question->answers->find($answer['id']);
@@ -234,6 +237,13 @@ class ClassService extends Service
             $this->deleteImage($ans->image, 'answers');
           }
         }
+
+        if (isset($answer['is_correct']))
+          foreach ($answer['is_correct'] as $is_correct) {
+            $answer['is_correct'] = true;
+          }
+        else
+          $answer['is_correct'] = false;
 
         $ans->update($answer);
       }
@@ -255,6 +265,15 @@ class ClassService extends Service
         })->toArray();
       }
       foreach ($newAnswers as $newAnswer) {
+        if (isset($newAnswer['is_correct'])) {
+          foreach ($newAnswer['is_correct'] as $is_correct) {
+            $newAnswer['is_correct'] = true;
+          }
+        }
+        else {
+          $newAnswer['is_correct'] = false;
+        }
+
         $question->answers()->create($newAnswer);
       }
     }

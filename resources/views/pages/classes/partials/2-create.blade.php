@@ -24,7 +24,6 @@
               'class' => ['form-control form-control-sm', $errors->has('name') ? 'border-danger' : ''],
               'placeholder' => 'Как будет выглядеть ваш вопрос?',
               'autocomplete' => 'off',
-              'required' => ''
             ];
         @endphp
         <div class="position-relative">
@@ -69,7 +68,6 @@
                         'class' => ['form-control form-control-sm pr-3', $errors->has('answer') ? 'border-danger' : ''],
                         'placeholder' => 'Вариант ответа',
                         'autocomplete' => 'off',
-                        'required' => ''
                       ];
                     @endphp
 

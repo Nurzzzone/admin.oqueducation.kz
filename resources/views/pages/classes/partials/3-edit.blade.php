@@ -26,19 +26,20 @@
           ];
         @endphp
         {{ Form::label('task-image', $value, $options, false) }}
-        {{ Form::file('image', ['class' => 'd-none', 'id' => 'task-image']) }}
+        {{ Form::file('image', ['class' => 'd-none taskImageUpload', 'id' => 'task-image']) }}
       </div>
       
       <div class="hint-box position-relative d-flex justify-content-end">
         @php
           $options = [
+            'id' => 'hint-button',
             'class' => 'hint-button btn cursor-pointer font-small-1 m-0 p-0', 
             'type'  => 'button',
             'style' => "text-decoration: underline;",
           ]
         @endphp
         {{ Form::button('добавить подсказку', $options) }}
-        <div class="hint-popover position-absolute" style="right: 0px; top: 100%; z-index: 1000; display: none;">
+        <div id="hint-popover" class="hint-popover position-absolute" style="right: 0px; top: 100%; z-index: 1000; display: none;">
           @php
             $value = $task['hint'] ?? old('hint');
             $options = [

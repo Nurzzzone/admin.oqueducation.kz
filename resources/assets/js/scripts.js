@@ -8,6 +8,8 @@
   WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR JAVASCRIPT CODE PLEASE CONSIDER WRITING YOUR SCRIPT HERE.  */
 
     $(document).ready(() => {
+        countTasks();
+        countAsnwerCheckboxes();
         readQuestionUrl();
         readAnswerUrl();
         readTasksUrl();
@@ -247,6 +249,51 @@
             e.preventDefault();
             $('#hint-popover').toggle();
         });
+
+        function countAsnwerCheckboxes() {
+            if ($('.answer').length > 1) {
+                $('.answer').each((index, element) => {
+                    if ($('#questions').find(`#is_correct_${index}`).length) {
+                        ++index;
+                    }
+                    let checkboxInput = $(element).find('input[id="is_correct"]');
+                    let checkboxLabel = $(element).find('label[for="is_correct"]');
+                    let imgInput =  $(element).find('.answerImageUpload');
+                    let imgLabels = $(element).find('label[for="answer-image"]');
+                    
+                        $(checkboxInput).attr('id', `is_correct_${index}`);
+                        $(checkboxLabel).attr('for', `is_correct_${index}`);
+                        $(imgInput).attr('id', index + 'answerImage');
+                        $(imgLabels).each(function(i, e) {
+                            $(e).attr('for', index + 'answerImage');
+                        });
+                });
+            }
+        }
+        
+        function countTasks() {
+            if ($('.task').length > 1) {
+                $('.task').each((index, element) => {
+                    let imgInput =  $(element).find('.taskImageUpload');
+                    let imgLabels = $(element).find('label[for="task-image"]');
+                    let taskLabel = $(element).find('label');
+                    let taskInput = $(element).find('input');
+                    let button = $(element).find('#hint-button');
+                    let hintBox = $(element).find('#hint-popover');
+        
+                        $(button).attr('id', `hintButton_${index}`);
+                        $(hintBox).attr('id', `hintBox_${index}`);
+                        setHintsIdentifiers(index);
+        
+                        $(taskLabel).attr('for', `task_${index}`);
+                        $(taskInput).attr('id', `task_${index}`);
+                        $(imgInput).attr('id', index + 'taskImage');
+                        $(imgLabels).each(function(i, e) {
+                            $(e).attr('for', index + 'taskImage');
+                        });
+                });
+            }
+        }
     
         // let hintObserver = new MutationObserver(function(mutations) {
         //     mutations.forEach(function(mutation) {

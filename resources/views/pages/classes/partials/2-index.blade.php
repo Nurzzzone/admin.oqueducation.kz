@@ -13,7 +13,7 @@
   </div>
 
   <div class="row">
-    <div class="col-12 repeater-default">
+    <div class="col-12 repeater-default" data-tag="questions-list">
       <div data-repeater-list="questions" id='questions'>
         @if ($data['class']->questions->isNotEmpty())
           @include('pages.classes.partials.2-edit')
@@ -24,7 +24,7 @@
       {{-- button: create question  --}}
       <div class="form-group">
         <div class="col-12 d-flex justify-content-center mt-1">
-          <button class="btn btn-primary" data-repeater-create type="button">
+          <button class="btn btn-primary" data-label="create-question" data-repeater-create type="button">
             <i class="bx bx-plus"></i>
           </button>
         </div>

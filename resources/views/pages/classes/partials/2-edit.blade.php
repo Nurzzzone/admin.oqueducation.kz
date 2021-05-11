@@ -1,5 +1,5 @@
 @foreach ($data['class']->questions as $question)
-<div data-repeater-item class="col-md-12 px-0">
+<div data-repeater-item class="col-md-12 px-0 question">
   <div>
     <div class="border mb-1 pb-2">
 
@@ -13,13 +13,14 @@
       {{ Form::hidden('id', $question->id ?? null) }}
       {{-- question_name: label --}}
       <div class="col-12">
-        {{ Form::label('name', trans('fields.question').':', ['class' => 'font-small-1']) }}
+        {{ Form::label('question_0', trans('fields.question').':', ['class' => 'font-small-1']) }}
         <span class="text-danger">*</span>
       </div>
 
       <div class="col-12">
         @php
             $options = [
+              'id' => 'question_0',
               'class' => ['form-control form-control-sm', $errors->has('name') ? 'border-danger' : ''],
               'placeholder' => 'Как будет выглядеть ваш вопрос?',
               'autocomplete' => 'off',
@@ -35,12 +36,12 @@
             ];
           @endphp
           {{-- question_image: input --}}
-          {{ Form::label('question-image', '<i class="bx bxs-file-image"></i>', $options, false) }}
-          {{ Form::file('image', ['class' => 'd-none', 'id' => 'question-image']) }}
+          {{ Form::label('image', '<i class="bx bxs-file-image"></i>', $options, false) }}
+          {{ Form::file('image', ['class' => 'd-none questionImageUpload']) }}
         </div>
         <div class="text-right">
           {{-- question_image: label --}}
-          {{ Form::label('question-image', 'прикрепить изображение', ['class' => 'text-right cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
+          {{ Form::label('image', 'прикрепить изображение', ['class' => 'text-right cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
         </div>
         <hr>
       </div>
@@ -55,7 +56,7 @@
           </div>
           <div data-repeater-list="answers">
             @foreach ($question->answers as $answer)
-            <div data-repeater-item class="col-md-12">
+            <div data-repeater-item class="col-md-12 answer">
               <div class="row justify-content-between align-items-start">
                 {{ Form::hidden('id', $answer->id ?? null) }}
                 <div class="col-12 d-flex">
@@ -79,7 +80,7 @@
                       @endphp
                       {{-- answer_image: input --}}
                       {{ Form::label('answer-image', '<i class="bx bxs-file-image"></i>', $options, false) }}
-                      {{ Form::file('image', ['class' => 'd-none', 'id' => 'answer-image']) }}
+                      {{ Form::file('image', ['class' => 'd-none answerImageUpload', 'id' => 'answer-image']) }}
                     </div>
 
                     {{-- answer_name: label --}}
@@ -87,6 +88,17 @@
                       {{ Form::label('answer-image', 'прикрепить изображение', ['class' => 'text-right cursor-pointer font-small-1 ', 'style' => "text-decoration: underline;"]) }}
                     </div>
                   </div>
+
+                  {{-- answer_is_correct: input --}}
+                  <div class="col-md-1 d-flex justify-content-center checkbox-container">
+                    <fieldset>
+                      <div class="checkbox checkbox-success checkbox-glow">
+                        {{ Form::checkbox('is_correct', 1, $answer->is_correct ?? false, ['id' => 'is_correct']) }}
+                          <label class="cursor-pointer" for="is_correct"></label>
+                      </div>
+                    </fieldset>
+                  </div>
+                  {{-- answer_is_correct: input --}}
 
                   {{-- button: delete answer  --}}
                   <div class="col-md-2 d-flex">
