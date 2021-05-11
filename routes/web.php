@@ -28,7 +28,7 @@ Route::group(['middleware' => ['auth']], function()
   Route::resource('/tests','Admin\TestsController');
   Route::resource('/payments', 'Admin\PaymentsController');
   Route::resource('/translations', 'Admin\TranslationsController');
-  Route::resource('/users', 'Admin\UsersController');
+  Route::resource('/users', 'Admin\UsersController')->middleware('can:users-view');
 });
 
 

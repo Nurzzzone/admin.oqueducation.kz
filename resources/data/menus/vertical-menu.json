@@ -64,12 +64,6 @@
       "name": "translations",
       "icon": "globe",
       "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
-    },
-    {
-      "url": "/users",
-      "name": "users",
-      "icon": "user",
-      "tagcustom": "badge badge-light-danger badge-pill badge-round float-right mr-2"
     }
   ]
 }

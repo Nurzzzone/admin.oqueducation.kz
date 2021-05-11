@@ -41,6 +41,14 @@
               </li>
               @endif
           @endforeach
+          @can('users-view', User::class)
+          <li class="nav-item">
+            <a href="{{ route('users.index') }}">
+              <i class="menu-livicon" data-icon="user"></i>
+              <span class="menu-title">{{ trans('pages.users') }}</span>
+            </a>
+          </li>
+        @endcan
           @endif
       </ul>
     </div>
