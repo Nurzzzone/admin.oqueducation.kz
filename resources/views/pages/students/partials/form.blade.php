@@ -147,7 +147,13 @@
         <span class="text-danger">*</span>
       </div>
       <div class="col-md-12 form-group">
-        {{ Form::text('p1_phone_number', $student->parent['p1_phone_number'] ?? old('p1_phone_number'), ['class' => ['form-control form-control-sm', $errors->has('p1_phone_number') ? 'border-danger' : '']]) }}
+          @php
+          $options = [
+            'id' => 'p1PhoneNumber',
+            'class' => ['form-control form-control-sm', $errors->has('p1_phone_number') ? 'border-danger' : '']
+          ];
+        @endphp
+        {{ Form::tel('p1_phone_number', $student->parent['p1_phone_number'] ?? old('p1_phone_number'), $options) }}
         @error('p1_phone_number')
             <small class="text-danger">{{ $message }}</small>
         @enderror
@@ -157,7 +163,13 @@
         {{ Form::label('p2_phone_number', trans('fields.p2_phone_number').':', ['class' => 'font-small-1']) }}
       </div>
       <div class="col-md-12 form-group">
-        {{ Form::text('p2_phone_number', $student->parent['p2_phone_number'] ?? old('p2_phone_number'), ['class' => ['form-control form-control-sm', $errors->has('p2_phone_number') ? 'border-danger' : '']]) }}
+        @php
+            $options = [
+              'id' => 'p2PhoneNumber',
+              'class' => ['form-control form-control-sm', $errors->has('p2_phone_number') ? 'border-danger' : '']
+            ];
+        @endphp
+        {{ Form::tel('p2_phone_number', $student->parent['p2_phone_number'] ?? old('p2_phone_number'), $options) }}
         @error('p2_phone_number')
             <small class="text-danger">{{ $message }}</small>
         @enderror

@@ -34,11 +34,24 @@ $(document).ready(function(){
             }
             reader.readAsDataURL(input.files[0]);
         }
-      }
+    }
       
-      $("#imageUpload").change(function() {
-          readURL(this);
+    $("#imageUpload").change(function() {
+        readURL(this);
     });
+
+    let phoneInputMask = new Inputmask({
+        mask: '+7 (999)-999-99-99',
+        rightAlign: false,
+        showMaskOnHover: false,
+        showMaskOnFocus: false,
+        placeholder: "_",
+    });
+
+    phoneInputMask.mask($('#teacherPhoneNumber'));
+    phoneInputMask.mask($('#studentPhoneNumber'));
+    phoneInputMask.mask($('#p1PhoneNumber'));
+    phoneInputMask.mask($('#p2PhoneNumber'));
 
     // remove loader after page is loaded on classes page
     $('#class-loader').addClass('d-none');

@@ -37,6 +37,7 @@
 <script src="{{asset('vendors/js/editors/quill/quill.min.js')}}"></script>
 <script src="{{asset('vendors/js/extensions/jquery.steps.min.js')}}"></script>
 <script src="{{asset('vendors/js/forms/validation/jquery.validate.min.js')}}"></script>
+<script src="{{asset('vendors/js/inputmask/jquery.inputmask.min.js')}}"></script>
 @endsection
 
 {{-- page scripts --}}

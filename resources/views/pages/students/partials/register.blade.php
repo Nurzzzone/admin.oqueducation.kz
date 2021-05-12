@@ -6,7 +6,13 @@
       <span class="text-danger">*</span>
     </div>
     <div class="col-md-12">
-      {{ Form::tel('phone_number', $student['phone_numbers'] ?? old('phone_number'), ['class' => ['form-control form-control-sm', $errors->has('phone_number') ? 'border-danger' : '']]) }}
+      @php
+        $options = [
+          'id' => 'studentPhoneNumber',
+          'class' => ['form-control form-control-sm', $errors->has('phone_number') ? 'border-danger' : '']
+        ];
+      @endphp
+      {{ Form::tel('phone_number', $student['phone_numbers'] ?? old('phone_number'), $options) }}
       @error('phone_number')
           <small class="text-danger">{{ $message }}</small>
       @enderror

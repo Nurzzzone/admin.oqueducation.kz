@@ -1,6 +1,6 @@
 @extends('layouts.contentLayoutMaster')
 
-@section('title', __('pages.students'))
+@section('title', trans('pages.students'))
 
 @section('content')
 <section >
@@ -18,4 +18,8 @@
     </div>
   </div>
 </section>
+@endsection
+
+@section('vendor-scripts')
+<script src="{{asset('vendors/js/inputmask/jquery.inputmask.min.js')}}"></script>
 @endsection
