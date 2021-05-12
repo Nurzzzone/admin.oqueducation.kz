@@ -21,7 +21,3 @@
 
 </section>
 @endsection
-
-@section('vendor-scripts')
-  <script src="{{asset('vendors/js/inputmask/jquery.inputmask.min.js')}}"></script>
-@endsection
