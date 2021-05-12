@@ -8,6 +8,19 @@
   WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR JAVASCRIPT CODE PLEASE CONSIDER WRITING YOUR SCRIPT HERE.  */
 
     $(document).ready(() => {
+        let phoneInputMask = new Inputmask({
+            mask: '+7 (999)-999-99-99',
+            rightAlign: false,
+            showMaskOnHover: false,
+            showMaskOnFocus: false,
+            placeholder: "_",
+        });
+    
+        phoneInputMask.mask($('#teacherPhoneNumber'));
+        phoneInputMask.mask($('#studentPhoneNumber'));
+        phoneInputMask.mask($('#p1PhoneNumber'));
+        phoneInputMask.mask($('#p2PhoneNumber'));
+
         countTasks();
         countAsnwerCheckboxes();
         readQuestionUrl();
@@ -294,19 +307,6 @@
                 });
             }
         }
-
-        let phoneInputMask = new Inputmask({
-            mask: '+7 (999)-999-99-99',
-            rightAlign: false,
-            showMaskOnHover: false,
-            showMaskOnFocus: false,
-            placeholder: "_",
-        });
-    
-        phoneInputMask.mask($('#teacherPhoneNumber'));
-        phoneInputMask.mask($('#studentPhoneNumber'));
-        phoneInputMask.mask($('#p1PhoneNumber'));
-        phoneInputMask.mask($('#p2PhoneNumber'));
     
         // let hintObserver = new MutationObserver(function(mutations) {
         //     mutations.forEach(function(mutation) {
