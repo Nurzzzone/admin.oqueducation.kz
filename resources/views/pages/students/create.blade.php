@@ -19,3 +19,7 @@
   </div>
 </section>
 @endsection
+
+@section('page-scripts')
+<script src="{{asset('assets/js/scripts.js')}}"></script>
+@endsection

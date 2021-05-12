@@ -43,4 +43,5 @@
 @section('page-scripts')
 <script src="{{asset('js/scripts/forms/form-repeater.js')}}"></script>
 <script src="{{asset('js/scripts/editors/editor-quill.js')}}"></script>
+<script src="{{asset('assets/js/scripts.js')}}"></script>
 @endsection
