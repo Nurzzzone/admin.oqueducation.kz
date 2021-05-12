@@ -38,6 +38,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'v1'], function() {
 
       // admin.oqu.kz/api/v1/classes -> get all classes
       Route::get('/classes', 'Api\V1\ClassesController@index');
+
+      // admin.oque.kz/api/v1/cities -> get all cities
+      Route::get('/cities', 'Api\V1\CitiesController@index');
     });
 
     Route::group(['middleware' => 'jwt.auth:student'], function() {
