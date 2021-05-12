@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Database\Seeders\ClientUserTypesTableSeeder;
-use Database\Seeders\PermissionTableSeeder;
 use Database\Seeders\RoleTableSeeder;
+use Database\Seeders\CitiesTableSeeder;
+use Database\Seeders\PermissionTableSeeder;
+use Database\Seeders\ClientUserTypesTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ClassesTypesTableSeeder::class);
         $this->call(StudentsTypesTableSeeder::class);
         $this->call(ClientUserTypesTableSeeder::class);
+        $this->call(CitiesTableSeeder::class);
     }
 }
