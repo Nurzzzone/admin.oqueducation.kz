@@ -319,7 +319,7 @@ class ClassService extends Service
         $task = $class->hometasks->tasks()->find($taskValue['id']);
         
         // update task image
-        if (isset($task['image']) && $task['image'] !== null) {
+        if (isset($data['tasks'][$taskKey]['image']) && $data['tasks'][$taskKey]['image'] !== null) {
           $data['tasks'][$taskKey]['image'] = $this->uploadImage($taskValue['image'], 'tasks');
 
           if ($task->image !== null) {
@@ -382,15 +382,19 @@ class ClassService extends Service
     DB::transaction(function () use ($class) {
       $class->delete();
 
-      // delete question image
       if ($class->questions->isNotEmpty()) {
         foreach ($class->questions as $question) {
-          $this->deleteImage($question->image, 'questions');
+          // delete question image
+          if ($question->image !== null) {
+            $this->deleteImage($question->image, 'questions');
+          }
 
           // delete answer image
           if ($question->answers->isNotEmpty()) {
             foreach ($question->answers as $answer) {
-              $this->deleteImage($answer->image, 'answers');
+              if ($answer->image !== null) {
+                $this->deleteImage($answer->image, 'answers');
+              }
             }
           }
         }
@@ -399,7 +403,9 @@ class ClassService extends Service
       // delete task image
       if ($class->hometasks->tasks->isNotEmpty()) {
         foreach ($class->hometasks->tasks as $task) {
-          $this->deleteImage($task->image, 'tasks');
+          if ($task->image !== null) {
+            $this->deleteImage($task->image, 'tasks');
+          }
         }
       }
     });

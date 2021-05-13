@@ -17,7 +17,7 @@ class CreateClassesTasksTable extends Migration
             $table->id();
             $table->string('name', 255)->comment('Задание');
             $table->string('image', 255)->nullable()->comment('Изображение');
-            $table->text('hint', 255)->nullable()->comment('Подсказка');
+            $table->text('hint')->nullable()->comment('Подсказка');
             $table->foreignId('hometask_id')->comment('Домашнее задание')->constrained('classes_hometasks')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

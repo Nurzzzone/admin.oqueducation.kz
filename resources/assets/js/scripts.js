@@ -1,11 +1,11 @@
 (function(window, undefined) {
-  'use strict';
+    'use strict';
 
-  /*
-  NOTE:
-  ------
-  PLACE HERE YOUR OWN JAVASCRIPT CODE IF NEEDED
-  WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR JAVASCRIPT CODE PLEASE CONSIDER WRITING YOUR SCRIPT HERE.  */
+    /*
+    NOTE:
+    ------
+    PLACE HERE YOUR OWN JAVASCRIPT CODE IF NEEDED
+    WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR JAVASCRIPT CODE PLEASE CONSIDER WRITING YOUR SCRIPT HERE.  */
 
     $(document).ready(() => {
         let phoneInputMask = new Inputmask({
@@ -103,9 +103,6 @@
     
         function setAnswersIdentifier() {
             $('.answer').each((index, element) => {
-                if ($('#questions').find(`#is_correct_${index}`).length) {
-                    ++index;
-                }
                 let checkboxInput = $(element).find('input[id="is_correct"]');
                 let checkboxLabel = $(element).find('label[for="is_correct"]');
                 let imgInput =  $(element).find('.answerImageUpload');
@@ -124,7 +121,7 @@
             $('.task').each((index, element) => {
                 let imgInput =  $(element).find('.taskImageUpload');
                 let imgLabels = $(element).find('label[for="task-image"]');
-                let taskLabel = $(element).find('label');
+                let taskLabel = $(element).find('label[for=task_0]');
                 let taskInput = $(element).find('input');
                 let button = $(element).find('#hint-button');
                 let hintBox = $(element).find('#hint-popover');
@@ -308,27 +305,5 @@
             }
         }
     
-        // let hintObserver = new MutationObserver(function(mutations) {
-        //     mutations.forEach(function(mutation) {
-        //         handleHintBox();
-        //     });    
-        // });
-    
-        // hintObserver.observe($('div[data-repeater-list="tasks"]')[0], {
-        //     childList: true, 
-        // });
-    
-        // function handleHintBox() {
-        //     $('.hint-box').each(function(index, element) {
-        //         let button = $(element).find('.hint-button');
-        //         let hintbox = $(element).find('.hint-popover');
-        //         $(button).attr('id', index + 'hintButton');
-        //         $(hintbox).attr('id', index + 'hintPopover');
-        //         $(`#${index}hintButton`).on('click', function() {
-        //             $(`#${index}hintPopover`).toggle();
-        //         });
-        //     });
-        // }
     });
-
 })(window);

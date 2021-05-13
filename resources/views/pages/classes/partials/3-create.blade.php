@@ -1,4 +1,4 @@
-<div data-repeater-item class="col-md-12 task">
+<div data-repeater-item class="col-md-12 task" data-tag="task">
   <div class="row justify-content-between align-items-end">
     <div class="col-md-11">
       @php
@@ -13,7 +13,7 @@
           'class' => ['pr-3 form-control form-control-sm', $errors->has('answer') ? 'border-danger' : ''],
           'placeholder' => 'Введите ваш вопрос для ученика',
           'autocomplete' => 'off',
-          'required' => ''
+          'data-id' => 'taskName',
         ];
       @endphp
       <div class="position-relative">
@@ -36,16 +36,18 @@
             'class' => 'hint-button btn cursor-pointer font-small-1 m-0 p-0', 
             'type'  => 'button',
             'style' => "text-decoration: underline;",
+            'data-tag' => 'hintButton',
           ]
         @endphp
         {{ Form::button('добавить подсказку', $options) }}
-        <div id="hint-popover" class="hint-popover position-absolute" style="right: 0px; top: 100%; z-index: 1000; display: none;">
+        <div data-tag="hintContainer" id="hint-popover" class="hint-popover position-absolute" style="right: 0px; top: 100%; z-index: 1000; display: none;">
           @php
             $value = $task['hint'] ?? old('hint');
             $options = [
               'class'        => ['pt-1 form-control form-control-sm', $errors->has('hint') ? 'border-danger' : ''],
               'placeholder'  => 'Например...',
               'autocomplete' => 'off',
+              'data-tag' => 'taskHintInput',
             ];
           @endphp
         {{ Form::textarea('hint', $value, $options) }}

@@ -35,11 +35,11 @@
             {{ Form::text('hometask', $value, $options) }}
             <hr class="mb-0">
           </div>
-          @if ($data['class']->hometasks !== null)
-            @include('pages.classes.partials.3-edit')
-          @else
+            @if ($data['class']->hometasks !== null)
+              @include('pages.classes.partials.3-edit')
+            @endif
+
             @include('pages.classes.partials.3-create')
-          @endif
         </div>
 
 

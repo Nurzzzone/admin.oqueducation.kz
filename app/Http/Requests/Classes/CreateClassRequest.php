@@ -38,7 +38,7 @@ class CreateClassRequest extends FormRequest
             'questions.*.answers.*.is_correct.*'=> 'required|boolean',
             'tasks.*.name'                      => 'required|string|max:255',
             'tasks.*.hint'                      => 'nullable|string|max:255',
-            'tasks.*.image'                     => 'nullable'
+            'tasks.*.image'                     => 'nullable|mimes:jpg,jpeg,png,bmp,gif,svg,webp'
         ];
     }
 

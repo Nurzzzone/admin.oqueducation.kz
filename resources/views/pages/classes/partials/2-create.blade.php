@@ -1,4 +1,4 @@
-<div data-repeater-item class="col-md-12 px-0 question">
+<div data-repeater-item class="col-md-12 px-0 question" data-tag="old-question">
   <div>
     <div class="border mb-1 pb-2">
 
@@ -24,6 +24,7 @@
               'class' => ['form-control form-control-sm', $errors->has('name') ? 'border-danger' : ''],
               'placeholder' => 'Как будет выглядеть ваш вопрос?',
               'autocomplete' => 'off',
+              'data-tag' => 'questionInput'
             ];
         @endphp
         <div class="position-relative">
@@ -38,7 +39,7 @@
           @endphp
           {{-- question_image: label, input --}}
           {{ Form::label('image', '<i class="bx bxs-file-image"></i>', $options, false) }}
-          {{ Form::file('image', ['class' => 'd-none questionImageUpload']) }}
+          {{ Form::file('image', ['class' => 'd-none questionImageUpload', 'data-tag' => 'questionImageInput']) }}
           {{-- question_image: label, input --}}
         </div>
         <div class="text-right">
@@ -68,6 +69,7 @@
                         'class' => ['form-control form-control-sm pr-3', $errors->has('answer') ? 'border-danger' : ''],
                         'placeholder' => 'Вариант ответа',
                         'autocomplete' => 'off',
+                        'data-tag' => 'answerInput',
                       ];
                     @endphp
 
@@ -82,7 +84,7 @@
                       @endphp
                       {{-- answer_image: input --}}
                       {{ Form::label('answer-image', '<i class="bx bxs-file-image"></i>', $options, false) }}
-                      {{ Form::file('image', ['class' => 'd-none answerImageUpload', 'id' => 'answer-image']) }}
+                      {{ Form::file('image', ['class' => 'd-none answerImageUpload', 'id' => 'answer-image', 'data-tag' => 'answerImageInput']) }}
                     </div>
 
                     {{-- answer_name: label --}}
@@ -95,8 +97,14 @@
                   <div class="col-md-1 d-flex justify-content-center checkbox-container">
                     <fieldset>
                       <div class="checkbox checkbox-success checkbox-glow">
-                        {{ Form::checkbox('is_correct', 1, false, ['id' => 'is_correct']) }}
-                          <label class="cursor-pointer" for="is_correct"></label>
+                        @php
+                          $options = [
+                            'data-tag' => 'answerCheckbox',
+                            'id' => 'is_correct'
+                          ]
+                        @endphp
+                        {{ Form::checkbox('is_correct', 1, false, $options) }}
+                        <label class="cursor-pointer" for="is_correct" data-tag="checkboxLabel"></label>
                       </div>
                     </fieldset>
                   </div>

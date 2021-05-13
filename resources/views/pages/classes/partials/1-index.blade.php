@@ -71,7 +71,7 @@
           @php
             $options = ['class' => ['form-control form-control-sm', $errors->has('type') ? 'border-danger' : '']];
           @endphp
-          {{ Form::select('type', ['БИЛ' => 'БИЛ', 'НИШ' => 'НИШ', 'ЕНТ' => 'ЕНТ'], $class->type->name ?? 'БИЛ', $options) }}
+          {{ Form::select('type', ['БИЛ' => 'БИЛ', 'НИШ' => 'НИШ', 'ЕНТ' => 'ЕНТ'], $data['class']->type->name ?? 'БИЛ', $options) }}
         </div>
       </div>
     </div>

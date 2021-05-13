@@ -27,20 +27,21 @@ class UpdateClassRequest extends FormRequest
             'title'                             => 'sometimes|string|max:255',
             'source_url'                        => 'sometimes|string|max:255|url',
             'type_id'                           => 'sometimes|digits_between:1,3',
+            'is_active'                         => 'sometimes|boolean',
             'hometask'                          => 'sometimes|string|max:255',
             'teacher_id'                        => 'nullable|numeric',
             'subject_id'                        => 'nullable|numeric',
-            'questions.*.id'                    => 'nullable',
-            'questions.*.name'                  => 'sometimes|string|max:255',
+            'questions.*.id'                    => 'nullable|numeric',
+            'questions.*.name'                  => 'nullable|string|max:255',
             'questions.*.image'                 => 'nullable',
-            'questions.*.answers.*.id'          => 'nullable',
+            'questions.*.answers.*.id'          => 'nullable|numeric',
             'questions.*.answers.*.name'        => 'nullable|string|max:255',
             'questions.*.answers.*.image'       => 'nullable',
             'questions.*.answers.*.is_correct.*'=> 'sometimes|boolean',
-            'tasks.*.id'                        => 'nullable',
-            'tasks.*.name'                      => 'nullable|string|max:255',
+            'tasks.*.id'                        => 'nullable|numeric',
+            'tasks.*.name'                      => 'nullable|string|max:4000',
             'tasks.*.hint'                      => 'nullable|string|max:255',
-            'tasks.*.image'                     => 'nullable'
+            'tasks.*.image'                     => 'nullable|mimes:jpg,jpeg,png,bmp,gif,svg,webp'
         ];
     }
 
@@ -53,12 +54,29 @@ class UpdateClassRequest extends FormRequest
     {
         $request = $this->validator->validated();
         
-        if ($this->has('hometask') && $this->filled('hometask'))
-            $request['hometask'] = [
-                'name' => $this->hometask,
-                'tasks' => $this->tasks,
-            ];
+        if ($this->has('tasks')) {
+            foreach($this->tasks as $taskKey => $task) {
+                if ($task['name'] === null) {
+                    unset($request['tasks'][$taskKey]);
+                }
+            }
+        }
+
+        if ($this->has('questions')) {
+            foreach($this->questions as $questionKey => $question) {
+                if ($question['name'] === null) {
+                    unset($request['questions'][$questionKey]);
+                }
+            }
+        }
+
+        if ($this->has('hometask') && $this->filled('hometask')) {
+            $request['hometask'] = ['name' => $this->hometask];
+            foreach ($request['tasks'] as $taskKey => $task) {
+                $request['hometask']['tasks'][$taskKey] = $task;
+            }
             unset($request['tasks']);
+        }
         
         return $request;
     }
