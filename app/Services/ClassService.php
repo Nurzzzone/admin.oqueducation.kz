@@ -125,10 +125,11 @@ class ClassService extends Service
     try {
       $class->update($data);
       $this->updateQuestions($data['questions'], $class);
+      // dd($data);
       $this->updateHometask($data['hometask'], $class);
       DB::commit();
     } catch(\Exception $exception) {
-      dd(['message' => $exception->getMessage()]);
+      throw new \Exception($exception->getMessage());
       DB::rollback();
     }
   }
@@ -147,7 +148,7 @@ class ClassService extends Service
     }
     
     foreach ($questions as $questionKey => $questionValue) { // update existing questions
-      if ($questionValue['id'] !== null) {
+      if (isset($questionValue['id']) && $questionValue['id'] !== null) {
         $question = $class->questions()->find($questionValue['id']);
         
         // update question image
@@ -179,11 +180,13 @@ class ClassService extends Service
     if (!empty($questions) && $questions !== null) {
       $newQuestionsKeys = array_diff(array_keys($questions), array_keys($class->questions->toArray()));
       foreach ($newQuestionsKeys as $newQuestionsKey) {
-        $newQuestions = collect($questions)->filter(function($value, $key) use($newQuestionsKey) {
+        $newQuestions[] = collect($questions)->filter(function($value, $key) use($newQuestionsKey) {
             return $key == $newQuestionsKey;
         })->toArray();
       }
-      $this->createQuestions($newQuestions, $class);
+      foreach($newQuestions as $item) {
+        $this->createQuestions($item, $class);
+      }
     }
   }
 
@@ -197,16 +200,18 @@ class ClassService extends Service
     if (!empty($questions) && $questions !== null) {
       $oldQuestionsKeys = array_diff(array_keys($class->questions->toArray()), array_keys($questions));
       foreach ($oldQuestionsKeys as $oldQuestionKey) {
-        $oldQuestions = $class->questions->filter(function($value, $key) use ($oldQuestionKey) {
+        $oldQuestions[] = $class->questions->filter(function($value, $key) use ($oldQuestionKey) {
           return $key == $oldQuestionKey;
         })->toArray();
       }
-      foreach ($oldQuestions as $oldQuestion) {
-        $question = $class->questions->find($oldQuestion['id']);
-        if ($question->image !== null) {
-          $this->deleteImage($question->image, 'questions');
+      foreach ($oldQuestions as $item) {
+        foreach ($item as $oldQuestion) {
+          $question = $class->questions->find($oldQuestion['id']);
+          if ($question->image !== null) {
+            $this->deleteImage($question->image, 'questions');
+          }
+          $question->delete();
         }
-        $questions->delete();
       }
     }
   }
@@ -223,28 +228,27 @@ class ClassService extends Service
     } elseif (count($answers) < $question->answers()->count()) {
       $this->updateWithoutOldAnswers($answers, $question);
     }
-
-
+    
     foreach ($answers as $answerKey => $answer) {
-      if ($answer['id'] !== null) {
+      if (isset($answer['id']) && $answer['id'] !== null) {
         $ans = $question->answers->find($answer['id']);
-
+        
         // update answer image
         if (isset($answer['image']) && $answer['image'] !== null) {
           $answer['image'] = $this->uploadImage($answer['image'], 'answers');
-
+          
           if ($ans->image !== null) {
             $this->deleteImage($ans->image, 'answers');
           }
         }
-
+        
         if (isset($answer['is_correct']))
-          foreach ($answer['is_correct'] as $is_correct) {
-            $answer['is_correct'] = true;
-          }
+        foreach ($answer['is_correct'] as $is_correct) {
+          $answer['is_correct'] = true;
+        }
         else
-          $answer['is_correct'] = false;
-
+        $answer['is_correct'] = false;
+        
         $ans->update($answer);
       }
     }
@@ -260,21 +264,23 @@ class ClassService extends Service
     if (!empty($answers) && $answers !== null) {
       $newAnswersKeys = array_diff(array_keys($answers), array_keys($question->answers->toArray()));
       foreach ($newAnswersKeys as $newAnswersKey) {
-        $newAnswers = collect($answers)->filter(function($value, $key) use($newAnswersKey) {
+        $newAnswers[] = collect($answers)->filter(function($value, $key) use($newAnswersKey) {
           return $key == $newAnswersKey;
         })->toArray();
       }
-      foreach ($newAnswers as $newAnswer) {
-        if (isset($newAnswer['is_correct'])) {
-          foreach ($newAnswer['is_correct'] as $is_correct) {
-            $newAnswer['is_correct'] = true;
+      foreach ($newAnswers as $item) {
+        foreach ($item as $newAnswer) {
+          if (isset($newAnswer['is_correct'])) {
+            foreach ($newAnswer['is_correct'] as $is_correct) {
+              $newAnswer['is_correct'] = true;
+            }
           }
+          else {
+            $newAnswer['is_correct'] = false;
+          }
+  
+          $question->answers()->create($newAnswer);
         }
-        else {
-          $newAnswer['is_correct'] = false;
-        }
-
-        $question->answers()->create($newAnswer);
       }
     }
   }
@@ -289,12 +295,14 @@ class ClassService extends Service
     if (!empty($answers) && $answers !== null) {
       $oldAnswersKeys = array_diff(array_keys($question->answers->toArray()), array_keys($answers));
       foreach ($oldAnswersKeys as $oldAnswersKey) {
-        $oldAnswers = $question->answers->filter(function($value, $key) use($oldAnswersKey) {
-            return $key == $oldAnswersKey;
+        $oldAnswers[] = $question->answers->reject(function($value, $key) use($oldAnswersKey) {
+          return $key !== $oldAnswersKey;
         })->toArray();
       }
-      foreach ($oldAnswers as $oldAnswer) {
-        $question->answers()->find($oldAnswer['id'])->delete();
+      foreach ($oldAnswers as $item) {
+        foreach ($item as $oldAnswer) {
+          $question->answers()->find($oldAnswer['id'])->delete();
+        }
       }
     }
   }
@@ -304,9 +312,19 @@ class ClassService extends Service
    * 
    * @return void
    */
-  private function updateHometask($data, $class): void
+  private function updateHometask($data, $class)
   {
     $hometask = $class->hometasks->update($data);
+
+    if (!isset($data['tasks'])) {
+      if ($class->hometasks->tasks !== null) {
+        foreach ($class->hometasks->tasks as $task) {
+          $task->delete();
+        }
+      }
+      return;
+    }
+
     if (count($data['tasks']) > $class->hometasks->tasks->count()) { // create new task
       $this->updateWithNewTask($data['tasks'], $class->hometasks);
     } elseif (count($data['tasks']) < $class->hometasks->tasks->count()) { // delete old task
@@ -315,7 +333,7 @@ class ClassService extends Service
 
     // update tasks
     foreach ($data['tasks'] as $taskKey => $taskValue) {
-      if ($taskValue['id'] !== null) {
+      if (isset($taskValue['id']) && $taskValue['id'] !== null) {
         $task = $class->hometasks->tasks()->find($taskValue['id']);
         
         // update task image
@@ -342,12 +360,14 @@ class ClassService extends Service
     if (!empty($tasks) && $tasks !== null) {
       $newTasksKeys = array_diff(array_keys($tasks), array_keys($hometask->tasks->toArray()));
       foreach ($newTasksKeys as $newTaksKey) {
-        $newTasks = collect($tasks)->filter(function($value, $key) use($newTaksKey) {
+        $newTasks[] = collect($tasks)->filter(function($value, $key) use($newTaksKey) {
             return $key == $newTaksKey;
         })->toArray();
       }
-      foreach ($newTasks as $newTask) {
-        $hometask->tasks()->create($newTask);
+      foreach ($newTasks as $item) {
+        foreach ($item as $newTask) {
+          $hometask->tasks()->create($newTask);
+        }
       }
     }
   }
@@ -362,12 +382,14 @@ class ClassService extends Service
     if (!empty($tasks) && $tasks !== null) {
       $oldTasksKeys = array_diff(array_keys($hometask->tasks->toArray()), array_keys($tasks));
       foreach ($oldTasksKeys as $oldTasksKey) {
-        $oldTasks = $hometask->tasks->filter(function($value, $key) use($oldTasksKey) {
+        $oldTasks[] = $hometask->tasks->filter(function($value, $key) use($oldTasksKey) {
             return $key == $oldTasksKey;
         })->toArray();
       }
-      foreach ($oldTasks as $oldTask) {
-        $hometask->tasks->find($oldTask['id'])->delete();
+      foreach ($oldTasks as $item) {
+        foreach ($item as $oldTask) {
+          $hometask->tasks->find($oldTask['id'])->delete();
+        }
       }
     }
   }

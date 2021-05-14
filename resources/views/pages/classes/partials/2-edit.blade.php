@@ -1,5 +1,5 @@
 @foreach ($data['class']->questions as $question)
-  <div data-repeater-item class="col-md-12 px-0 question" data-tag="old-question">
+  <div data-repeater-item class="col-md-12 px-0 question" data-tag="old-question" data-find="question">
     <div>
       <div class="border mb-1 pb-2">
         @if ($question->image !== null)
@@ -12,7 +12,7 @@
 
         {{-- button: delete question  --}}
         <div class="d-flex justify-content-end">
-          <button class="btn p-0 m-0 pr-1 pt-1" data-repeater-delete type="button">
+          <button data-tag="removeQuestion" class="btn p-0 m-0 pr-1 pt-1" data-repeater-delete type="button">
             <i class="bx bx-x align-middle text-danger"></i>
           </button>
         </div>

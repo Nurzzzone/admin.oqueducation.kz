@@ -3,6 +3,7 @@
 
   $(document).ready(() => {
     // questions
+    removeQuestion();
     setQuestionsIdentifier();
     setQuestionsName();
     readQuestionUrl();
@@ -385,6 +386,21 @@
             $(taskImageContainer).remove();
           });
         }
+      });
+    }
+
+    function removeQuestion() {
+      let buttons = $('button[data-tag="removeQuestion"]');
+
+      buttons.each((i, e) => {
+        $(e).on('click', () => {
+          if (confirm('Are you sure you want to delete this element?')) {
+            let curr = $(e).closest('div[data-find="question"]');
+            curr.slideUp('normal', () => {
+              curr.remove();
+            });
+          }
+        });
       });
     }
   });
